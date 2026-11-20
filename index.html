@@ -882,13 +882,13 @@
         <div class="p-3 rounded-2xl bg-emeraldbrand-50/70 border border-emeraldbrand-100 text-[11px] text-slate-700 space-y-1 leading-relaxed">
           <p class="font-bold text-emeraldbrand-900">Cara mendapatkan API Key Gemini gratis:</p>
           <p>1. Buka <strong>aistudio.google.com/apikey</strong> &rarr; klik <strong>Create API key</strong>.</p>
-          <p>2. Salin kunci yang diawali <code class="bg-white px-1 rounded font-bold">AIza...</code> lalu tempel di bawah.</p>
+          <p>2. Klik tombol <strong>Copy key</strong> (format baru berawalan <code class="bg-white px-1 rounded font-bold">AQ....</code> atau lama <code class="bg-white px-1 rounded font-bold">AIza...</code>) lalu tempel di bawah.</p>
           <p>3. Atau gunakan <strong>Endpoint Proxy Vercel</strong> (<code class="bg-white px-1 rounded">/api/translate</code>) agar seluruh peserta otomatis bisa menerjemahkan tanpa isi kunci.</p>
         </div>
         <div>
           <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Gemini API Key (Disimpan Lokal di Perangkat)</label>
           <div class="relative">
-            <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="AIzaSy..." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+            <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="AQ.Ab8... atau AIzaSy..." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
             <button type="button" id="btn-toggle-key-vis" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-200">Lihat</button>
           </div>
         </div>
@@ -958,7 +958,7 @@
     // KONFIGURASI GEMINI AI TRANSLATE
     // Opsi 1 (Rekomendasi Vercel): Isi "/api/translate" agar API Key aman di Server Vercel (Environment Variable: GEMINI_API_KEY)
     // Opsi 2 (Langsung Client): Kosongkan GEMINI_API_ENDPOINT & biarkan apiKey = "" (otomatis di Preview) atau isi via ikon gerigi di UI
-    const GEMINI_API_ENDPOINT = "/api/translate";
+    const GEMINI_API_ENDPOINT = "api/translate.js";
     const apiKey = ""; // Biarkan kosong untuk runtime Canvas; di Vercel atur via /api/translate atau ikon Pengaturan
     const GEMINI_MODEL = "gemini-3-flash-preview";
 
@@ -974,6 +974,26 @@
       const localKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key'));
       const activeKey = localKey || sanitizeApiKey(apiKey);
       return { endpoint, activeKey, hasLocalKey: Boolean(localKey) };
+    }
+
+    // Membangun URL & Header resmi Google Gemini API (wajib header x-goog-api-key untuk kunci format baru AQ.)
+    function buildGeminiDirectRequest(key, model, payload) {
+      const cleanKey = sanitizeApiKey(key);
+      const headers = { 'Content-Type': 'application/json' };
+      let url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      if (cleanKey) {
+        headers['x-goog-api-key'] = cleanKey;
+      } else {
+        url += `?key=`;
+      }
+      return {
+        url,
+        options: {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        }
+      };
     }
 
     function updateTranslateStatusBadge() {
@@ -1894,12 +1914,8 @@ ATURAN WAJIB:
           const data = await res.json();
           parsedResult = data.arab_amiyah ? data : parseGeminiJsonSafely(data?.candidates?.[0]?.content?.parts?.[0]?.text);
         } else {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${activeKey}`;
-          const res = await fetchWithBackoff(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(geminiPayload)
-          }, {
+          const { url, options } = buildGeminiDirectRequest(activeKey, GEMINI_MODEL, geminiPayload);
+          const res = await fetchWithBackoff(url, options, {
             outerSignal: runController.signal,
             onStatus: (s) => { loadingStatus.textContent = s; }
           });
@@ -1908,7 +1924,7 @@ ATURAN WAJIB:
             const errJson = await res.json().catch(() => ({}));
             const apiMsg = errJson?.error?.message || `HTTP ${res.status}`;
             if (res.status === 400 || res.status === 401 || res.status === 403 || /api key/i.test(apiMsg)) {
-              throw new Error(`API Key Gemini tidak valid atau belum diatur (${apiMsg}). Klik tombol "Atur API Key Gemini" di bawah untuk memasukkan API Key dari Google AI Studio, atau aktifkan Proxy Vercel (/api/translate).`);
+              throw new Error(`API Key Gemini tidak valid atau belum diatur (${apiMsg}). Pastikan Anda menyalin seluruh kunci via tombol "Copy key" di Google AI Studio, atau aktifkan Proxy Vercel (/api/translate).`);
             }
             throw new Error(apiMsg);
           }
@@ -2085,11 +2101,8 @@ ATURAN WAJIB:
             body: JSON.stringify({ text: 'Halo', direction: 'id-ar', lawanBicara: 'Laki-laki tunggal', gayaBahasa: 'Sopan & Ramah', model: GEMINI_MODEL, payload: pingPayload })
           });
         } else {
-          res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${testKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(pingPayload)
-          });
+          const { url, options } = buildGeminiDirectRequest(testKey, GEMINI_MODEL, pingPayload);
+          res = await fetch(url, options);
         }
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
