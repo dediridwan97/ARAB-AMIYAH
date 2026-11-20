@@ -220,20 +220,6 @@
       <span class="truncate">Mode Preview Aktif &bull; Ubah <code class="bg-amber-100 px-1 rounded">IS_PREVIEW = false</code></span>
     </div>
 
-    <!-- Popup Auto-Install PWA (Android Chrome & Safari iOS) -->
-    <div id="pwa-install-banner" class="hidden absolute bottom-24 left-3 right-3 z-[1000015] glass-panel rounded-2xl p-3.5 shadow-2xl border border-goldaccent-500/40 flex items-center gap-3">
-        <span class="arabic-text text-xl font-bold leading-none">ع</span>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">Install Kamus 'Ammiyah</p>
-        <p id="pwa-install-desc" class="text-[11px] text-slate-600 leading-snug mt-0.5">Pasang di layar utama HP agar akses lebih cepat &amp; layar penuh.</p>
-      </div>
-      <div class="flex flex-col gap-1 shrink-0">
-        <button type="button" id="pwa-btn-install" class="px-3 py-1.5 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold shadow-sm transition">Install</button>
-        <button type="button" id="pwa-btn-close" class="text-[11px] font-semibold text-slate-500 hover:text-slate-800 py-0.5">Nanti</button>
-      </div>
-    </div>
-
     <!-- ========================================== -->
     <!-- HALAMAN LOGIN HYBRID (PESERTA & ADMIN)     -->
     <!-- ========================================== -->
@@ -807,12 +793,6 @@
     <!-- ========================================== -->
     <!-- MODAL PENGATURAN API KEY GEMINI            -->
     <!-- ========================================== -->
-    <div id="modal-gemini-settings" class="hidden absolute inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODAL PENGATURAN API KEY GEMINI            -->
-    <!-- ========================================== -->
     <div id="modal-gemini-settings" class="hidden fixed inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="glass-panel bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto custom-scroll">
         <div class="flex items-center justify-between">
@@ -890,28 +870,21 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     // =========================================================================
-    // KONFIGURASI APLIKASI (UBAH SAAT DEPLOY KE PRODUKSI / VERCEL)
+    // KONFIGURASI APLIKASI (UBAH SAAT DEPLOY KE VERCEL / PRODUKSI)
     // =========================================================================
-    const IS_PREVIEW = false; // Ubah menjadi false SAAT DEPLOY agar mode preview & data dummy hilang dan terhubung 100% ke Supabase
+    const IS_PREVIEW = false; // Ubah menjadi false saat deploy agar terhubung 100% ke Supabase
     const SUPABASE_URL = "https://vajqtviwgrtafmotfqwb.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_Y_XgpjYkg9Z9zMww8IKRZg_6cMm85tr";
-
-    // KONFIGURASI GEMINI AI TRANSLATE
-    // Opsi 1 (Rekomendasi Vercel): Isi "/api/translate" agar API Key aman di Server Vercel (Environment Variable: GEMINI_API_KEY)
-    // Opsi 2 (Langsung Client): Kosongkan GEMINI_API_ENDPOINT & biarkan apiKey = "" (otomatis di Preview) atau isi via ikon gerigi di UI
-    const GEMINI_API_ENDPOINT = "/api/translate";
-    const apiKey = ""; // Biarkan kosong untuk runtime Canvas; di Vercel atur via /api/translate atau ikon Pengaturan
+    const GEMINI_API_ENDPOINT = "/api/translate"; // Isi "/api/translate" jika memakai Proxy Server Vercel
+    const GEMINI_DEFAULT_KEY = ""; // Opsional: biarkan kosong agar diatur lewat Proxy atau Pengaturan
     const GEMINI_MODEL = "gemini-3-flash-preview";
 
-    // Inisialisasi Client Supabase (hanya saat IS_PREVIEW = false)
-    let supabase = null;
-    if (!IS_PREVIEW) {
-      if (SUPABASE_URL && !SUPABASE_URL.includes('URL_SUPABASE_ANDA') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('ANON_KEY_ANDA')) {
-        supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    }
+    // Inisialisasi Client Supabase (hanya saat mode produksi dan kredensial valid)
+    const supabase = (!IS_PREVIEW && SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== 'ANON_KEY_ANDA')
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
 
-    // State Global Aplikasi
+    // State Aplikasi
     const state = {
       currentUser: null,
       currentView: 'beranda',
@@ -930,35 +903,47 @@
       adminEditingSubItem: null,
     };
 
-    let currentTranslateController = null;
-    let translateTimerInterval = null;
-
-    // Data Dummy Minimalis (Hanya aktif saat IS_PREVIEW = true; null saat produksi)
-    const previewStore = IS_PREVIEW ? {
+    // Data Dummy Minimalis (Hanya dipakai saat IS_PREVIEW = true; 100% tidak aktif di produksi)
+    const previewStore = {
       users: [
-        { id: 'u-prev-1', username: 'jamaah1', password: '123', nama_lengkap: 'Ahmad Jamaah (Preview)' }
+        { id: 'u-prev-1', username: 'jamaah1', password: '123', nama_lengkap: 'Jamaah Preview' }
       ],
       materi_bab: [
-        { id: 1, judul_id: 'Di Bandara', judul_ar: 'فِي المَطَار', subjudul: 'Check-in, Bagasi, Gate, dan Lainnya', deskripsi: 'Percakapan praktis saat check-in, pemeriksaan tiket, dan bagasi di bandara.' },
-        { id: 8, judul_id: 'Di Sekitar Masjidil Haram', judul_ar: 'حَوْلَ المَسْجِدِ الحَرَام', subjudul: 'Tanya arah, tempat wudhu, dan lokasi zamzam', deskripsi: 'Ungkapan penting saat berada di sekitar Masjidil Haram.' }
+        {
+          id: 1,
+          judul_id: 'Di Bandara',
+          judul_ar: 'فِي المَطَار',
+          subjudul: 'Check-in, Bagasi, Gate, dan Lainnya',
+          deskripsi: 'Panduan percakapan praktis di bandara mulai dari check-in, pemeriksaan tiket, hingga menanyakan nomor gate.'
+        },
+        {
+          id: 2,
+          judul_id: 'Di Imigrasi dan Pemeriksaan Keamanan',
+          judul_ar: 'فِي الجَوَازَاتِ وَالتَّفْتِيش',
+          subjudul: 'Tanya paspor, visa, tujuan kedatangan',
+          deskripsi: 'Ungkapan penting saat berhadapan dengan petugas imigrasi dan pemeriksaan keamanan barang bawaan.'
+        }
       ],
       kosakata: [
         { id: 'k-prev-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
-        { id: 'k-prev-2', bab_id: 8, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت، فِين مَكَان زَمْزَم؟', transliterasi: 'law samaht, fēn makān zamzam?', arti: 'permisi, di mana tempat air zamzam?' }
+        { id: 'k-prev-2', bab_id: 2, kategori: 'Ungkapan', arab: 'أَبْشِر', transliterasi: 'absyir', arti: 'siap / dengan senang hati' }
       ],
       percakapan: [
-        { id: 'p-prev-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 1, peran: 'Petugas (المُوَظَّف)', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
-        { id: 'p-prev-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 2, peran: 'Penumpang (المُسَافِر)', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' }
+        { id: 'p-prev-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 1, peran: 'Petugas', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
+        { id: 'p-prev-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 2, peran: 'Penumpang', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' }
       ],
       budaya_kaidah: [
-        { id: 'b-prev-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) selalu digunakan sebagai pembuka sopan sebelum bertanya atau meminta bantuan.' },
-        { id: 'b-prev-2', bab_id: 1, tipe: 'Kaidah', judul: 'Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyah dibaca sukun, misalnya مَطَارْ (mathār).' }
+        { id: 'b-prev-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) selalu dipakai sebagai pembuka sopan sebelum bertanya atau meminta bantuan.' },
+        { id: 'b-prev-2', bab_id: 1, tipe: 'Kaidah', judul: 'Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyah Saudi disukun. Contoh: مَطَارْ (mathār), bukan mathārun.' }
       ],
       progres_user: []
-    } : null;
+    };
+
+    let currentTranslateController = null;
+    let translateTimerInterval = null;
 
     // =========================================================================
-    // HELPER UTILITAS (ESCAPE HTML, TOAST, COPY, MODAL KONFIRMASI)
+    // FUNGSI BANTU UI, AUDIO, SALIN, KONFIRMASI, & KONFIGURASI GEMINI
     // =========================================================================
     function escapeHtml(str) {
       return String(str ?? '')
@@ -972,21 +957,21 @@
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       if (!container) return;
-      const colors = {
-        success: 'bg-emeraldbrand-700 text-white',
-        error: 'bg-rose-600 text-white',
-        warning: 'bg-amber-600 text-white',
-        info: 'bg-slate-800 text-white',
+      const styles = {
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        error: 'bg-rose-600 text-white border-rose-500',
+        warning: 'bg-amber-600 text-white border-amber-500',
+        info: 'bg-slate-800 text-white border-slate-700',
       };
       const el = document.createElement('div');
-      el.className = `pointer-events-auto px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-xl max-w-sm transition-all duration-300 ${colors[type] || colors.info}`;
+      el.className = `pointer-events-auto max-w-[92%] px-4 py-2.5 rounded-2xl border shadow-lg text-xs font-bold text-center transition-all duration-300 ${styles[type] || styles.info}`;
       el.textContent = message;
       container.appendChild(el);
       setTimeout(() => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(-6px)';
         setTimeout(() => el.remove(), 300);
-      }, 3600);
+      }, 3200);
     }
 
     function copyTextSafe(text) {
@@ -998,13 +983,36 @@
         document.body.appendChild(ta);
         ta.focus();
         ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        showToast('Teks berhasil disalin!', 'success');
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) {
+          showToast('Teks berhasil disalin!', 'success');
+        } else {
+          showToast('Gagal menyalin teks.', 'warning');
+        }
       } catch (e) {
-        showToast('Gagal menyalin teks.', 'error');
+        showToast('Gagal menyalin teks.', 'warning');
       }
     }
+
+    function speakArabic(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Browser tidak mendukung pemutaran audio TTS.', 'warning');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ar-SA';
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        showToast('Gagal memutar audio.', 'error');
+      }
+    }
+
+    window.__speakEncoded = (enc) => speakArabic(decodeURIComponent(enc));
+    window.__copyEncoded = (enc) => copyTextSafe(decodeURIComponent(enc));
 
     function showConfirmModal(title, message) {
       return new Promise((resolve) => {
@@ -1031,73 +1039,55 @@
     }
 
     function sanitizeApiKey(raw) {
-      const cleaned = String(raw || '').replace(/[\s"'`]/g, '').trim();
-      if (!cleaned || /^(API_KEY|GEMINI_API_KEY|MASUKKAN|ISI_)/i.test(cleaned)) return '';
-      return cleaned;
+      return String(raw || '').trim().replace(/^["']+|["']+$/g, '').replace(/\s+/g, '');
     }
 
     function getGeminiConfig() {
-      const localEndpoint = (localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
-      const endpoint = localEndpoint || GEMINI_API_ENDPOINT.trim();
-      const localKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key'));
-      const activeKey = localKey || sanitizeApiKey(apiKey);
-      return { endpoint, activeKey, hasLocalKey: Boolean(localKey) };
+      const storedEp = (localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
+      const storedKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key') || '');
+      const endpoint = storedEp || GEMINI_API_ENDPOINT.trim();
+      const activeKey = storedKey || sanitizeApiKey(GEMINI_DEFAULT_KEY);
+      return { endpoint, activeKey };
     }
 
-    // Membangun URL & Header resmi Google Gemini API (wajib header x-goog-api-key untuk kunci format baru AQ.)
-    function buildGeminiDirectRequest(key, model, payload) {
-      const cleanKey = sanitizeApiKey(key);
-      const headers = { 'Content-Type': 'application/json' };
-      let url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-      if (cleanKey) {
-        headers['x-goog-api-key'] = cleanKey;
-      } else {
-        url += `?key=`;
+    function buildGeminiDirectRequest(apiKey, model, payload) {
+      const cleanKey = sanitizeApiKey(apiKey);
+      if (!cleanKey) {
+        throw new Error('API Key Gemini belum diisi. Ketuk ikon pengaturan (gerigi) di pojok kanan atas untuk memasukkan API Key Anda.');
       }
-      return {
-        url,
-        options: {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(payload)
-        }
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': cleanKey,
+        },
+        body: JSON.stringify(payload),
       };
+      return { url, options };
     }
 
     function updateTranslateStatusBadge() {
       const badge = document.getElementById('tr-connection-badge');
       if (!badge) return;
-      const { endpoint, hasLocalKey } = getGeminiConfig();
+      const { endpoint, activeKey } = getGeminiConfig();
       if (endpoint) {
-        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Mode Proxy: ${escapeHtml(endpoint)}</span>`;
-      } else if (hasLocalKey) {
-        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>API Key Tersimpan di Perangkat</span>`;
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Proxy Server Aktif</span>';
+      } else if (activeKey) {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>API Key Gemini Terpasang</span>';
+      } else if (IS_PREVIEW) {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Mode Simulasi Preview</span>';
       } else {
-        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Mode Default (Atur API Key jika di Vercel)</span>`;
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>API Key Belum Diatur</span>';
       }
     }
-
-    function speakArabic(text) {
-      try {
-        if (!('speechSynthesis' in window)) {
-          showToast('Browser tidak mendukung audio TTS.', 'warning');
-          return;
-        }
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'ar-SA';
-        utter.rate = 0.9;
-        window.speechSynthesis.speak(utter);
-      } catch (e) {
-        showToast('Audio pengucapan tidak tersedia.', 'warning');
-      }
-    }
-
-    window.__copyEncoded = (enc) => copyTextSafe(decodeURIComponent(enc));
-    window.__speakEncoded = (enc) => speakArabic(decodeURIComponent(enc));
 
     // =========================================================================
-    // PWA (SERVICE WORKER DINAMIS & AUTO-INSTALL BANNER)
+    // PWA (SERVICE WORKER DINAMIS TANPA POPUP BANNER)
     // =========================================================================
     function initPWA() {
       // Gunakan Service Worker resmi jika ada di Vercel, jika tidak pakai Blob SW 1-file
@@ -1124,48 +1114,6 @@
           }
         });
       }
-
-      const banner = document.getElementById('pwa-install-banner');
-      const desc = document.getElementById('pwa-install-desc');
-      const btnInstall = document.getElementById('pwa-btn-install');
-      const btnClose = document.getElementById('pwa-btn-close');
-
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-      if (isStandalone) return;
-
-      let deferredPrompt = null;
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (sessionStorage.getItem('pwa_dismissed') !== '1') {
-          banner.classList.remove('hidden');
-        }
-      });
-
-      btnInstall.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') banner.classList.add('hidden');
-        deferredPrompt = null;
-      });
-
-      window.addEventListener('appinstalled', () => {
-        banner.classList.add('hidden');
-        deferredPrompt = null;
-      });
-
-      const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-      if (isIos && sessionStorage.getItem('pwa_dismissed') !== '1') {
-        desc.innerHTML = 'Ketuk tombol <strong>Share (&uarr;)</strong> di Safari, lalu pilih <strong>Add to Home Screen</strong>.';
-        btnInstall.classList.add('hidden');
-        setTimeout(() => banner.classList.remove('hidden'), 1500);
-      }
-
-      btnClose.addEventListener('click', () => {
-        banner.classList.add('hidden');
-        sessionStorage.setItem('pwa_dismissed', '1');
-      });
     }
 
     // =========================================================================
