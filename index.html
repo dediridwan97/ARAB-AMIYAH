@@ -958,7 +958,7 @@
     // KONFIGURASI GEMINI AI TRANSLATE
     // Opsi 1 (Rekomendasi Vercel): Isi "/api/translate" agar API Key aman di Server Vercel (Environment Variable: GEMINI_API_KEY)
     // Opsi 2 (Langsung Client): Kosongkan GEMINI_API_ENDPOINT & biarkan apiKey = "" (otomatis di Preview) atau isi via ikon gerigi di UI
-    const GEMINI_API_ENDPOINT = "";
+    const GEMINI_API_ENDPOINT = "/api/translate";
     const apiKey = ""; // Biarkan kosong untuk runtime Canvas; di Vercel atur via /api/translate atau ikon Pengaturan
     const GEMINI_MODEL = "gemini-3-flash-preview";
 
