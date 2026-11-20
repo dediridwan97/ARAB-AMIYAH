@@ -1,25 +1,2601 @@
-export default async function handler(req, res) {
-     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-     const apiKey = (process.env.GEMINI_API_KEY || '').trim();
-     if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY belum diatur di Vercel.' });
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>Labbaik Academy by Abu Syauqi — Kamus Arab 'Ammiyah</title>
+  <meta name="theme-color" content="#c5a253" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Labbaik Academy" />
 
-     try {
-       const { model = 'gemini-3-flash-preview', payload } = req.body || {};
-       const response = await fetch(
-         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
-         {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-             'x-goog-api-key': apiKey,
-           },
-           body: JSON.stringify(payload),
-         }
-       );
-       const data = await response.json();
-       if (!response.ok) return res.status(response.status).json(data);
-       return res.status(200).json(data);
-     } catch (err) {
-       return res.status(500).json({ error: err.message });
-     }
-   }
+  <!-- Ikon Browser & Ikon Layar Utama HP (Logo Labbaik Academy) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='26' fill='%23ffffff'/%3E%3Cg fill='%23c5a253'%3E%3Cpath d='M14 31 L60 12 L106 31 L106 44 L60 25 L14 44 Z'/%3E%3Cpath d='M14 50 L60 31 L106 50 L106 59 L60 40 L14 59 Z'/%3E%3Cpath d='M58 46 L106 65 L106 108 L92 108 L92 84 C92 76 74 76 74 84 L74 108 L58 108 Z'/%3E%3C/g%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png?v=2" />
+
+  <!-- PWA Manifest Data URI (otomatis beralih ke /manifest.json?v=2 saat di-deploy ke Vercel) -->
+  <link id="pwa-manifest-link" rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Labbaik%20Academy%20by%20Abu%20Syauqi%22%2C%22short_name%22%3A%22Labbaik%20Academy%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23c5a253%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520120%2520120'%253E%253Crect%2520width%3D'120'%2520height%3D'120'%2520rx%3D'26'%2520fill%3D'%2523ffffff'%2F%253E%253Cg%2520fill%3D'%2523c5a253'%253E%253Cpath%2520d%3D'M14%252031%2520L60%252012%2520L106%252031%2520L106%252044%2520L60%252025%2520L14%252044%2520Z'%2F%253E%253Cpath%2520d%3D'M14%252050%2520L60%252031%2520L106%252050%2520L106%252059%2520L60%252040%2520L14%252059%2520Z'%2F%253E%253Cpath%2520d%3D'M58%252046%2520L106%252065%2520L106%2520108%2520L92%2520108%2520L92%252084%2520C92%252076%252074%252076%252074%252084%2520L74%2520108%2520L58%2520108%2520Z'%2F%253E%253C%2Fg%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D" />
+
+  <!-- Google Fonts: Inter & Amiri (untuk teks Arab berharakat yang jernih) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            arabic: ['Amiri', 'Traditional Arabic', 'serif'],
+          },
+          colors: {
+            emeraldbrand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            goldaccent: {
+              50: '#fefce8',
+              100: '#fef3c7',
+              200: '#fde68a',
+              500: '#d97706',
+              600: '#b45309',
+              700: '#92400e',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Reset dasar agar skala HP & Tablet selalu pas 100% tanpa mengecil */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      background: #ffffff;
+    }
+
+    /* Mencegah auto-zoom di iOS Safari & Chrome Mobile saat mengetik */
+    @media (max-width: 767px) {
+      input, textarea, select {
+        font-size: 16px !important;
+      }
+    }
+
+    /* Full Page Wrapper menutupi elemen bawaan Blogger / Standalone */
+    /* Full Page Wrapper menutupi elemen bawaan Blogger / Standalone (Mobile-Only Frame) */
+    #app-root {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      min-height: 100vh;
+      z-index: 999999;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      background: #e2e8f0;
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Bingkai Mobile-Only: Penuh di HP, terpusat rapi seperti aplikasi native di Tablet/Desktop */
+    .mobile-app-frame {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(15, 118, 110, 0.10), transparent 45%),
+        radial-gradient(circle at 88% 14%, rgba(217, 119, 6, 0.10), transparent 42%),
+        radial-gradient(circle at 50% 95%, rgba(15, 118, 110, 0.07), transparent 48%),
+        #fbfbf8;
+    }
+
+    @media (min-width: 481px) {
+      .mobile-app-frame {
+        box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.22);
+        border-left: 1px solid rgba(255, 255, 255, 0.7);
+        border-right: 1px solid rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    /* Tata Letak Mobile-Only Permanen */
+    .mobile-header {
+      display: flex;
+      padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+    .mobile-bottom-nav {
+      display: grid;
+      bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+    .app-main-area {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    /* Glassmorphism Utilities */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.80);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-color: rgba(226, 232, 240, 0.85);
+    }
+
+    .arabic-text {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      direction: rtl;
+      line-height: 1.9;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.65);
+    }
+
+    /* Shimmer loading animation untuk Translate AI */
+    @keyframes shimmerSlide {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .ai-shimmer {
+      background: linear-gradient(90deg, rgba(226,232,240,0.45) 25%, rgba(204,251,241,0.75) 50%, rgba(226,232,240,0.45) 75%);
+      background-size: 200% 100%;
+      animation: shimmerSlide 1.4s infinite linear;
+    }
+
+    /* Flashcard 3D Flip */
+    .flashcard-scene {
+      perspective: 1000px;
+    }
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      min-height: 290px;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .flashcard-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div id="app-root">
+    <div class="mobile-app-frame">
+
+    <!-- Toast Notifikasi -->
+    <div id="toast-container" class="absolute top-3 left-3 right-3 z-[1000030] flex flex-col gap-2 pointer-events-none items-center"></div>
+
+    <!-- Banner Indikator Mode Preview (Otomatis disembunyikan 100% saat IS_PREVIEW = false) -->
+    <div id="preview-mode-banner" class="hidden shrink-0 bg-amber-50/95 border-b border-amber-200 px-3 py-1.5 text-center text-[11px] font-semibold text-amber-900 z-50 flex items-center justify-center gap-1.5">
+      <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
+      <span class="truncate">Mode Preview Aktif &bull; Ubah <code class="bg-amber-100 px-1 rounded">IS_PREVIEW = false</code></span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- HALAMAN LOGIN HYBRID (PESERTA & ADMIN)     -->
+    <!-- ========================================== -->
+    <section id="login-screen" class="flex-1 w-full overflow-y-auto custom-scroll flex items-center justify-center px-4 py-6">
+      <div class="w-full max-w-[400px] my-auto py-2">
+        <div class="text-center mb-5">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white shadow-xl shadow-amber-900/10 mb-3 border border-amber-200/80 p-3">
+            <svg viewBox="0 0 120 120" class="w-full h-full" aria-label="Logo Labbaik Academy">
+              <g fill="#c5a253">
+                <path d="M12 31 L60 10 L108 31 L108 45 L60 24 L12 45 Z" />
+                <path d="M12 51 L60 30 L108 51 L108 60 L60 39 L12 60 Z" />
+                <path d="M58 46 L108 66 L108 110 L93 110 L93 85 C93 76 73 76 73 85 L73 110 L58 110 Z" />
+              </g>
+            </svg>
+          </div>
+          <p class="text-sm font-extrabold tracking-wide text-[#9a7b32] mb-1">Labbaik Academy by Abu Syauqi</p>
+          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kamus Arab 'Ammiyah</h1>
+          <p class="text-xs text-slate-600 mt-1">Dialek Saudi Sehari-hari &bull; 30 Bab Materi Lengkap</p>
+        </div>
+
+        <div class="glass-panel rounded-3xl p-5">
+          <!-- Tab Pilihan Login -->
+          <div class="grid grid-cols-2 gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl mb-5">
+            <button type="button" id="tab-login-user" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-white text-emeraldbrand-700 shadow-sm transition">
+              Peserta / Jamaah
+            </button>
+            <button type="button" id="tab-login-admin" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition">
+              Admin Pengelola
+            </button>
+          </div>
+
+          <!-- Form Login Peserta (Via Tabel users Supabase) -->
+          <form id="form-login-user" class="space-y-4">
+            <div>
+              <label for="login-user-username" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">Username Peserta</label>
+              <input id="login-user-username" type="text" required autocomplete="username" placeholder="Masukkan username Anda"
+                class="w-full px-4 py-3 rounded-2xl bg-white/90 border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label for="login-user-password" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">Kata Sandi / Password</label>
+              <input id="login-user-password" type="password" required autocomplete="current-password" placeholder="Masukkan password"
+                class="w-full px-4 py-3 rounded-2xl bg-white/90 border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
+            </div>
+            <button type="submit" id="btn-submit-user" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emeraldbrand-700 to-emeraldbrand-800 hover:from-emeraldbrand-800 hover:to-emeraldbrand-900 text-white font-bold text-sm shadow-lg shadow-emeraldbrand-700/25 transition active:scale-[0.99]">
+              Masuk sebagai Peserta
+            </button>
+          </form>
+
+          <!-- Form Login Admin (Via Supabase Auth) -->
+          <form id="form-login-admin" class="hidden space-y-4">
+            <div>
+              <label for="login-admin-email" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">Email Admin (Supabase Auth)</label>
+              <input id="login-admin-email" type="email" required autocomplete="email" placeholder="admin@domain.com"
+                class="w-full px-4 py-3 rounded-2xl bg-white/90 border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label for="login-admin-password" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1.5">Password Admin</label>
+              <input id="login-admin-password" type="password" required autocomplete="current-password" placeholder="Masukkan password admin"
+                class="w-full px-4 py-3 rounded-2xl bg-white/90 border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
+            </div>
+            <button type="submit" id="btn-submit-admin" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-900 hover:to-black text-white font-bold text-sm shadow-lg shadow-slate-900/20 transition active:scale-[0.99]">
+              Masuk sebagai Admin
+            </button>
+          </form>
+
+          <!-- Quick Login Khusus Mode Preview (Hilang 100% saat IS_PREVIEW = false) -->
+          <div id="preview-quick-login" class="hidden mt-5 pt-5 border-t border-slate-200/80">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700 text-center mb-2.5">Akses Cepat Uji Coba (Preview)</p>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" id="btn-quick-user" class="py-2.5 px-3 rounded-xl bg-emeraldbrand-50 hover:bg-emeraldbrand-100 text-emeraldbrand-800 border border-emeraldbrand-200 text-xs font-bold transition">
+                Quick Login Peserta
+              </button>
+              <button type="button" id="btn-quick-admin" class="py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition">
+                Quick Login Admin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SHELL UTAMA APLIKASI (MOBILE-ONLY)         -->
+    <!-- ========================================== -->
+    <div id="app-shell" class="hidden flex-1 flex flex-col min-h-0 relative overflow-hidden">
+
+      <!-- Mobile Top Header (Permanen) -->
+      <header class="mobile-header shrink-0 z-20 glass-nav border-b px-4 pb-3 items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-white border border-amber-200/90 flex items-center justify-center shadow-sm p-1.5 shrink-0">
+            <svg viewBox="0 0 120 120" class="w-full h-full" aria-label="Logo Labbaik Academy">
+              <g fill="#c5a253">
+                <path d="M12 31 L60 10 L108 31 L108 45 L60 24 L12 45 Z" />
+                <path d="M12 51 L60 30 L108 51 L108 60 L60 39 L12 60 Z" />
+                <path d="M58 46 L108 66 L108 110 L93 110 L93 85 C93 76 73 76 73 85 L73 110 L58 110 Z" />
+              </g>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h2 class="text-sm font-extrabold text-slate-900 truncate leading-tight">Labbaik Academy</h2>
+            <p id="mob-user-label" class="text-[11px] font-semibold text-[#9a7b32] truncate">by Abu Syauqi</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button type="button" id="mob-btn-admin" class="hidden px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">
+            Admin
+          </button>
+          <button type="button" id="btn-logout-mobile" class="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition" title="Keluar">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content Container -->
+      <main id="main-scroll-area" class="app-main-area flex-1 overflow-y-auto overflow-x-hidden custom-scroll pb-28">
+        <div class="w-full px-3.5 pt-4">
+
+          <!-- ========================================== -->
+          <!-- VIEW 1: BERANDA & PENCARIAN SUPER CEPAT    -->
+          <!-- ========================================== -->
+          <section id="view-beranda" class="app-view space-y-4">
+            <!-- Hero & Smart Search -->
+            <div class="glass-panel rounded-3xl p-4 relative overflow-hidden">
+              <div class="flex flex-col gap-3 mb-3.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-emeraldbrand-100 text-emeraldbrand-800 text-[10px] font-bold mb-1">Ahlan wa Sahlan &bull; أهلاً وسهلاً</span>
+                    <h1 class="text-lg font-extrabold text-slate-900 leading-snug">Cari Kosakata &amp; Dialog Saudi</h1>
+                  </div>
+                  <button type="button" id="btn-hero-translate" class="shrink-0 px-3 py-2 rounded-xl bg-gradient-to-r from-emeraldbrand-700 to-teal-800 text-white text-xs font-bold shadow-md flex items-center gap-1.5 transition active:scale-[0.98]">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <span>AI Trans</span>
+                  </button>
+                </div>
+                <p class="text-xs text-slate-600">Ketik kata Indonesia, Arab, atau transliterasi (<em>wēn</em>, <em>abghā</em>, <em>bandara</em>).</p>
+              </div>
+
+              <div class="relative">
+                <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input id="global-search-input" type="search" placeholder="Cari di seluruh 30 bab..."
+                  class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm shadow-sm transition" />
+              </div>
+
+              <!-- Statistik Progres (Grid 2x2 Mobile) -->
+              <div class="grid grid-cols-2 gap-2.5 mt-3.5">
+                <div class="bg-white/80 rounded-2xl p-3 border border-slate-100">
+                  <p class="text-[11px] font-semibold text-slate-500">Total Bab</p>
+                  <p id="stat-total-bab" class="text-lg font-extrabold text-slate-900 mt-0.5">0</p>
+                </div>
+                <div class="bg-white/80 rounded-2xl p-3 border border-slate-100">
+                  <p class="text-[11px] font-semibold text-slate-500">Kosakata</p>
+                  <p id="stat-total-kosa" class="text-lg font-extrabold text-emeraldbrand-700 mt-0.5">0</p>
+                </div>
+                <div class="bg-white/80 rounded-2xl p-3 border border-slate-100">
+                  <p class="text-[11px] font-semibold text-slate-500">Sudah Hafal</p>
+                  <p id="stat-total-hafal" class="text-lg font-extrabold text-teal-700 mt-0.5">0</p>
+                </div>
+                <div class="bg-white/80 rounded-2xl p-3 border border-slate-100">
+                  <p class="text-[11px] font-semibold text-slate-500">Favorit</p>
+                  <p id="stat-total-fav" class="text-lg font-extrabold text-goldaccent-600 mt-0.5">0</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hasil Pencarian Global -->
+            <div id="global-search-results" class="hidden space-y-3"></div>
+
+            <!-- Daftar Bab Materi (1 Kolom Mobile) -->
+            <div>
+              <div class="flex items-center justify-between mb-2.5 px-0.5">
+                <h2 class="text-base font-extrabold text-slate-900">Daftar Bab Materi</h2>
+                <span id="beranda-bab-count" class="text-xs font-bold text-slate-500">0 Bab</span>
+              </div>
+              <div id="beranda-bab-grid" class="grid grid-cols-1 gap-2.5"></div>
+            </div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 2: KAMUS KOSAKATA LENGKAP             -->
+          <!-- ========================================== -->
+          <section id="view-kamus" class="app-view hidden space-y-3.5">
+            <div class="glass-panel rounded-3xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <h2 class="text-base font-extrabold text-slate-900">Kamus Kosakata 'Ammiyah</h2>
+                  <p class="text-[11px] text-slate-500">Saring berdasarkan bab, kategori, atau hafalan.</p>
+                </div>
+                <span id="kamus-count-badge" class="shrink-0 px-2.5 py-1 rounded-full bg-emeraldbrand-50 text-emeraldbrand-800 text-[11px] font-bold border border-emeraldbrand-200">0 Kata</span>
+              </div>
+
+              <div class="grid grid-cols-1 gap-2">
+                <select id="kamus-filter-bab" class="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600"></select>
+                <div class="grid grid-cols-2 gap-2">
+                  <select id="kamus-filter-kat" class="px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600">
+                    <option value="all">Semua Kategori</option>
+                    <option value="Kata Benda">Kata Benda</option>
+                    <option value="Kata Kerja">Kata Kerja</option>
+                    <option value="Partikel">Partikel</option>
+                    <option value="Ungkapan">Ungkapan</option>
+                    <option value="hafal">Sudah Hafal</option>
+                    <option value="favorit">Favorit</option>
+                  </select>
+                  <input id="kamus-search-input" type="search" placeholder="Filter kata..."
+                    class="px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+                </div>
+              </div>
+
+              <div id="kamus-bab-deskripsi" class="hidden p-3 rounded-2xl bg-emeraldbrand-50/70 border border-emeraldbrand-100 text-xs text-slate-700 leading-relaxed"></div>
+            </div>
+
+            <div id="kamus-list" class="grid grid-cols-1 gap-2.5"></div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 3: PERCAKAPAN & MINI DIALOG           -->
+          <!-- ========================================== -->
+          <section id="view-percakapan" class="app-view hidden space-y-3.5">
+            <div class="glass-panel rounded-3xl p-4 space-y-3">
+              <div>
+                <h2 class="text-base font-extrabold text-slate-900">Percakapan &amp; Contoh Kalimat</h2>
+                <p class="text-[11px] text-slate-500">Pola kalimat sehari-hari dan simulasi dialog dua arah.</p>
+              </div>
+              <div class="grid grid-cols-1 gap-2">
+                <select id="percakapan-filter-bab" class="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600"></select>
+                <select id="percakapan-filter-jenis" class="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600">
+                  <option value="all">Semua Jenis (Kalimat &amp; Dialog)</option>
+                  <option value="Contoh Kalimat">Contoh Kalimat</option>
+                  <option value="Mini Dialog">Mini Dialog</option>
+                </select>
+              </div>
+            </div>
+            <div id="percakapan-list" class="space-y-3.5"></div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 4: TRANSLATE AI GEMINI                -->
+          <!-- ========================================== -->
+          <section id="view-translate" class="app-view hidden space-y-3.5">
+            <div class="glass-panel rounded-3xl p-4 space-y-3.5">
+              <div class="flex items-start justify-between gap-2.5">
+                <div class="min-w-0">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full bg-goldaccent-100 text-goldaccent-700 text-[10px] font-bold uppercase tracking-wider mb-1">AI Gemini</span>
+                  <h2 class="text-base font-extrabold text-slate-900 leading-snug">Translate ID &#8644; Arab 'Ammiyah</h2>
+                  <p id="tr-connection-badge" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Status AI: Siap</span>
+                  </p>
+                </div>
+                <button type="button" id="btn-open-gemini-settings" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 transition" title="Pengaturan API Key Gemini">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </button>
+              </div>
+
+              <!-- Arah Terjemahan -->
+              <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl">
+                <div id="tr-dir-from" class="flex-1 text-center py-2 px-1.5 rounded-xl bg-white text-xs font-bold text-emeraldbrand-800 shadow-sm truncate">Bahasa Indonesia</div>
+                <button type="button" id="tr-swap-btn" class="p-2 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white shadow-sm shrink-0 transition" title="Tukar Arah">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                </button>
+                <div id="tr-dir-to" class="flex-1 text-center py-2 px-1.5 rounded-xl bg-white text-xs font-bold text-slate-800 shadow-sm truncate">Arab 'Ammiyah</div>
+              </div>
+
+              <!-- Opsi Lawan Bicara & Gaya Bahasa -->
+              <div class="grid grid-cols-1 gap-2">
+                <div>
+                  <label for="tr-lawan-bicara" class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Lawan Bicara</label>
+                  <select id="tr-lawan-bicara" class="w-full px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600">
+                    <option value="Laki-laki tunggal">Laki-laki tunggal (إِنْتَ)</option>
+                    <option value="Perempuan tunggal">Perempuan tunggal (إِنْتِ)</option>
+                    <option value="Jamak / Banyak orang">Jamak / Banyak orang (إِنْتُوا)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="tr-gaya-bahasa" class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Gaya Bahasa</label>
+                  <select id="tr-gaya-bahasa" class="w-full px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600">
+                    <option value="Sopan & Ramah">Sopan &amp; Ramah (Resmi Harian)</option>
+                    <option value="Santai & Akrab">Santai &amp; Akrab (Sesama Teman)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Textarea Input -->
+              <div>
+                <textarea id="tr-input-text" rows="3" placeholder="Contoh: Permisi, di mana pintu masuk Masjidil Haram terdekat?"
+                  class="w-full p-3.5 rounded-2xl bg-white border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm resize-none transition"></textarea>
+                <!-- Chip Contoh Cepat -->
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <button type="button" class="tr-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emeraldbrand-50 hover:text-emeraldbrand-800 text-[11px] font-semibold text-slate-600 transition" data-text="Permisi, di mana tempat wudhu perempuan?">Tempat wudhu?</button>
+                  <button type="button" class="tr-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emeraldbrand-50 hover:text-emeraldbrand-800 text-[11px] font-semibold text-slate-600 transition" data-text="Berapa harga jubah ini? Bisa kurang sedikit?">Tawar harga</button>
+                  <button type="button" class="tr-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emeraldbrand-50 hover:text-emeraldbrand-800 text-[11px] font-semibold text-slate-600 transition" data-text="Tolong antarkan saya ke hotel dekat Masjid Nabawi">Naik taksi</button>
+                </div>
+              </div>
+
+              <!-- Tombol Submit Translate -->
+              <button type="button" id="tr-submit-btn" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emeraldbrand-700 to-teal-800 hover:from-emeraldbrand-800 hover:to-teal-900 text-white font-extrabold text-sm shadow-lg shadow-emeraldbrand-800/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span id="tr-submit-label">Terjemahkan dengan AI Gemini</span>
+              </button>
+            </div>
+
+            <!-- Loading State Translate AI -->
+            <div id="tr-loading-card" class="hidden glass-panel rounded-3xl p-4 space-y-3.5 border border-emeraldbrand-200">
+              <div class="flex items-center justify-between gap-2.5">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-7 h-7 border-[3px] border-emeraldbrand-200 border-t-emeraldbrand-700 rounded-full animate-spin shrink-0"></div>
+                  <div class="min-w-0">
+                    <p id="tr-loading-status" class="text-xs font-extrabold text-slate-800 truncate">Menghubungi AI Gemini...</p>
+                    <p id="tr-loading-timer" class="text-[11px] font-semibold text-slate-500">Menyusun dialek 'Ammiyah (0 dtk)</p>
+                  </div>
+                </div>
+                <button type="button" id="tr-cancel-btn" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold shrink-0 transition">
+                  Batal
+                </button>
+              </div>
+              <div class="space-y-2">
+                <div class="h-14 w-full rounded-2xl ai-shimmer"></div>
+                <div class="h-12 w-full rounded-2xl ai-shimmer"></div>
+              </div>
+            </div>
+
+            <!-- Error State Inline Translate AI -->
+            <div id="tr-error-card" class="hidden glass-panel rounded-3xl p-5 border-2 border-rose-200 bg-rose-50/75 space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <h4 class="text-sm font-extrabold text-rose-900">Gagal Menerjemahkan</h4>
+                  <p id="tr-error-message" class="text-xs text-rose-700 mt-0.5 leading-relaxed"></p>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 pt-1">
+                <button type="button" id="tr-retry-btn" class="px-4 py-2 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold transition">Coba Lagi</button>
+                <button type="button" id="tr-error-settings-btn" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition">Atur API Key Gemini</button>
+              </div>
+            </div>
+
+            <!-- Kartu Hasil Terjemahan AI -->
+            <div id="tr-result-card" class="hidden glass-panel rounded-3xl p-4 space-y-3.5 border border-emeraldbrand-200/80">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2.5 py-0.5 rounded-full bg-emeraldbrand-100 text-emeraldbrand-800 text-[11px] font-bold">Hasil 'Ammiyah Saudi</span>
+                  <span id="tr-preview-sim-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">Simulasi Preview</span>
+                </div>
+                <span id="tr-result-meta" class="text-[11px] font-semibold text-slate-500"></span>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emeraldbrand-50/90 to-white border border-emeraldbrand-100 space-y-2">
+                <p id="tr-res-arab" class="arabic-text text-2xl font-bold text-slate-900 text-right"></p>
+                <p id="tr-res-translit" class="text-sm font-bold text-emeraldbrand-800 italic"></p>
+                <p id="tr-res-id" class="text-sm text-slate-700 font-medium pt-1 border-t border-emeraldbrand-100/80"></p>
+                <div class="flex items-center gap-2 pt-2">
+                  <button type="button" id="tr-btn-speak" class="flex-1 py-2 rounded-xl bg-white hover:bg-emeraldbrand-50 text-emeraldbrand-800 border border-emeraldbrand-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                    <span>Dengar</span>
+                  </button>
+                  <button type="button" id="tr-btn-copy" class="flex-1 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span>Salin</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-2.5">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70">
+                  <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Perbandingan Arab Fushhā</p>
+                  <p id="tr-res-fusha" class="arabic-text text-lg text-slate-800 text-right"></p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/70">
+                  <p class="text-[11px] font-bold uppercase tracking-wider text-amber-800 mb-1">Catatan Budaya &amp; Kaidah</p>
+                  <p id="tr-res-catatan" class="text-xs text-slate-700 leading-relaxed"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Riwayat Terjemahan -->
+            <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-extrabold text-slate-800">Riwayat Terjemahan</h3>
+                <button type="button" id="tr-clear-history" class="text-xs font-bold text-rose-600 hover:underline">Bersihkan</button>
+              </div>
+              <div id="tr-history-list" class="space-y-2"></div>
+            </div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 5: BUDAYA & KAIDAH 'AMMIYAH           -->
+          <!-- ========================================== -->
+          <section id="view-budaya" class="app-view hidden space-y-3.5">
+            <div class="glass-panel rounded-3xl p-4 space-y-3">
+              <div>
+                <h2 class="text-base font-extrabold text-slate-900">Budaya &amp; Kaidah 'Ammiyah</h2>
+                <p class="text-[11px] text-slate-500">Etika komunikasi lokal Saudi serta rumus dialek harian.</p>
+              </div>
+              <div class="grid grid-cols-1 gap-2">
+                <select id="budaya-filter-bab" class="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600"></select>
+                <select id="budaya-filter-tipe" class="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none focus:border-emeraldbrand-600">
+                  <option value="all">Semua (Budaya &amp; Kaidah)</option>
+                  <option value="Budaya">Adab &amp; Budaya Saudi</option>
+                  <option value="Kaidah">Kaidah 'Ammiyah</option>
+                </select>
+              </div>
+            </div>
+            <div id="budaya-list" class="space-y-3"></div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 6: MODE LATIHAN / FLASHCARD           -->
+          <!-- ========================================== -->
+          <section id="view-latihan" class="app-view hidden space-y-3.5">
+            <div class="glass-panel rounded-3xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <h2 class="text-base font-extrabold text-slate-900">Mode Latihan Flashcard</h2>
+                  <p class="text-[11px] text-slate-500">Ketuk kartu untuk membalik dan menguji hafalan.</p>
+                </div>
+                <span id="fc-counter" class="shrink-0 text-xs font-extrabold text-emeraldbrand-700 bg-emeraldbrand-50 px-2.5 py-1 rounded-full border border-emeraldbrand-200">0 / 0</span>
+              </div>
+              <div class="flex gap-2">
+                <select id="fc-filter-bab" class="flex-1 min-w-0 px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-medium outline-none"></select>
+                <button type="button" id="fc-btn-shuffle" class="shrink-0 px-3.5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">Acak</button>
+              </div>
+            </div>
+
+            <div id="fc-empty" class="hidden glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada kosakata pada filter ini.</div>
+
+            <div id="fc-stage" class="space-y-3.5">
+              <div class="flashcard-scene w-full">
+                <div id="fc-card-inner" class="flashcard-inner cursor-pointer">
+                  <!-- Depan -->
+                  <div class="flashcard-face glass-panel rounded-3xl p-6 flex flex-col items-center justify-center text-center border-2 border-emeraldbrand-100">
+                    <span id="fc-front-kat" class="px-3 py-1 rounded-full bg-emeraldbrand-50 text-emeraldbrand-700 text-[11px] font-bold mb-4">Kategori</span>
+                    <p id="fc-front-arab" class="arabic-text text-3xl font-bold text-slate-900 mb-3"></p>
+                    <p id="fc-front-translit" class="text-sm font-bold text-emeraldbrand-700 italic"></p>
+                    <p class="text-[11px] text-slate-400 mt-6">Ketuk kartu untuk lihat arti &rarr;</p>
+                  </div>
+                  <!-- Belakang -->
+                  <div class="flashcard-face flashcard-back glass-panel rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-gradient-to-br from-emeraldbrand-800 to-teal-900 text-white">
+                    <span class="px-3 py-1 rounded-full bg-white/15 text-emeraldbrand-100 text-[11px] font-bold mb-4">Arti Bahasa Indonesia</span>
+                    <p id="fc-back-arti" class="text-xl font-extrabold leading-snug"></p>
+                    <p id="fc-back-bab" class="text-xs text-emeraldbrand-200 mt-4"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" id="fc-btn-prev" class="py-2.5 px-3 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition">&larr; Sebelumnya</button>
+                <button type="button" id="fc-btn-next" class="py-2.5 px-3 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition">Berikutnya &rarr;</button>
+                <button type="button" id="fc-btn-audio" class="py-2.5 px-3 rounded-2xl bg-emeraldbrand-50 border border-emeraldbrand-200 hover:bg-emeraldbrand-100 text-xs font-bold text-emeraldbrand-800 transition">Dengar Audio</button>
+                <button type="button" id="fc-btn-hafal" class="py-2.5 px-3 rounded-2xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-xs font-bold text-white shadow-sm transition">Tandai Hafal</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ========================================== -->
+          <!-- VIEW 7: PANEL ADMIN (KELOLA MATERI & USER) -->
+          <!-- ========================================== -->
+          <section id="view-admin" class="app-view hidden space-y-4">
+            <div class="glass-panel rounded-3xl p-4 space-y-4">
+              <div class="space-y-2.5">
+                <div>
+                  <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider mb-1">Akses Pengelola</span>
+                  <h2 class="text-base font-extrabold text-slate-900">Panel Admin &mdash; Kelola Materi</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-2xl">
+                  <button type="button" id="admin-tab-materi" class="py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition">Kelola Materi</button>
+                  <button type="button" id="admin-tab-users" class="py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">Akun Peserta</button>
+                </div>
+              </div>
+
+              <!-- SUB-PANEL 1: KELOLA MATERI (TAMBAH, EDIT, HAPUS BAB & ISI) -->
+              <div id="admin-panel-materi" class="space-y-4">
+                <!-- Baris Kontrol Bab -->
+                <div class="p-3.5 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-2.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <label for="admin-select-bab" class="text-[11px] font-extrabold uppercase tracking-wider text-slate-600">Pilih Materi Bab</label>
+                    <button type="button" id="admin-btn-new-bab" class="px-3 py-1.5 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold shadow-sm transition">+ Bab Baru</button>
+                  </div>
+                  <select id="admin-select-bab" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold outline-none"></select>
+                  <button type="button" id="admin-btn-delete-bab" class="w-full py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition">Hapus Bab Ini</button>
+                </div>
+
+                <!-- Form Simpan Info Bab -->
+                <form id="admin-form-bab" class="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 space-y-3">
+                  <h3 id="admin-form-bab-title" class="text-sm font-extrabold text-slate-900">Edit Detail Materi Bab</h3>
+                  <div class="grid grid-cols-1 gap-2.5">
+                    <div>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Nomor Bab</label>
+                      <input id="admin-bab-id" type="number" min="1" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-bold" />
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul Indonesia</label>
+                      <input id="admin-bab-judul-id" type="text" required placeholder="Contoh: Di Bandara" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" />
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul Arab</label>
+                      <input id="admin-bab-judul-ar" type="text" required dir="rtl" placeholder="فِي المَطَار" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm arabic-text" />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Subjudul / Ringkasan</label>
+                    <input id="admin-bab-subjudul" type="text" placeholder="Check-in, Bagasi, Gate..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Deskripsi Tema</label>
+                    <textarea id="admin-bab-deskripsi" rows="2" placeholder="Penjelasan konteks situasi bab ini..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm"></textarea>
+                  </div>
+                  <button type="submit" class="w-full py-2.5 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold shadow-sm transition">Simpan Materi Bab</button>
+                </form>
+
+                <!-- Pengelolaan Sub-Materi dalam Bab Terpilih -->
+                <div id="admin-submateri-box" class="space-y-3">
+                  <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
+                    <button type="button" data-subtab="kosakata" class="admin-subtab-btn py-1.5 rounded-lg text-[11px] font-bold bg-white text-emeraldbrand-700 shadow-sm">Kosakata</button>
+                    <button type="button" data-subtab="percakapan" class="admin-subtab-btn py-1.5 rounded-lg text-[11px] font-bold text-slate-600">Dialog</button>
+                    <button type="button" data-subtab="budaya" class="admin-subtab-btn py-1.5 rounded-lg text-[11px] font-bold text-slate-600">Kaidah</button>
+                  </div>
+                  <button type="button" id="admin-btn-add-subitem" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition">+ Tambah Item ke Bab Ini</button>
+                  <div id="admin-submateri-list" class="space-y-2"></div>
+                </div>
+              </div>
+
+              <!-- SUB-PANEL 2: MANAJEMEN AKUN PESERTA -->
+              <div id="admin-panel-users" class="hidden space-y-3.5">
+                <form id="admin-form-user" class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 grid grid-cols-1 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Username</label>
+                    <input id="admin-u-username" type="text" required placeholder="jamaah01" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Password</label>
+                    <input id="admin-u-password" type="text" required placeholder="123456" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Lengkap</label>
+                    <input id="admin-u-nama" type="text" required placeholder="Nama Jamaah" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" />
+                  </div>
+                  <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold shadow-sm transition">+ Tambah Peserta</button>
+                </form>
+                <div id="admin-users-list" class="space-y-2"></div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </main>
+
+      <!-- Floating Bottom Navigation Bar (Permanen Mobile-Only) -->
+      <nav id="mobile-bottom-nav" class="mobile-bottom-nav absolute left-3 right-3 z-30 glass-nav border rounded-2xl shadow-xl px-1.5 py-1.5 grid-cols-6 gap-1">
+        <button type="button" data-nav="beranda" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="truncate">Cari</span>
+        </button>
+        <button type="button" data-nav="kamus" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span class="truncate">Kamus</span>
+        </button>
+        <button type="button" data-nav="percakapan" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          <span class="truncate">Dialog</span>
+        </button>
+        <button type="button" data-nav="translate" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+          <span class="truncate">AI Trans</span>
+        </button>
+        <button type="button" data-nav="budaya" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          <span class="truncate">Kaidah</span>
+        </button>
+        <button type="button" data-nav="latihan" class="mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span class="truncate">Latihan</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL PENGATURAN API KEY GEMINI            -->
+    <!-- ========================================== -->
+    <div id="modal-gemini-settings" class="hidden fixed inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-panel bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto custom-scroll">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-extrabold text-slate-900">Pengaturan AI Gemini</h3>
+          <button type="button" id="close-gemini-settings" class="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 text-lg leading-none">&times;</button>
+        </div>
+        <div class="p-3 rounded-2xl bg-emeraldbrand-50/70 border border-emeraldbrand-100 text-[11px] text-slate-700 space-y-1 leading-relaxed">
+          <p class="font-bold text-emeraldbrand-900">Cara mendapatkan API Key Gemini gratis:</p>
+          <p>1. Buka <strong>aistudio.google.com/apikey</strong> &rarr; klik <strong>Create API key</strong>.</p>
+          <p>2. Klik tombol <strong>Copy key</strong> (format baru berawalan <code class="bg-white px-1 rounded font-bold">AQ....</code> atau lama <code class="bg-white px-1 rounded font-bold">AIza...</code>) lalu tempel di bawah.</p>
+          <p>3. Atau gunakan <strong>Endpoint Proxy Vercel</strong> (<code class="bg-white px-1 rounded">/api/translate</code>) agar seluruh peserta otomatis bisa menerjemahkan tanpa isi kunci.</p>
+        </div>
+        <div>
+          <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Gemini API Key (Disimpan Lokal di Perangkat)</label>
+          <div class="relative">
+            <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="AQ.Ab8... atau AIzaSy..." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+            <button type="button" id="btn-toggle-key-vis" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-200">Lihat</button>
+          </div>
+        </div>
+        <div>
+          <label for="input-gemini-endpoint" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Endpoint Proxy Server (Opsional — untuk Vercel)</label>
+          <input id="input-gemini-endpoint" type="text" autocomplete="off" spellcheck="false" placeholder="Kosongkan atau isi /api/translate" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+        </div>
+        <div id="gemini-test-status" class="hidden p-2.5 rounded-xl text-xs font-semibold"></div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+          <button type="button" id="btn-test-gemini-key" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">Uji Koneksi</button>
+          <div class="flex gap-2">
+            <button type="button" id="btn-clear-gemini-key" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">Hapus</button>
+            <button type="button" id="btn-save-gemini-key" class="px-4 py-2 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold transition">Simpan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL TAMBAH/EDIT SUB-MATERI ADMIN         -->
+    <!-- ========================================== -->
+    <div id="modal-admin-subitem" class="hidden absolute inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-panel bg-white rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto custom-scroll">
+        <div class="flex items-center justify-between">
+          <h3 id="modal-sub-title" class="text-base font-extrabold text-slate-900">Tambah Item</h3>
+          <button type="button" id="close-admin-subitem" class="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 text-lg leading-none">&times;</button>
+        </div>
+        <form id="form-admin-subitem" class="space-y-3">
+          <div id="form-admin-subitem-fields" class="space-y-3"></div>
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" id="cancel-admin-subitem" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Batal</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-emeraldbrand-700 text-white text-xs font-bold">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL KONFIRMASI (PENGGANTI confirm())     -->
+    <!-- ========================================== -->
+    <div id="modal-confirm" class="hidden absolute inset-0 z-[1000028] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-panel bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
+        <h3 id="confirm-title" class="text-base font-extrabold text-slate-900">Konfirmasi</h3>
+        <p id="confirm-message" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" id="confirm-btn-cancel" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Batal</button>
+          <button type="button" id="confirm-btn-ok" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- LOGIKA APLIKASI UTAMA (ES MODULE)          -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // =========================================================================
+    // KONFIGURASI APLIKASI (UBAH SAAT DEPLOY KE VERCEL / PRODUKSI)
+    // =========================================================================
+    const IS_PREVIEW = false; // Ubah menjadi false saat deploy agar terhubung 100% ke Supabase
+    const SUPABASE_URL = "https://vajqtviwgrtafmotfqwb.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Y_XgpjYkg9Z9zMww8IKRZg_6cMm85tr";
+    const GEMINI_API_ENDPOINT = "/api/translate"; // Isi "/api/translate" jika memakai Proxy Server Vercel
+    const GEMINI_DEFAULT_KEY = ""; // Opsional: biarkan kosong agar diatur lewat Proxy atau Pengaturan
+    const GEMINI_MODEL = "gemini-3-flash-preview";
+
+    // Inisialisasi Client Supabase (hanya saat mode produksi dan kredensial valid)
+    const supabase = (!IS_PREVIEW && SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== 'ANON_KEY_ANDA')
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    // State Aplikasi
+    const state = {
+      currentUser: null,
+      currentView: 'beranda',
+      babList: [],
+      kosakataList: [],
+      percakapanList: [],
+      budayaList: [],
+      usersList: [],
+      progresMap: {},
+      translateDir: 'id-ar',
+      lastTranslateResult: null,
+      fcDeck: [],
+      fcIndex: 0,
+      adminSelectedBabId: null,
+      adminSubTab: 'kosakata',
+      adminEditingSubItem: null,
+    };
+
+    // Data Dummy Minimalis (Hanya dipakai saat IS_PREVIEW = true; 100% tidak aktif di produksi)
+    const previewStore = {
+      users: [
+        { id: 'u-prev-1', username: 'jamaah1', password: '123', nama_lengkap: 'Jamaah Preview' }
+      ],
+      materi_bab: [
+        {
+          id: 1,
+          judul_id: 'Di Bandara',
+          judul_ar: 'فِي المَطَار',
+          subjudul: 'Check-in, Bagasi, Gate, dan Lainnya',
+          deskripsi: 'Panduan percakapan praktis di bandara mulai dari check-in, pemeriksaan tiket, hingga menanyakan nomor gate.'
+        },
+        {
+          id: 2,
+          judul_id: 'Di Imigrasi dan Pemeriksaan Keamanan',
+          judul_ar: 'فِي الجَوَازَاتِ وَالتَّفْتِيش',
+          subjudul: 'Tanya paspor, visa, tujuan kedatangan',
+          deskripsi: 'Ungkapan penting saat berhadapan dengan petugas imigrasi dan pemeriksaan keamanan barang bawaan.'
+        }
+      ],
+      kosakata: [
+        { id: 'k-prev-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
+        { id: 'k-prev-2', bab_id: 2, kategori: 'Ungkapan', arab: 'أَبْشِر', transliterasi: 'absyir', arti: 'siap / dengan senang hati' }
+      ],
+      percakapan: [
+        { id: 'p-prev-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 1, peran: 'Petugas', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
+        { id: 'p-prev-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 2, peran: 'Penumpang', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' }
+      ],
+      budaya_kaidah: [
+        { id: 'b-prev-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) selalu dipakai sebagai pembuka sopan sebelum bertanya atau meminta bantuan.' },
+        { id: 'b-prev-2', bab_id: 1, tipe: 'Kaidah', judul: 'Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyah Saudi disukun. Contoh: مَطَارْ (mathār), bukan mathārun.' }
+      ],
+      progres_user: []
+    };
+
+    let currentTranslateController = null;
+    let translateTimerInterval = null;
+
+    // =========================================================================
+    // FUNGSI BANTU UI, AUDIO, SALIN, KONFIRMASI, & KONFIGURASI GEMINI
+    // =========================================================================
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const styles = {
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        error: 'bg-rose-600 text-white border-rose-500',
+        warning: 'bg-amber-600 text-white border-amber-500',
+        info: 'bg-slate-800 text-white border-slate-700',
+      };
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto max-w-[92%] px-4 py-2.5 rounded-2xl border shadow-lg text-xs font-bold text-center transition-all duration-300 ${styles[type] || styles.info}`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+        setTimeout(() => el.remove(), 300);
+      }, 3200);
+    }
+
+    function copyTextSafe(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) {
+          showToast('Teks berhasil disalin!', 'success');
+        } else {
+          showToast('Gagal menyalin teks.', 'warning');
+        }
+      } catch (e) {
+        showToast('Gagal menyalin teks.', 'warning');
+      }
+    }
+
+    function speakArabic(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Browser tidak mendukung pemutaran audio TTS.', 'warning');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ar-SA';
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        showToast('Gagal memutar audio.', 'error');
+      }
+    }
+
+    window.__speakEncoded = (enc) => speakArabic(decodeURIComponent(enc));
+    window.__copyEncoded = (enc) => copyTextSafe(decodeURIComponent(enc));
+
+    function showConfirmModal(title, message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('modal-confirm');
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        modal.classList.remove('hidden');
+
+        const btnOk = document.getElementById('confirm-btn-ok');
+        const btnCancel = document.getElementById('confirm-btn-cancel');
+
+        const cleanup = (result) => {
+          modal.classList.add('hidden');
+          btnOk.removeEventListener('click', onOk);
+          btnCancel.removeEventListener('click', onCancel);
+          resolve(result);
+        };
+        const onOk = () => cleanup(true);
+        const onCancel = () => cleanup(false);
+
+        btnOk.addEventListener('click', onOk);
+        btnCancel.addEventListener('click', onCancel);
+      });
+    }
+
+    function sanitizeApiKey(raw) {
+      return String(raw || '').trim().replace(/^["']+|["']+$/g, '').replace(/\s+/g, '');
+    }
+
+    function getGeminiConfig() {
+      const storedEp = (localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
+      const storedKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key') || '');
+      const endpoint = storedEp || GEMINI_API_ENDPOINT.trim();
+      const activeKey = storedKey || sanitizeApiKey(GEMINI_DEFAULT_KEY);
+      return { endpoint, activeKey };
+    }
+
+    function buildGeminiDirectRequest(apiKey, model, payload) {
+      const cleanKey = sanitizeApiKey(apiKey);
+      if (!cleanKey) {
+        throw new Error('API Key Gemini belum diisi. Ketuk ikon pengaturan (gerigi) di pojok kanan atas untuk memasukkan API Key Anda.');
+      }
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': cleanKey,
+        },
+        body: JSON.stringify(payload),
+      };
+      return { url, options };
+    }
+
+    function updateTranslateStatusBadge() {
+      const badge = document.getElementById('tr-connection-badge');
+      if (!badge) return;
+      const { endpoint, activeKey } = getGeminiConfig();
+      if (endpoint) {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Proxy Server Aktif</span>';
+      } else if (activeKey) {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>API Key Gemini Terpasang</span>';
+      } else if (IS_PREVIEW) {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Mode Simulasi Preview</span>';
+      } else {
+        badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>API Key Belum Diatur</span>';
+      }
+    }
+
+    // =========================================================================
+    // PWA (SERVICE WORKER DINAMIS TANPA POPUP BANNER)
+    // =========================================================================
+    function initPWA() {
+      // Gunakan Service Worker resmi jika ada di Vercel, jika tidak pakai Blob SW 1-file
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            const checkSw = await fetch('/sw.js', { method: 'HEAD' }).catch(() => null);
+            if (checkSw && checkSw.ok) {
+              const link = document.getElementById('pwa-manifest-link');
+              if (link) link.href = '/manifest.json?v=2';
+              await navigator.serviceWorker.register('/sw.js');
+            } else {
+              const swCode = `
+                self.addEventListener('install', () => self.skipWaiting());
+                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', () => {});
+              `;
+              const blob = new Blob([swCode], { type: 'application/javascript' });
+              const swUrl = URL.createObjectURL(blob);
+              await navigator.serviceWorker.register(swUrl).catch(() => {});
+            }
+          } catch (e) {
+            // Abaikan pada sandbox iframe
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // AUTENTIKASI HYBRID (ADMIN: SUPABASE AUTH | PESERTA: TABEL USERS)
+    // =========================================================================
+    function initAuthUI() {
+      if (IS_PREVIEW) {
+        document.getElementById('preview-mode-banner').classList.remove('hidden');
+        document.getElementById('preview-quick-login').classList.remove('hidden');
+      } else {
+        document.getElementById('preview-mode-banner').classList.add('hidden');
+        document.getElementById('preview-quick-login').classList.add('hidden');
+      }
+
+      const tabUser = document.getElementById('tab-login-user');
+      const tabAdmin = document.getElementById('tab-login-admin');
+      const formUser = document.getElementById('form-login-user');
+      const formAdmin = document.getElementById('form-login-admin');
+
+      tabUser.addEventListener('click', () => {
+        tabUser.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
+        tabAdmin.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition';
+        formUser.classList.remove('hidden');
+        formAdmin.classList.add('hidden');
+      });
+
+      tabAdmin.addEventListener('click', () => {
+        tabAdmin.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-900 shadow-sm transition';
+        tabUser.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition';
+        formAdmin.classList.remove('hidden');
+        formUser.classList.add('hidden');
+      });
+
+      // Login Peserta
+      formUser.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('login-user-username').value.trim();
+        const password = document.getElementById('login-user-password').value;
+        const btn = document.getElementById('btn-submit-user');
+        btn.disabled = true;
+        btn.textContent = 'Memeriksa akun...';
+
+        try {
+          if (IS_PREVIEW) {
+            const found = previewStore.users.find(u => u.username === username && u.password === password);
+            if (!found) throw new Error('Username atau password tidak cocok (Preview: jamaah1 / 123).');
+            await enterApp({ id: found.id, role: 'user', nama: found.nama_lengkap || found.username, username: found.username });
+          } else {
+            if (!supabase) throw new Error('Konfigurasi SUPABASE_URL atau SUPABASE_ANON_KEY belum diisi.');
+            const { data, error } = await supabase
+              .from('users')
+              .select('*')
+              .eq('username', username)
+              .eq('password', password)
+              .maybeSingle();
+            if (error) throw error;
+            if (!data) throw new Error('Username atau password peserta tidak ditemukan.');
+            const userObj = { id: data.id, role: 'user', nama: data.nama_lengkap || data.username, username: data.username };
+            localStorage.setItem('ammiyah_peserta_session', JSON.stringify(userObj));
+            await enterApp(userObj);
+          }
+        } catch (err) {
+          showToast(err.message || 'Gagal login peserta.', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Masuk sebagai Peserta';
+        }
+      });
+
+      // Login Admin
+      formAdmin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-admin-email').value.trim();
+        const password = document.getElementById('login-admin-password').value;
+        const btn = document.getElementById('btn-submit-admin');
+        btn.disabled = true;
+        btn.textContent = 'Autentikasi Admin...';
+
+        try {
+          if (IS_PREVIEW) {
+            await enterApp({ id: 'admin-prev', role: 'admin', nama: 'Administrator', username: email || 'admin@preview' });
+          } else {
+            if (!supabase) throw new Error('Konfigurasi SUPABASE_URL atau SUPABASE_ANON_KEY belum diisi.');
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            localStorage.removeItem('ammiyah_peserta_session');
+            await enterApp({ id: data.user.id, role: 'admin', nama: 'Administrator', username: data.user.email });
+          }
+        } catch (err) {
+          showToast(err.message || 'Email atau password Admin salah.', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Masuk sebagai Admin';
+        }
+      });
+
+      // Quick Login (Hanya aktif di Preview)
+      if (IS_PREVIEW) {
+        document.getElementById('btn-quick-user').addEventListener('click', () => {
+          const u = previewStore.users[0];
+          enterApp({ id: u.id, role: 'user', nama: u.nama_lengkap, username: u.username });
+        });
+        document.getElementById('btn-quick-admin').addEventListener('click', () => {
+          enterApp({ id: 'admin-prev', role: 'admin', nama: 'Admin Preview', username: 'admin@preview.local' });
+        });
+      }
+
+      // Logout
+      const handleLogout = async () => {
+        try {
+          if (!IS_PREVIEW && state.currentUser?.role === 'admin') {
+            await supabase.auth.signOut();
+          }
+          localStorage.removeItem('ammiyah_peserta_session');
+          state.currentUser = null;
+          document.getElementById('app-shell').classList.add('hidden');
+          document.getElementById('login-screen').classList.remove('hidden');
+          showToast('Anda telah keluar.', 'info');
+        } catch (err) {
+          showToast('Gagal keluar: ' + err.message, 'error');
+        }
+      };
+      document.getElementById('btn-logout-mobile')?.addEventListener('click', handleLogout);
+    }
+
+    async function checkExistingSession() {
+      if (IS_PREVIEW || !supabase) return;
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.user) {
+          await enterApp({ id: data.session.user.id, role: 'admin', nama: 'Administrator', username: data.session.user.email });
+          return;
+        }
+        const savedPeserta = localStorage.getItem('ammiyah_peserta_session');
+        if (savedPeserta) {
+          const parsed = JSON.parse(savedPeserta);
+          if (parsed?.id) {
+            await enterApp(parsed);
+          }
+        }
+      } catch (e) {
+        // Biarkan tetap di halaman login
+      }
+    }
+
+    async function enterApp(userObj) {
+      state.currentUser = userObj;
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app-shell').classList.remove('hidden');
+
+      const isAdmin = userObj.role === 'admin';
+      document.getElementById('mob-user-label').textContent = isAdmin ? `Admin • ${userObj.nama}` : userObj.nama;
+      document.getElementById('mob-btn-admin').classList.toggle('hidden', !isAdmin);
+
+      await loadAllData();
+      switchView('beranda');
+      showToast(`Selamat datang, ${userObj.nama}!`, 'success');
+    }
+
+    // =========================================================================
+    // PENGAMBILAN DATA (SUPABASE REAL / PREVIEW MEMORY)
+    // =========================================================================
+    async function loadAllData() {
+      try {
+        if (IS_PREVIEW) {
+          state.babList = [...previewStore.materi_bab].sort((a, b) => a.id - b.id);
+          state.kosakataList = [...previewStore.kosakata];
+          state.percakapanList = [...previewStore.percakapan];
+          state.budayaList = [...previewStore.budaya_kaidah];
+          state.usersList = [...previewStore.users];
+          state.progresMap = {};
+          previewStore.progres_user
+            .filter(p => p.user_id === state.currentUser.id)
+            .forEach(p => { state.progresMap[p.kosakata_id] = p.status; });
+        } else {
+          const [babRes, kosaRes, percRes, budRes] = await Promise.all([
+            supabase.from('materi_bab').select('*').order('id', { ascending: true }),
+            supabase.from('kosakata').select('*').order('created_at', { ascending: true }),
+            supabase.from('percakapan').select('*').order('urutan', { ascending: true }),
+            supabase.from('budaya_kaidah').select('*').order('created_at', { ascending: true }),
+          ]);
+          if (babRes.error) throw babRes.error;
+          if (kosaRes.error) throw kosaRes.error;
+          if (percRes.error) throw percRes.error;
+          if (budRes.error) throw budRes.error;
+
+          state.babList = babRes.data || [];
+          state.kosakataList = kosaRes.data || [];
+          state.percakapanList = percRes.data || [];
+          state.budayaList = budRes.data || [];
+
+          state.progresMap = {};
+          if (state.currentUser.role === 'user') {
+            const { data: progData } = await supabase
+              .from('progres_user')
+              .select('kosakata_id, status')
+              .eq('user_id', state.currentUser.id);
+            (progData || []).forEach(p => { state.progresMap[p.kosakata_id] = p.status; });
+          }
+
+          if (state.currentUser.role === 'admin') {
+            const { data: uData } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+            state.usersList = uData || [];
+          }
+        }
+
+        populateBabDropdowns();
+        renderAllViews();
+      } catch (err) {
+        showToast('Gagal memuat data: ' + (err.message || err), 'error');
+      }
+    }
+
+    function populateBabDropdowns() {
+      const optionsAll = ['<option value="all">Semua Bab Materi</option>']
+        .concat(state.babList.map(b => `<option value="${b.id}">Bab ${String(b.id).padStart(2, '0')} — ${escapeHtml(b.judul_id)}</option>`))
+        .join('');
+
+      ['kamus-filter-bab', 'percakapan-filter-bab', 'budaya-filter-bab', 'fc-filter-bab'].forEach(id => {
+        const el = document.getElementById(id);
+        const prev = el.value || 'all';
+        el.innerHTML = optionsAll;
+        el.value = prev;
+      });
+
+      const adminSel = document.getElementById('admin-select-bab');
+      if (state.babList.length === 0) {
+        adminSel.innerHTML = '<option value="">Belum ada bab</option>';
+        state.adminSelectedBabId = null;
+      } else {
+        adminSel.innerHTML = state.babList
+          .map(b => `<option value="${b.id}">Bab ${String(b.id).padStart(2, '0')} — ${escapeHtml(b.judul_id)}</option>`)
+          .join('');
+        if (!state.adminSelectedBabId || !state.babList.some(b => b.id === Number(state.adminSelectedBabId))) {
+          state.adminSelectedBabId = state.babList[0].id;
+        }
+        adminSel.value = String(state.adminSelectedBabId);
+      }
+    }
+
+    function renderAllViews() {
+      renderBeranda();
+      renderKamus();
+      renderPercakapan();
+      renderBudaya();
+      initFlashcardDeck();
+      renderTranslateHistory();
+      if (state.currentUser?.role === 'admin') {
+        renderAdminBabEditor();
+        renderAdminUsers();
+      }
+    }
+
+    // =========================================================================
+    // NAVIGASI ANTAR MENU
+    // =========================================================================
+    function switchView(viewName) {
+      if (viewName === 'admin' && state.currentUser?.role !== 'admin') return;
+      state.currentView = viewName;
+
+      document.querySelectorAll('.app-view').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('#mobile-bottom-nav .mob-nav-btn').forEach(btn => {
+        const active = btn.dataset.nav === viewName;
+        btn.className = active
+          ? 'mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold bg-emeraldbrand-700 text-white shadow-sm transition'
+          : 'mob-nav-btn flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-[10px] font-bold text-slate-500 hover:text-slate-800 transition';
+      });
+
+      document.getElementById('main-scroll-area').scrollTop = 0;
+    }
+
+    document.querySelectorAll('[data-nav]').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.nav));
+    });
+    document.getElementById('mob-btn-admin').addEventListener('click', () => switchView('admin'));
+    document.getElementById('btn-hero-translate').addEventListener('click', () => switchView('translate'));
+
+    // =========================================================================
+    // VIEW 1: BERANDA & SMART SEARCH
+    // =========================================================================
+    function renderBeranda() {
+      const hafalCount = Object.values(state.progresMap).filter(v => v === 'hafal').length;
+      const favCount = Object.values(state.progresMap).filter(v => v === 'favorit').length;
+
+      document.getElementById('stat-total-bab').textContent = state.babList.length;
+      document.getElementById('stat-total-kosa').textContent = state.kosakataList.length;
+      document.getElementById('stat-total-hafal').textContent = hafalCount;
+      document.getElementById('stat-total-fav').textContent = favCount;
+      document.getElementById('beranda-bab-count').textContent = `${state.babList.length} Bab`;
+
+      const grid = document.getElementById('beranda-bab-grid');
+      if (state.babList.length === 0) {
+        grid.innerHTML = '<div class="col-span-full glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada data materi bab di database.</div>';
+        return;
+      }
+
+      grid.innerHTML = state.babList.map(bab => {
+        const kCount = state.kosakataList.filter(k => k.bab_id === bab.id).length;
+        const pCount = state.percakapanList.filter(p => p.bab_id === bab.id).length;
+        return `
+          <div onclick="window.__openBabKamus(${bab.id})" class="glass-panel rounded-2xl p-4 hover:border-emeraldbrand-300 hover:shadow-md cursor-pointer transition flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-lg bg-emeraldbrand-50 text-emeraldbrand-800 text-[11px] font-extrabold border border-emeraldbrand-100">Bab ${String(bab.id).padStart(2, '0')}</span>
+                <span class="arabic-text text-base font-bold text-goldaccent-700 truncate">${escapeHtml(bab.judul_ar)}</span>
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900 leading-snug">${escapeHtml(bab.judul_id)}</h3>
+              <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">${escapeHtml(bab.subjudul || bab.deskripsi || '')}</p>
+            </div>
+            <div class="flex items-center gap-2 pt-2 border-t border-slate-100 text-[11px] font-semibold text-slate-500">
+              <span>${kCount} kosakata</span>
+              <span>&bull;</span>
+              <span>${pCount} dialog/kalimat</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.__openBabKamus = (babId) => {
+      document.getElementById('kamus-filter-bab').value = String(babId);
+      document.getElementById('percakapan-filter-bab').value = String(babId);
+      document.getElementById('budaya-filter-bab').value = String(babId);
+      renderKamus();
+      renderPercakapan();
+      renderBudaya();
+      switchView('kamus');
+    };
+
+    document.getElementById('global-search-input').addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      const box = document.getElementById('global-search-results');
+      if (!q) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+
+      const kMatches = state.kosakataList.filter(k =>
+        (k.arti || '').toLowerCase().includes(q) ||
+        (k.transliterasi || '').toLowerCase().includes(q) ||
+        (k.arab || '').toLowerCase().includes(q)
+      ).slice(0, 12);
+
+      const pMatches = state.percakapanList.filter(p =>
+        (p.arti || '').toLowerCase().includes(q) ||
+        (p.transliterasi || '').toLowerCase().includes(q) ||
+        (p.arab || '').toLowerCase().includes(q)
+      ).slice(0, 8);
+
+      box.classList.remove('hidden');
+      if (kMatches.length === 0 && pMatches.length === 0) {
+        box.innerHTML = `<div class="glass-panel rounded-2xl p-5 text-center text-xs text-slate-500">Tidak ditemukan hasil untuk "<strong>${escapeHtml(q)}</strong>". Coba gunakan menu <strong>Translate AI</strong>.</div>`;
+        return;
+      }
+
+      let html = `<div class="glass-panel rounded-3xl p-4 space-y-3 border border-emeraldbrand-200">
+        <p class="text-xs font-extrabold text-emeraldbrand-800 uppercase tracking-wider">Hasil Pencarian (${kMatches.length + pMatches.length})</p>
+        <div class="grid grid-cols-1 gap-2.5">`;
+
+      kMatches.forEach(k => {
+        html += `
+          <div class="p-3 rounded-2xl bg-white border border-slate-200/80 space-y-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emeraldbrand-50 text-emeraldbrand-700">Bab ${k.bab_id} &bull; ${escapeHtml(k.kategori)}</span>
+              <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(k.arab)}')" class="text-xs font-bold text-emeraldbrand-700 hover:underline">Audio</button>
+            </div>
+            <p class="arabic-text text-xl font-bold text-slate-900 text-right">${escapeHtml(k.arab)}</p>
+            <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(k.transliterasi)}</p>
+            <p class="text-xs text-slate-700">${escapeHtml(k.arti)}</p>
+          </div>`;
+      });
+
+      pMatches.forEach(p => {
+        html += `
+          <div class="p-3 rounded-2xl bg-amber-50/50 border border-amber-200/70 space-y-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">Bab ${p.bab_id} &bull; ${escapeHtml(p.jenis)}</span>
+              <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(p.arab)}')" class="text-xs font-bold text-amber-800 hover:underline">Audio</button>
+            </div>
+            <p class="arabic-text text-lg font-bold text-slate-900 text-right">${escapeHtml(p.arab)}</p>
+            <p class="text-xs font-bold text-amber-800 italic">${escapeHtml(p.transliterasi)}</p>
+            <p class="text-xs text-slate-700">${escapeHtml(p.arti)}</p>
+          </div>`;
+      });
+
+      html += '</div></div>';
+      box.innerHTML = html;
+    });
+
+    // =========================================================================
+    // VIEW 2: KAMUS KOSAKATA & PROGRES HAFALAN
+    // =========================================================================
+    function renderKamus() {
+      const babVal = document.getElementById('kamus-filter-bab').value;
+      const katVal = document.getElementById('kamus-filter-kat').value;
+      const q = document.getElementById('kamus-search-input').value.trim().toLowerCase();
+
+      const descBox = document.getElementById('kamus-bab-deskripsi');
+      if (babVal !== 'all') {
+        const bab = state.babList.find(b => String(b.id) === babVal);
+        if (bab?.deskripsi) {
+          descBox.textContent = bab.deskripsi;
+          descBox.classList.remove('hidden');
+        } else {
+          descBox.classList.add('hidden');
+        }
+      } else {
+        descBox.classList.add('hidden');
+      }
+
+      const filtered = state.kosakataList.filter(k => {
+        if (babVal !== 'all' && String(k.bab_id) !== babVal) return false;
+        if (katVal === 'hafal' && state.progresMap[k.id] !== 'hafal') return false;
+        if (katVal === 'favorit' && state.progresMap[k.id] !== 'favorit') return false;
+        if (!['all', 'hafal', 'favorit'].includes(katVal) && k.kategori !== katVal) return false;
+        if (q) {
+          const hit = (k.arti || '').toLowerCase().includes(q) ||
+            (k.transliterasi || '').toLowerCase().includes(q) ||
+            (k.arab || '').toLowerCase().includes(q);
+          if (!hit) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('kamus-count-badge').textContent = `${filtered.length} Kosakata`;
+      const container = document.getElementById('kamus-list');
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="col-span-full glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada kosakata yang sesuai filter.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(k => {
+        const prog = state.progresMap[k.id] || '';
+        const isHafal = prog === 'hafal';
+        const isFav = prog === 'favorit';
+        return `
+          <div class="glass-panel rounded-2xl p-4 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold">Bab ${k.bab_id} &bull; ${escapeHtml(k.kategori)}</span>
+                <div class="flex items-center gap-1">
+                  <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(k.arab)}')" class="p-1.5 rounded-lg hover:bg-emeraldbrand-50 text-emeraldbrand-700" title="Dengar">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                  </button>
+                  <button type="button" onclick="window.__copyEncoded('${encodeURIComponent(`${k.arab} (${k.transliterasi}) = ${k.arti}`)}')" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500" title="Salin">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  </button>
+                </div>
+              </div>
+              <p class="arabic-text text-2xl font-bold text-slate-900 text-right">${escapeHtml(k.arab)}</p>
+              <p class="text-xs font-bold text-emeraldbrand-700 italic mt-0.5">${escapeHtml(k.transliterasi)}</p>
+              <p class="text-sm font-medium text-slate-700 mt-1">${escapeHtml(k.arti)}</p>
+            </div>
+            <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+              <button type="button" onclick="window.__toggleProgres('${k.id}', 'hafal')" class="flex-1 py-1.5 px-2.5 rounded-xl text-[11px] font-bold border transition ${isHafal ? 'bg-emeraldbrand-700 text-white border-emeraldbrand-700' : 'bg-white text-slate-600 border-slate-200 hover:bg-emeraldbrand-50'}">
+                ${isHafal ? '✓ Sudah Hafal' : 'Tandai Hafal'}
+              </button>
+              <button type="button" onclick="window.__toggleProgres('${k.id}', 'favorit')" class="flex-1 py-1.5 px-2.5 rounded-xl text-[11px] font-bold border transition ${isFav ? 'bg-goldaccent-500 text-white border-goldaccent-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-amber-50'}">
+                ${isFav ? '★ Favorit' : '☆ Favorit'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.__toggleProgres = async (kosakataId, statusTarget) => {
+      if (!state.currentUser) return;
+      const current = state.progresMap[kosakataId];
+      const nextStatus = current === statusTarget ? null : statusTarget;
+
+      try {
+        if (IS_PREVIEW || state.currentUser.role === 'admin') {
+          if (nextStatus) state.progresMap[kosakataId] = nextStatus;
+          else delete state.progresMap[kosakataId];
+        } else {
+          if (nextStatus) {
+            const { error } = await supabase
+              .from('progres_user')
+              .upsert({ user_id: state.currentUser.id, kosakata_id: kosakataId, status: nextStatus }, { onConflict: 'user_id,kosakata_id' });
+            if (error) throw error;
+            state.progresMap[kosakataId] = nextStatus;
+          } else {
+            const { error } = await supabase
+              .from('progres_user')
+              .delete()
+              .eq('user_id', state.currentUser.id)
+              .eq('kosakata_id', kosakataId);
+            if (error) throw error;
+            delete state.progresMap[kosakataId];
+          }
+        }
+        renderBeranda();
+        renderKamus();
+      } catch (err) {
+        showToast('Gagal menyimpan progres: ' + err.message, 'error');
+      }
+    };
+
+    ['kamus-filter-bab', 'kamus-filter-kat', 'kamus-search-input'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderKamus);
+    });
+
+    // =========================================================================
+    // VIEW 3: PERCAKAPAN & MINI DIALOG
+    // =========================================================================
+    function renderPercakapan() {
+      const babVal = document.getElementById('percakapan-filter-bab').value;
+      const jenisVal = document.getElementById('percakapan-filter-jenis').value;
+      const container = document.getElementById('percakapan-list');
+
+      const filtered = state.percakapanList.filter(p => {
+        if (babVal !== 'all' && String(p.bab_id) !== babVal) return false;
+        if (jenisVal !== 'all' && p.jenis !== jenisVal) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada data percakapan pada filter ini.</div>';
+        return;
+      }
+
+      // Kelompokkan berdasarkan bab + judul_dialog
+      const groups = new Map();
+      filtered.forEach(item => {
+        const key = `${item.bab_id}::${item.jenis}::${item.judul_dialog}`;
+        if (!groups.has(key)) groups.set(key, { bab_id: item.bab_id, jenis: item.jenis, judul: item.judul_dialog, items: [] });
+        groups.get(key).items.push(item);
+      });
+
+      container.innerHTML = Array.from(groups.values()).map(g => {
+        const isDialog = g.jenis === 'Mini Dialog';
+        const rowsHtml = g.items.sort((a, b) => (a.urutan || 0) - (b.urutan || 0)).map((row, idx) => {
+          const isRight = isDialog && idx % 2 === 1;
+          return `
+            <div class="flex ${isRight ? 'justify-end' : 'justify-start'}">
+              <div class="${isDialog ? 'max-w-[92%] sm:max-w-[82%]' : 'w-full'} p-3.5 rounded-2xl border ${isRight ? 'bg-emeraldbrand-50/90 border-emeraldbrand-200' : 'bg-white border-slate-200/80'} space-y-1">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-extrabold ${isRight ? 'text-emeraldbrand-800' : 'text-goldaccent-700'}">${escapeHtml(row.peran)}</span>
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(row.arab)}')" class="text-[11px] font-bold text-emeraldbrand-700 hover:underline">Audio</button>
+                    <button type="button" onclick="window.__copyEncoded('${encodeURIComponent(`${row.arab}\n${row.transliterasi}\n${row.arti}`)}')" class="text-[11px] font-bold text-slate-500 hover:underline">Salin</button>
+                  </div>
+                </div>
+                <p class="arabic-text text-xl sm:text-2xl font-bold text-slate-900 text-right">${escapeHtml(row.arab)}</p>
+                <p class="text-xs font-bold text-emeraldbrand-800 italic">${escapeHtml(row.transliterasi)}</p>
+                <p class="text-xs sm:text-sm text-slate-700">${escapeHtml(row.arti)}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${escapeHtml(g.judul)}</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isDialog ? 'bg-emeraldbrand-100 text-emeraldbrand-800' : 'bg-amber-100 text-amber-800'}">Bab ${g.bab_id} &bull; ${escapeHtml(g.jenis)}</span>
+            </div>
+            <div class="space-y-2.5">${rowsHtml}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    ['percakapan-filter-bab', 'percakapan-filter-jenis'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderPercakapan);
+    });
+
+    // =========================================================================
+    // VIEW 4: TRANSLATE AI GEMINI (DENGAN TIMEOUT, CANCEL & SKELETON)
+    // =========================================================================
+    document.getElementById('tr-swap-btn').addEventListener('click', () => {
+      state.translateDir = state.translateDir === 'id-ar' ? 'ar-id' : 'id-ar';
+      const fromEl = document.getElementById('tr-dir-from');
+      const toEl = document.getElementById('tr-dir-to');
+      const inputEl = document.getElementById('tr-input-text');
+      if (state.translateDir === 'id-ar') {
+        fromEl.textContent = 'Bahasa Indonesia';
+        toEl.textContent = "Arab 'Ammiyah Saudi";
+        inputEl.placeholder = 'Contoh: Permisi, di mana pintu masuk Masjidil Haram terdekat?';
+      } else {
+        fromEl.textContent = "Arab 'Ammiyah Saudi";
+        toEl.textContent = 'Bahasa Indonesia';
+        inputEl.placeholder = 'Contoh: لو سمحت، وين أقرب صرافة هنا؟';
+      }
+    });
+
+    document.querySelectorAll('.tr-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('tr-input-text').value = chip.dataset.text;
+        document.getElementById('tr-input-text').focus();
+      });
+    });
+
+    function parseGeminiJsonSafely(rawText) {
+      if (!rawText) throw new Error('Respons AI Gemini kosong.');
+      const cleaned = rawText
+        .replace(new RegExp('^\\x60{3}json\\s*', 'i'), '')
+        .replace(new RegExp('^\\x60{3}\\s*', 'i'), '')
+        .replace(new RegExp('\\x60{3}\\s*$', 'i'), '')
+        .trim();
+      return JSON.parse(cleaned);
+    }
+
+    function buildPreviewSimulation(text, direction, lawanBicara, gayaBahasa) {
+      const q = text.toLowerCase();
+      const match = state.kosakataList.find(k =>
+        (k.arti && q.includes(k.arti.toLowerCase())) ||
+        (k.arab && text.includes(k.arab))
+      );
+      if (match) {
+        return {
+          arab_amiyah: match.arab,
+          transliterasi: match.transliterasi,
+          terjemahan_id: match.arti,
+          arab_fusha: match.arab,
+          catatan_budaya_kaidah: `Mode Simulasi Preview (diambil dari kamus lokal Bab ${match.bab_id}). Masukkan API Key Gemini lewat ikon pengaturan untuk terjemahan AI kalimat bebas.`,
+          _isSimulation: true
+        };
+      }
+      return {
+        arab_amiyah: 'لَوْ سَمَحْت، أَبْغَى أَعْرِف وَيْن المَكَان ذَا؟',
+        transliterasi: 'law samaht, abghā a’rif wēn al-makān dzā?',
+        terjemahan_id: direction === 'id-ar' ? text : 'Permisi, saya ingin tahu di mana tempat ini?',
+        arab_fusha: 'لَوْ سَمَحْتَ، أُرِيدُ أَنْ أَعْرِفَ أَيْنَ هَذَا المَكَانُ؟',
+        catatan_budaya_kaidah: `Simulasi Preview (${lawanBicara}, ${gayaBahasa}). Untuk menerjemahkan kalimat bebas secara real-time, klik ikon Pengaturan (gerigi) dan masukkan API Key Google Gemini Anda.`,
+        _isSimulation: true
+      };
+    }
+
+    async function fetchWithBackoff(url, options, { maxRetries = 3, timeoutMs = 15000, outerSignal = null, onStatus = null } = {}) {
+      let delay = 1000;
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        if (outerSignal?.aborted) {
+          throw new DOMException('Dibatalkan pengguna', 'AbortError');
+        }
+
+        const attemptController = new AbortController();
+        const onOuterAbort = () => attemptController.abort();
+        if (outerSignal) outerSignal.addEventListener('abort', onOuterAbort, { once: true });
+
+        const timerId = setTimeout(() => attemptController.abort(), timeoutMs);
+        try {
+          if (attempt > 0 && typeof onStatus === 'function') {
+            onStatus(`Mencoba ulang koneksi (${attempt + 1}/${maxRetries})...`);
+          }
+          const response = await fetch(url, { ...options, signal: attemptController.signal });
+          clearTimeout(timerId);
+          if (outerSignal) outerSignal.removeEventListener('abort', onOuterAbort);
+
+          if (response.ok) return response;
+
+          if ((response.status === 429 || response.status >= 500) && attempt < maxRetries - 1) {
+            if (typeof onStatus === 'function') {
+              onStatus(`Server sibuk (${response.status}), mencoba ulang...`);
+            }
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+            continue;
+          }
+          return response;
+        } catch (err) {
+          clearTimeout(timerId);
+          if (outerSignal) outerSignal.removeEventListener('abort', onOuterAbort);
+
+          if (outerSignal?.aborted) {
+            throw new DOMException('Dibatalkan pengguna', 'AbortError');
+          }
+
+          if (attempt < maxRetries - 1) {
+            if (typeof onStatus === 'function') {
+              onStatus(`Koneksi lambat, mencoba ulang (${attempt + 2}/${maxRetries})...`);
+            }
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+            continue;
+          }
+
+          if (err.name === 'AbortError') {
+            throw new Error('Waktu tunggu habis (timeout 15 detik). Periksa koneksi internet atau konfigurasi API Gemini Anda.');
+          }
+          throw err;
+        }
+      }
+      throw new Error('Permintaan ke Gemini AI gagal setelah beberapa percobaan.');
+    }
+
+    function stopTranslateLoadingUI() {
+      if (translateTimerInterval) {
+        clearInterval(translateTimerInterval);
+        translateTimerInterval = null;
+      }
+      const btn = document.getElementById('tr-submit-btn');
+      const btnLabel = document.getElementById('tr-submit-label');
+      const loadingCard = document.getElementById('tr-loading-card');
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-70', 'cursor-not-allowed');
+      }
+      if (btnLabel) btnLabel.textContent = 'Terjemahkan dengan AI Gemini';
+      if (loadingCard) loadingCard.classList.add('hidden');
+    }
+
+    function showTranslateError(msg) {
+      document.getElementById('tr-error-message').textContent = msg;
+      document.getElementById('tr-error-card').classList.remove('hidden');
+    }
+
+    async function runGeminiTranslate() {
+      const text = document.getElementById('tr-input-text').value.trim();
+      if (!text) {
+        showToast('Masukkan teks yang ingin diterjemahkan terlebih dahulu.', 'warning');
+        return;
+      }
+
+      if (currentTranslateController) currentTranslateController.abort();
+      const runController = new AbortController();
+      currentTranslateController = runController;
+
+      const lawanBicara = document.getElementById('tr-lawan-bicara').value;
+      const gayaBahasa = document.getElementById('tr-gaya-bahasa').value;
+      const dirLabel = state.translateDir === 'id-ar'
+        ? "Bahasa Indonesia ke Bahasa Arab 'Ammiyah Saudi"
+        : "Bahasa Arab 'Ammiyah Saudi ke Bahasa Indonesia";
+
+      const btn = document.getElementById('tr-submit-btn');
+      const btnLabel = document.getElementById('tr-submit-label');
+      const loadingCard = document.getElementById('tr-loading-card');
+      const loadingStatus = document.getElementById('tr-loading-status');
+      const loadingTimer = document.getElementById('tr-loading-timer');
+      const resultCard = document.getElementById('tr-result-card');
+      const errorCard = document.getElementById('tr-error-card');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-70', 'cursor-not-allowed');
+      btnLabel.textContent = 'Menerjemahkan...';
+      loadingStatus.textContent = 'Menghubungi AI Gemini...';
+      loadingTimer.textContent = "Menyusun dialek 'Ammiyah Saudi (0 dtk)";
+      loadingCard.classList.remove('hidden');
+      resultCard.classList.add('hidden');
+      errorCard.classList.add('hidden');
+
+      let elapsedSec = 0;
+      if (translateTimerInterval) clearInterval(translateTimerInterval);
+      translateTimerInterval = setInterval(() => {
+        elapsedSec += 1;
+        loadingTimer.textContent = `Menyusun dialek 'Ammiyah Saudi (${elapsedSec} dtk)`;
+      }, 1000);
+
+      const systemPrompt = `Anda adalah pakar bahasa Arab dialek 'Ammiyah Saudi (Hijazi & Najdi sehari-hari di Makkah, Madinah, Jeddah, Riyadh) untuk jamaah umrah Indonesia.
+ATURAN WAJIB:
+1. Terjemahkan secara alami seperti penutur asli Saudi sehari-hari, BUKAN Fushha kaku.
+2. Gunakan kosakata khas Saudi: وَيْن/فِين, أَبْغَى/تِبْغَى, وِش/إِيش, مَرَّة, شُوَيَّة, لَوْ سَمَحْت, أَبْشِر, سَمّ, تَرَا, مُو, مَا فِيه, عَشَان.
+3. Sesuaikan dhamir, fi'il, dan kāf khithāb dengan lawan bicara "${lawanBicara}" dan gaya "${gayaBahasa}".
+4. Berikan harakat lengkap; akhir kata 'Ammiyah disukun kecuali kasrah untuk perempuan.
+5. Transliterasi: huruf ق dilafalkan 'g' (garīb, fundug, ragm).
+6. Balas HANYA dengan JSON valid sesuai skema.`;
+
+      const userPrompt = `Arah: ${dirLabel}\nLawan bicara: ${lawanBicara}\nGaya: ${gayaBahasa}\nTeks: """${text}"""`;
+
+      const geminiPayload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              arab_amiyah: { type: 'STRING' },
+              transliterasi: { type: 'STRING' },
+              terjemahan_id: { type: 'STRING' },
+              arab_fusha: { type: 'STRING' },
+              catatan_budaya_kaidah: { type: 'STRING' }
+            },
+            required: ['arab_amiyah', 'transliterasi', 'terjemahan_id', 'arab_fusha', 'catatan_budaya_kaidah']
+          }
+        }
+      };
+
+      try {
+        const { endpoint, activeKey } = getGeminiConfig();
+        let parsedResult = null;
+
+        if (endpoint) {
+          const res = await fetchWithBackoff(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, direction: state.translateDir, lawanBicara, gayaBahasa, model: GEMINI_MODEL, payload: geminiPayload })
+          }, {
+            outerSignal: runController.signal,
+            onStatus: (s) => { loadingStatus.textContent = s; }
+          });
+
+          if (!res.ok) {
+            const errTxt = await res.text().catch(() => '');
+            throw new Error(`Proxy ${endpoint} error (${res.status}): ${errTxt || res.statusText}`);
+          }
+          const data = await res.json();
+          parsedResult = data.arab_amiyah ? data : parseGeminiJsonSafely(data?.candidates?.[0]?.content?.parts?.[0]?.text);
+        } else {
+          const { url, options } = buildGeminiDirectRequest(activeKey, GEMINI_MODEL, geminiPayload);
+          const res = await fetchWithBackoff(url, options, {
+            outerSignal: runController.signal,
+            onStatus: (s) => { loadingStatus.textContent = s; }
+          });
+
+          if (!res.ok) {
+            const errJson = await res.json().catch(() => ({}));
+            const apiMsg = errJson?.error?.message || `HTTP ${res.status}`;
+            if (res.status === 400 || res.status === 401 || res.status === 403 || /api key/i.test(apiMsg)) {
+              throw new Error(`API Key Gemini tidak valid atau belum diatur (${apiMsg}). Pastikan Anda menyalin seluruh kunci via tombol "Copy key" di Google AI Studio, atau aktifkan Proxy Vercel (/api/translate).`);
+            }
+            throw new Error(apiMsg);
+          }
+
+          const resultJson = await res.json();
+          parsedResult = parseGeminiJsonSafely(resultJson?.candidates?.[0]?.content?.parts?.[0]?.text);
+        }
+
+        if (runController.signal.aborted) return;
+        displayTranslateResult(parsedResult, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
+        saveTranslateHistory({ text, direction: state.translateDir, lawanBicara, gayaBahasa, result: parsedResult });
+      } catch (err) {
+        if (err.name === 'AbortError' && runController.signal.aborted) {
+          showToast('Proses terjemahan dibatalkan.', 'warning');
+          return;
+        }
+        if (IS_PREVIEW) {
+          const sim = buildPreviewSimulation(text, state.translateDir, lawanBicara, gayaBahasa);
+          displayTranslateResult(sim, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
+          saveTranslateHistory({ text, direction: state.translateDir, lawanBicara, gayaBahasa, result: sim });
+          showToast('Menggunakan Simulasi Preview (masukkan API Key Gemini untuk AI penuh).', 'warning');
+        } else {
+          showTranslateError(err.message);
+          showToast('Terjemahan gagal. Lihat detail di layar.', 'error');
+        }
+      } finally {
+        if (currentTranslateController === runController) {
+          currentTranslateController = null;
+          stopTranslateLoadingUI();
+        }
+      }
+    }
+
+    function displayTranslateResult(res, meta) {
+      state.lastTranslateResult = res;
+      document.getElementById('tr-error-card').classList.add('hidden');
+      document.getElementById('tr-res-arab').textContent = res.arab_amiyah || '-';
+      document.getElementById('tr-res-translit').textContent = res.transliterasi || '-';
+      document.getElementById('tr-res-id').textContent = res.terjemahan_id || '-';
+      document.getElementById('tr-res-fusha').textContent = res.arab_fusha || '-';
+      document.getElementById('tr-res-catatan').textContent = res.catatan_budaya_kaidah || '-';
+      document.getElementById('tr-result-meta').textContent = `${meta.lawanBicara} • ${meta.gayaBahasa}`;
+      document.getElementById('tr-preview-sim-badge').classList.toggle('hidden', !res._isSimulation);
+      document.getElementById('tr-result-card').classList.remove('hidden');
+    }
+
+    function saveTranslateHistory(entry) {
+      try {
+        const list = JSON.parse(localStorage.getItem('ammiyah_tr_history') || '[]');
+        list.unshift({ ...entry, ts: Date.now() });
+        localStorage.setItem('ammiyah_tr_history', JSON.stringify(list.slice(0, 15)));
+        renderTranslateHistory();
+      } catch (e) {}
+    }
+
+    function renderTranslateHistory() {
+      const box = document.getElementById('tr-history-list');
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem('ammiyah_tr_history') || '[]'); } catch (e) {}
+      if (list.length === 0) {
+        box.innerHTML = '<p class="text-xs text-slate-400 text-center py-2">Belum ada riwayat terjemahan.</p>';
+        return;
+      }
+      box.innerHTML = list.map((item, idx) => `
+        <div onclick="window.__loadTrHistory(${idx})" class="p-3 rounded-2xl bg-white hover:bg-emeraldbrand-50/40 border border-slate-200/70 cursor-pointer transition">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-xs font-bold text-slate-800 truncate">${escapeHtml(item.text)}</p>
+            <span class="text-[10px] font-semibold text-slate-400 shrink-0">${item.direction === 'id-ar' ? 'ID → AR' : 'AR → ID'}</span>
+          </div>
+          <p class="arabic-text text-base font-bold text-emeraldbrand-800 text-right truncate mt-0.5">${escapeHtml(item.result?.arab_amiyah || '')}</p>
+        </div>
+      `).join('');
+    }
+
+    window.__loadTrHistory = (idx) => {
+      try {
+        const list = JSON.parse(localStorage.getItem('ammiyah_tr_history') || '[]');
+        const item = list[idx];
+        if (!item) return;
+        document.getElementById('tr-input-text').value = item.text;
+        displayTranslateResult(item.result, item);
+      } catch (e) {}
+    };
+
+    document.getElementById('tr-submit-btn').addEventListener('click', runGeminiTranslate);
+    document.getElementById('tr-retry-btn').addEventListener('click', runGeminiTranslate);
+    document.getElementById('tr-cancel-btn').addEventListener('click', () => {
+      if (currentTranslateController) {
+        currentTranslateController.abort();
+        currentTranslateController = null;
+      }
+      stopTranslateLoadingUI();
+    });
+    document.getElementById('tr-btn-speak').addEventListener('click', () => {
+      if (state.lastTranslateResult?.arab_amiyah) speakArabic(state.lastTranslateResult.arab_amiyah);
+    });
+    document.getElementById('tr-btn-copy').addEventListener('click', () => {
+      const r = state.lastTranslateResult;
+      if (!r) return;
+      copyTextSafe(`${r.arab_amiyah}\n(${r.transliterasi})\nArtinya: ${r.terjemahan_id}`);
+    });
+    document.getElementById('tr-clear-history').addEventListener('click', () => {
+      localStorage.removeItem('ammiyah_tr_history');
+      renderTranslateHistory();
+      showToast('Riwayat terjemahan dibersihkan.', 'info');
+    });
+    document.getElementById('tr-input-text').addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runGeminiTranslate();
+      }
+    });
+
+    // Modal Pengaturan API Key Gemini
+    const openGeminiSettings = () => {
+      document.getElementById('input-gemini-key').value = localStorage.getItem('ammiyah_gemini_key') || '';
+      document.getElementById('input-gemini-endpoint').value = localStorage.getItem('ammiyah_gemini_endpoint') || GEMINI_API_ENDPOINT || '';
+      document.getElementById('input-gemini-key').type = 'password';
+      document.getElementById('btn-toggle-key-vis').textContent = 'Lihat';
+      const statusBox = document.getElementById('gemini-test-status');
+      statusBox.classList.add('hidden');
+      document.getElementById('modal-gemini-settings').classList.remove('hidden');
+    };
+    document.getElementById('btn-open-gemini-settings').addEventListener('click', openGeminiSettings);
+    document.getElementById('tr-error-settings-btn').addEventListener('click', openGeminiSettings);
+    document.getElementById('close-gemini-settings').addEventListener('click', () => {
+      document.getElementById('modal-gemini-settings').classList.add('hidden');
+    });
+    document.getElementById('btn-toggle-key-vis').addEventListener('click', () => {
+      const inp = document.getElementById('input-gemini-key');
+      const btn = document.getElementById('btn-toggle-key-vis');
+      const isHidden = inp.type === 'password';
+      inp.type = isHidden ? 'text' : 'password';
+      btn.textContent = isHidden ? 'Tutup' : 'Lihat';
+    });
+    document.getElementById('btn-save-gemini-key').addEventListener('click', () => {
+      const cleanedKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
+      const cleanedEp = document.getElementById('input-gemini-endpoint').value.trim();
+      if (cleanedKey) localStorage.setItem('ammiyah_gemini_key', cleanedKey);
+      else localStorage.removeItem('ammiyah_gemini_key');
+      if (cleanedEp) localStorage.setItem('ammiyah_gemini_endpoint', cleanedEp);
+      else localStorage.removeItem('ammiyah_gemini_endpoint');
+      updateTranslateStatusBadge();
+      document.getElementById('modal-gemini-settings').classList.add('hidden');
+      showToast('Pengaturan AI Gemini berhasil disimpan.', 'success');
+    });
+    document.getElementById('btn-clear-gemini-key').addEventListener('click', () => {
+      localStorage.removeItem('ammiyah_gemini_key');
+      localStorage.removeItem('ammiyah_gemini_endpoint');
+      document.getElementById('input-gemini-key').value = '';
+      document.getElementById('input-gemini-endpoint').value = '';
+      document.getElementById('gemini-test-status').classList.add('hidden');
+      updateTranslateStatusBadge();
+      showToast('Pengaturan AI Gemini dihapus.', 'info');
+    });
+    document.getElementById('btn-test-gemini-key').addEventListener('click', async () => {
+      const testKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
+      const testEp = document.getElementById('input-gemini-endpoint').value.trim();
+      const statusBox = document.getElementById('gemini-test-status');
+      const btnTest = document.getElementById('btn-test-gemini-key');
+
+      statusBox.className = 'p-2.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700';
+      statusBox.textContent = 'Menguji koneksi ke AI Gemini...';
+      statusBox.classList.remove('hidden');
+      btnTest.disabled = true;
+
+      try {
+        const pingPayload = { contents: [{ parts: [{ text: 'Balas hanya dengan kata: OK' }] }] };
+        let res;
+        if (testEp) {
+          res = await fetch(testEp, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: 'Halo', direction: 'id-ar', lawanBicara: 'Laki-laki tunggal', gayaBahasa: 'Sopan & Ramah', model: GEMINI_MODEL, payload: pingPayload })
+          });
+        } else {
+          const { url, options } = buildGeminiDirectRequest(testKey, GEMINI_MODEL, pingPayload);
+          res = await fetch(url, options);
+        }
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `HTTP ${res.status}`);
+        }
+        statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
+        statusBox.textContent = '✓ Koneksi berhasil! API Key / Proxy Gemini valid dan siap dipakai.';
+      } catch (err) {
+        statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200';
+        statusBox.textContent = `✗ Gagal: ${err.message}`;
+      } finally {
+        btnTest.disabled = false;
+      }
+    });
+
+    // =========================================================================
+    // VIEW 5: BUDAYA & KAIDAH 'AMMIYAH
+    // =========================================================================
+    function renderBudaya() {
+      const babVal = document.getElementById('budaya-filter-bab').value;
+      const tipeVal = document.getElementById('budaya-filter-tipe').value;
+      const container = document.getElementById('budaya-list');
+
+      const filtered = state.budayaList.filter(b => {
+        if (babVal !== 'all' && String(b.bab_id) !== babVal) return false;
+        if (tipeVal !== 'all' && b.tipe !== tipeVal) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada catatan budaya atau kaidah pada filter ini.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(b => {
+        const isKaidah = b.tipe === 'Kaidah';
+        return `
+          <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-2 border-l-4 ${isKaidah ? 'border-l-emeraldbrand-700' : 'border-l-goldaccent-500'}">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${escapeHtml(b.judul)}</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isKaidah ? 'bg-emeraldbrand-100 text-emeraldbrand-800' : 'bg-amber-100 text-amber-800'}">Bab ${b.bab_id} &bull; ${escapeHtml(b.tipe)}</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(b.konten)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    ['budaya-filter-bab', 'budaya-filter-tipe'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderBudaya);
+    });
+
+    // =========================================================================
+    // VIEW 6: MODE LATIHAN / FLASHCARD
+    // =========================================================================
+    function initFlashcardDeck() {
+      const babVal = document.getElementById('fc-filter-bab').value;
+      state.fcDeck = state.kosakataList.filter(k => babVal === 'all' || String(k.bab_id) === babVal);
+      state.fcIndex = 0;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const emptyEl = document.getElementById('fc-empty');
+      const stageEl = document.getElementById('fc-stage');
+      const counterEl = document.getElementById('fc-counter');
+      const cardInner = document.getElementById('fc-card-inner');
+
+      cardInner.classList.remove('is-flipped');
+
+      if (!state.fcDeck.length) {
+        emptyEl.classList.remove('hidden');
+        stageEl.classList.add('hidden');
+        counterEl.textContent = '0 / 0';
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      stageEl.classList.remove('hidden');
+      const item = state.fcDeck[state.fcIndex];
+      const bab = state.babList.find(b => b.id === item.bab_id);
+
+      counterEl.textContent = `${state.fcIndex + 1} / ${state.fcDeck.length}`;
+      document.getElementById('fc-front-kat').textContent = item.kategori || 'Kosakata';
+      document.getElementById('fc-front-arab').textContent = item.arab || '-';
+      document.getElementById('fc-front-translit').textContent = item.transliterasi || '-';
+      document.getElementById('fc-back-arti').textContent = item.arti || '-';
+      document.getElementById('fc-back-bab').textContent = bab ? `Bab ${String(bab.id).padStart(2, '0')} — ${bab.judul_id}` : `Bab ${item.bab_id}`;
+
+      const isHafal = state.progresMap[item.id] === 'hafal';
+      const btnHafal = document.getElementById('fc-btn-hafal');
+      btnHafal.textContent = isHafal ? '✓ Sudah Hafal' : 'Tandai Hafal';
+    }
+
+    document.getElementById('fc-filter-bab').addEventListener('change', initFlashcardDeck);
+    document.getElementById('fc-card-inner').addEventListener('click', () => {
+      document.getElementById('fc-card-inner').classList.toggle('is-flipped');
+    });
+    document.getElementById('fc-btn-prev').addEventListener('click', () => {
+      if (!state.fcDeck.length) return;
+      state.fcIndex = (state.fcIndex - 1 + state.fcDeck.length) % state.fcDeck.length;
+      renderFlashcard();
+    });
+    document.getElementById('fc-btn-next').addEventListener('click', () => {
+      if (!state.fcDeck.length) return;
+      state.fcIndex = (state.fcIndex + 1) % state.fcDeck.length;
+      renderFlashcard();
+    });
+    document.getElementById('fc-btn-shuffle').addEventListener('click', () => {
+      for (let i = state.fcDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [state.fcDeck[i], state.fcDeck[j]] = [state.fcDeck[j], state.fcDeck[i]];
+      }
+      state.fcIndex = 0;
+      renderFlashcard();
+      showToast('Urutan kartu diacak!', 'info');
+    });
+    document.getElementById('fc-btn-audio').addEventListener('click', () => {
+      const item = state.fcDeck[state.fcIndex];
+      if (item?.arab) speakArabic(item.arab);
+    });
+    document.getElementById('fc-btn-hafal').addEventListener('click', async () => {
+      const item = state.fcDeck[state.fcIndex];
+      if (!item) return;
+      await window.__toggleProgres(item.id, 'hafal');
+      renderFlashcard();
+    });
+
+    // =========================================================================
+    // VIEW 7: PANEL ADMIN (KELOLA MATERI BAB & SUB-MATERI)
+    // =========================================================================
+    document.getElementById('admin-tab-materi').addEventListener('click', () => {
+      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
+      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      document.getElementById('admin-panel-materi').classList.remove('hidden');
+      document.getElementById('admin-panel-users').classList.add('hidden');
+    });
+
+    document.getElementById('admin-tab-users').addEventListener('click', () => {
+      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
+      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      document.getElementById('admin-panel-users').classList.remove('hidden');
+      document.getElementById('admin-panel-materi').classList.add('hidden');
+    });
+
+    function renderAdminBabEditor() {
+      const bab = state.babList.find(b => b.id === Number(state.adminSelectedBabId));
+      const subBox = document.getElementById('admin-submateri-box');
+      if (bab) {
+        document.getElementById('admin-form-bab-title').textContent = `Edit Detail Materi Bab ${String(bab.id).padStart(2, '0')}`;
+        document.getElementById('admin-bab-id').value = bab.id;
+        document.getElementById('admin-bab-judul-id').value = bab.judul_id || '';
+        document.getElementById('admin-bab-judul-ar').value = bab.judul_ar || '';
+        document.getElementById('admin-bab-subjudul').value = bab.subjudul || '';
+        document.getElementById('admin-bab-deskripsi').value = bab.deskripsi || '';
+        subBox.classList.remove('hidden');
+        renderAdminSubMateri();
+      } else {
+        const nextId = state.babList.length ? Math.max(...state.babList.map(b => b.id)) + 1 : 1;
+        document.getElementById('admin-form-bab-title').textContent = 'Tambah Materi Bab Baru';
+        document.getElementById('admin-bab-id').value = nextId;
+        document.getElementById('admin-bab-judul-id').value = '';
+        document.getElementById('admin-bab-judul-ar').value = '';
+        document.getElementById('admin-bab-subjudul').value = '';
+        document.getElementById('admin-bab-deskripsi').value = '';
+        subBox.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('admin-select-bab').addEventListener('change', (e) => {
+      state.adminSelectedBabId = e.target.value ? Number(e.target.value) : null;
+      renderAdminBabEditor();
+    });
+
+    document.getElementById('admin-btn-new-bab').addEventListener('click', () => {
+      state.adminSelectedBabId = null;
+      renderAdminBabEditor();
+      document.getElementById('admin-bab-judul-id').focus();
+    });
+
+    document.getElementById('admin-form-bab').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        id: Number(document.getElementById('admin-bab-id').value),
+        judul_id: document.getElementById('admin-bab-judul-id').value.trim(),
+        judul_ar: document.getElementById('admin-bab-judul-ar').value.trim(),
+        subjudul: document.getElementById('admin-bab-subjudul').value.trim(),
+        deskripsi: document.getElementById('admin-bab-deskripsi').value.trim(),
+      };
+      try {
+        if (IS_PREVIEW) {
+          const idx = previewStore.materi_bab.findIndex(b => b.id === payload.id);
+          if (idx >= 0) previewStore.materi_bab[idx] = payload;
+          else previewStore.materi_bab.push(payload);
+        } else {
+          const { error } = await supabase.from('materi_bab').upsert(payload, { onConflict: 'id' });
+          if (error) throw error;
+        }
+        state.adminSelectedBabId = payload.id;
+        await loadAllData();
+        showToast(`Materi Bab ${payload.id} berhasil disimpan!`, 'success');
+      } catch (err) {
+        showToast('Gagal menyimpan bab: ' + err.message, 'error');
+      }
+    });
+
+    document.getElementById('admin-btn-delete-bab').addEventListener('click', async () => {
+      if (!state.adminSelectedBabId) return;
+      const ok = await showConfirmModal('Hapus Materi Bab', `Yakin ingin menghapus Bab ${state.adminSelectedBabId} beserta seluruh kosakata, percakapan, dan kaidah di dalamnya?`);
+      if (!ok) return;
+      try {
+        const idDel = Number(state.adminSelectedBabId);
+        if (IS_PREVIEW) {
+          previewStore.materi_bab = previewStore.materi_bab.filter(b => b.id !== idDel);
+          previewStore.kosakata = previewStore.kosakata.filter(k => k.bab_id !== idDel);
+          previewStore.percakapan = previewStore.percakapan.filter(p => p.bab_id !== idDel);
+          previewStore.budaya_kaidah = previewStore.budaya_kaidah.filter(b => b.bab_id !== idDel);
+        } else {
+          const { error } = await supabase.from('materi_bab').delete().eq('id', idDel);
+          if (error) throw error;
+        }
+        state.adminSelectedBabId = null;
+        await loadAllData();
+        showToast(`Bab ${idDel} berhasil dihapus.`, 'success');
+      } catch (err) {
+        showToast('Gagal menghapus bab: ' + err.message, 'error');
+      }
+    });
+
+    document.querySelectorAll('.admin-subtab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.adminSubTab = btn.dataset.subtab;
+        document.querySelectorAll('.admin-subtab-btn').forEach(b => {
+          b.className = b.dataset.subtab === state.adminSubTab
+            ? 'admin-subtab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm'
+            : 'admin-subtab-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600';
+        });
+        renderAdminSubMateri();
+      });
+    });
+
+    function renderAdminSubMateri() {
+      const box = document.getElementById('admin-submateri-list');
+      const babId = Number(state.adminSelectedBabId);
+      let items = [];
+      if (state.adminSubTab === 'kosakata') items = state.kosakataList.filter(x => x.bab_id === babId);
+      if (state.adminSubTab === 'percakapan') items = state.percakapanList.filter(x => x.bab_id === babId);
+      if (state.adminSubTab === 'budaya') items = state.budayaList.filter(x => x.bab_id === babId);
+
+      if (items.length === 0) {
+        box.innerHTML = '<div class="p-4 rounded-2xl bg-slate-50 text-center text-xs text-slate-400">Belum ada item pada tab ini. Klik "+ Tambah Item".</div>';
+        return;
+      }
+
+      box.innerHTML = items.map(it => {
+        const title = state.adminSubTab === 'budaya' ? `${it.tipe}: ${it.judul}` : `${it.arab} — ${it.arti}`;
+        const sub = state.adminSubTab === 'budaya' ? it.konten : (it.transliterasi || '');
+        return `
+          <div class="p-3 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold text-slate-900 truncate">${escapeHtml(title)}</p>
+              <p class="text-[11px] text-slate-500 truncate">${escapeHtml(sub)}</p>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="window.__editSubItem('${it.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold">Edit</button>
+              <button type="button" onclick="window.__deleteSubItem('${it.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold">Hapus</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openSubItemModal(existingItem = null) {
+      state.adminEditingSubItem = existingItem;
+      const fields = document.getElementById('form-admin-subitem-fields');
+      const tab = state.adminSubTab;
+      document.getElementById('modal-sub-title').textContent = `${existingItem ? 'Edit' : 'Tambah'} ${tab === 'kosakata' ? 'Kosakata' : tab === 'percakapan' ? 'Percakapan' : 'Budaya / Kaidah'}`;
+
+      if (tab === 'kosakata') {
+        fields.innerHTML = `
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori</label>
+            <select id="sub-f-kat" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm">
+              ${['Kata Benda', 'Kata Kerja', 'Partikel', 'Ungkapan'].map(o => `<option value="${o}" ${existingItem?.kategori === o ? 'selected' : ''}>${o}</option>`).join('')}
+            </select></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Teks Arab</label>
+            <input id="sub-f-arab" required dir="rtl" value="${escapeHtml(existingItem?.arab || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm arabic-text" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Transliterasi</label>
+            <input id="sub-f-trans" required value="${escapeHtml(existingItem?.transliterasi || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Arti Indonesia</label>
+            <input id="sub-f-arti" required value="${escapeHtml(existingItem?.arti || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>`;
+      } else if (tab === 'percakapan') {
+        fields.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Jenis</label>
+              <select id="sub-f-jenis" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm">
+                <option value="Contoh Kalimat" ${existingItem?.jenis === 'Contoh Kalimat' ? 'selected' : ''}>Contoh Kalimat</option>
+                <option value="Mini Dialog" ${existingItem?.jenis === 'Mini Dialog' ? 'selected' : ''}>Mini Dialog</option>
+              </select></div>
+            <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Urutan</label>
+              <input id="sub-f-urutan" type="number" min="1" value="${existingItem?.urutan || 1}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          </div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Judul Dialog / Kelompok</label>
+            <input id="sub-f-judul" required value="${escapeHtml(existingItem?.judul_dialog || 'Contoh Penggunaan')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Peran Pembicara</label>
+            <input id="sub-f-peran" required value="${escapeHtml(existingItem?.peran || 'Kalimat')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Teks Arab</label>
+            <input id="sub-f-arab" required dir="rtl" value="${escapeHtml(existingItem?.arab || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm arabic-text" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Transliterasi</label>
+            <input id="sub-f-trans" required value="${escapeHtml(existingItem?.transliterasi || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Arti Indonesia</label>
+            <input id="sub-f-arti" required value="${escapeHtml(existingItem?.arti || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>`;
+      } else {
+        fields.innerHTML = `
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Tipe</label>
+            <select id="sub-f-tipe" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm">
+              <option value="Budaya" ${existingItem?.tipe === 'Budaya' ? 'selected' : ''}>Budaya</option>
+              <option value="Kaidah" ${existingItem?.tipe === 'Kaidah' ? 'selected' : ''}>Kaidah</option>
+            </select></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Judul</label>
+            <input id="sub-f-judul" required value="${escapeHtml(existingItem?.judul || '')}" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" /></div>
+          <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Konten Penjelasan</label>
+            <textarea id="sub-f-konten" required rows="4" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm">${escapeHtml(existingItem?.konten || '')}</textarea></div>`;
+      }
+      document.getElementById('modal-admin-subitem').classList.remove('hidden');
+    }
+
+    document.getElementById('admin-btn-add-subitem').addEventListener('click', () => openSubItemModal(null));
+    document.getElementById('close-admin-subitem').addEventListener('click', () => document.getElementById('modal-admin-subitem').classList.add('hidden'));
+    document.getElementById('cancel-admin-subitem').addEventListener('click', () => document.getElementById('modal-admin-subitem').classList.add('hidden'));
+
+    window.__editSubItem = (id) => {
+      const list = state.adminSubTab === 'kosakata' ? state.kosakataList : state.adminSubTab === 'percakapan' ? state.percakapanList : state.budayaList;
+      const found = list.find(x => String(x.id) === String(id));
+      if (found) openSubItemModal(found);
+    };
+
+    window.__deleteSubItem = async (id) => {
+      const ok = await showConfirmModal('Hapus Item', 'Yakin ingin menghapus item materi ini?');
+      if (!ok) return;
+      const tableName = state.adminSubTab === 'kosakata' ? 'kosakata' : state.adminSubTab === 'percakapan' ? 'percakapan' : 'budaya_kaidah';
+      try {
+        if (IS_PREVIEW) {
+          previewStore[tableName] = previewStore[tableName].filter(x => String(x.id) !== String(id));
+        } else {
+          const { error } = await supabase.from(tableName).delete().eq('id', id);
+          if (error) throw error;
+        }
+        await loadAllData();
+        showToast('Item berhasil dihapus.', 'success');
+      } catch (err) {
+        showToast('Gagal menghapus item: ' + err.message, 'error');
+      }
+    };
+
+    document.getElementById('form-admin-subitem').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tab = state.adminSubTab;
+      const tableName = tab === 'kosakata' ? 'kosakata' : tab === 'percakapan' ? 'percakapan' : 'budaya_kaidah';
+      const bab_id = Number(state.adminSelectedBabId);
+      let payload = { bab_id };
+
+      if (tab === 'kosakata') {
+        payload = {
+          bab_id,
+          kategori: document.getElementById('sub-f-kat').value,
+          arab: document.getElementById('sub-f-arab').value.trim(),
+          transliterasi: document.getElementById('sub-f-trans').value.trim(),
+          arti: document.getElementById('sub-f-arti').value.trim(),
+        };
+      } else if (tab === 'percakapan') {
+        payload = {
+          bab_id,
+          jenis: document.getElementById('sub-f-jenis').value,
+          urutan: Number(document.getElementById('sub-f-urutan').value) || 1,
+          judul_dialog: document.getElementById('sub-f-judul').value.trim(),
+          peran: document.getElementById('sub-f-peran').value.trim(),
+          arab: document.getElementById('sub-f-arab').value.trim(),
+          transliterasi: document.getElementById('sub-f-trans').value.trim(),
+          arti: document.getElementById('sub-f-arti').value.trim(),
+        };
+      } else {
+        payload = {
+          bab_id,
+          tipe: document.getElementById('sub-f-tipe').value,
+          judul: document.getElementById('sub-f-judul').value.trim(),
+          konten: document.getElementById('sub-f-konten').value.trim(),
+        };
+      }
+
+      try {
+        if (IS_PREVIEW) {
+          if (state.adminEditingSubItem) {
+            const idx = previewStore[tableName].findIndex(x => x.id === state.adminEditingSubItem.id);
+            if (idx >= 0) previewStore[tableName][idx] = { ...state.adminEditingSubItem, ...payload };
+          } else {
+            previewStore[tableName].push({ id: `prev-${Date.now()}`, ...payload });
+          }
+        } else {
+          if (state.adminEditingSubItem) {
+            const { error } = await supabase.from(tableName).update(payload).eq('id', state.adminEditingSubItem.id);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from(tableName).insert(payload);
+            if (error) throw error;
+          }
+        }
+        document.getElementById('modal-admin-subitem').classList.add('hidden');
+        await loadAllData();
+        showToast('Item materi berhasil disimpan!', 'success');
+      } catch (err) {
+        showToast('Gagal menyimpan item: ' + err.message, 'error');
+      }
+    });
+
+    // Manajemen Akun Peserta (Admin)
+    function renderAdminUsers() {
+      const box = document.getElementById('admin-users-list');
+      if (state.usersList.length === 0) {
+        box.innerHTML = '<div class="p-4 rounded-2xl bg-slate-50 text-center text-xs text-slate-400">Belum ada akun peserta terdaftar.</div>';
+        return;
+      }
+      box.innerHTML = state.usersList.map(u => `
+        <div class="p-3 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-xs font-extrabold text-slate-900 truncate">${escapeHtml(u.nama_lengkap || u.username)}</p>
+            <p class="text-[11px] text-slate-500">Username: <strong>${escapeHtml(u.username)}</strong> &bull; Password: <strong>${escapeHtml(u.password)}</strong></p>
+          </div>
+          <button type="button" onclick="window.__deleteUser('${u.id}')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold shrink-0">Hapus</button>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('admin-form-user').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        username: document.getElementById('admin-u-username').value.trim(),
+        password: document.getElementById('admin-u-password').value.trim(),
+        nama_lengkap: document.getElementById('admin-u-nama').value.trim(),
+      };
+      try {
+        if (IS_PREVIEW) {
+          previewStore.users.push({ id: `u-${Date.now()}`, ...payload });
+        } else {
+          const { error } = await supabase.from('users').insert(payload);
+          if (error) throw error;
+        }
+        e.target.reset();
+        await loadAllData();
+        showToast('Akun peserta berhasil ditambahkan!', 'success');
+      } catch (err) {
+        showToast('Gagal menambah peserta: ' + err.message, 'error');
+      }
+    });
+
+    window.__deleteUser = async (id) => {
+      const ok = await showConfirmModal('Hapus Akun Peserta', 'Yakin ingin menghapus akun peserta ini?');
+      if (!ok) return;
+      try {
+        if (IS_PREVIEW) {
+          previewStore.users = previewStore.users.filter(u => u.id !== id);
+        } else {
+          const { error } = await supabase.from('users').delete().eq('id', id);
+          if (error) throw error;
+        }
+        await loadAllData();
+        showToast('Akun peserta dihapus.', 'success');
+      } catch (err) {
+        showToast('Gagal menghapus peserta: ' + err.message, 'error');
+      }
+    };
+
+    // =========================================================================
+    // INISIALISASI APLIKASI
+    // =========================================================================
+    initPWA();
+    initAuthUI();
+    updateTranslateStatusBadge();
+    checkExistingSession();
+  </script>
+</body>
+</html>
