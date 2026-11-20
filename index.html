@@ -528,6 +528,10 @@
                   <span class="inline-block px-2.5 py-0.5 rounded-full bg-goldaccent-100 text-goldaccent-700 text-[10px] font-bold uppercase tracking-wider mb-1">AI Gemini</span>
                   <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Translate Indonesia &#8644; Arab 'Ammiyah</h2>
                   <p class="text-xs text-slate-500 mt-0.5">Terjemahan alami khas Saudi lengkap dengan harakat, transliterasi, dan perbandingan Fushhā.</p>
+                  <p id="tr-connection-badge" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Status AI: Siap</span>
+                  </p>
                 </div>
                 <button type="button" id="btn-open-gemini-settings" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 transition" title="Pengaturan API Key Gemini">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -870,21 +874,35 @@
     <!-- MODAL PENGATURAN API KEY GEMINI            -->
     <!-- ========================================== -->
     <div id="modal-gemini-settings" class="hidden fixed inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="glass-panel bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+      <div class="glass-panel bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto custom-scroll">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-extrabold text-slate-900">Pengaturan AI Gemini</h3>
-          <button type="button" id="close-gemini-settings" class="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500">&times;</button>
+          <button type="button" id="close-gemini-settings" class="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 text-lg leading-none">&times;</button>
         </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Masukkan API Key dari <strong>Google AI Studio</strong> agar fitur Translate AI berjalan langsung dari browser ini (disimpan lokal di perangkat Anda).
-        </p>
+        <div class="p-3 rounded-2xl bg-emeraldbrand-50/70 border border-emeraldbrand-100 text-[11px] text-slate-700 space-y-1 leading-relaxed">
+          <p class="font-bold text-emeraldbrand-900">Cara mendapatkan API Key Gemini gratis:</p>
+          <p>1. Buka <strong>aistudio.google.com/apikey</strong> &rarr; klik <strong>Create API key</strong>.</p>
+          <p>2. Salin kunci yang diawali <code class="bg-white px-1 rounded font-bold">AIza...</code> lalu tempel di bawah.</p>
+          <p>3. Atau gunakan <strong>Endpoint Proxy Vercel</strong> (<code class="bg-white px-1 rounded">/api/translate</code>) agar seluruh peserta otomatis bisa menerjemahkan tanpa isi kunci.</p>
+        </div>
         <div>
-          <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Gemini API Key</label>
-          <input id="input-gemini-key" type="password" placeholder="AIzaSy..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+          <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Gemini API Key (Disimpan Lokal di Perangkat)</label>
+          <div class="relative">
+            <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="AIzaSy..." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+            <button type="button" id="btn-toggle-key-vis" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-200">Lihat</button>
+          </div>
         </div>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" id="btn-clear-gemini-key" class="px-3.5 py-2 rounded-xl bg-rose-50 text-rose-700 text-xs font-bold">Hapus Key</button>
-          <button type="button" id="btn-save-gemini-key" class="px-4 py-2 rounded-xl bg-emeraldbrand-700 text-white text-xs font-bold">Simpan</button>
+        <div>
+          <label for="input-gemini-endpoint" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Endpoint Proxy Server (Opsional — untuk Vercel)</label>
+          <input id="input-gemini-endpoint" type="text" autocomplete="off" spellcheck="false" placeholder="Kosongkan atau isi /api/translate" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+        </div>
+        <div id="gemini-test-status" class="hidden p-2.5 rounded-xl text-xs font-semibold"></div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+          <button type="button" id="btn-test-gemini-key" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">Uji Koneksi</button>
+          <div class="flex gap-2">
+            <button type="button" id="btn-clear-gemini-key" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">Hapus</button>
+            <button type="button" id="btn-save-gemini-key" class="px-4 py-2 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold transition">Simpan</button>
+          </div>
         </div>
       </div>
     </div>
@@ -938,133 +956,36 @@
     const SUPABASE_ANON_KEY = "sb_publishable_Y_XgpjYkg9Z9zMww8IKRZg_6cMm85tr";
 
     // KONFIGURASI GEMINI AI TRANSLATE
-    // Opsi 1 (Rekomendasi Vercel): Isi "/api/translate" agar API Key aman di Server Vercel
-    // Opsi 2 (Langsung Client): Kosongkan GEMINI_API_ENDPOINT & isi GEMINI_API_KEY (atau atur lewat ikon gerigi di UI)
+    // Opsi 1 (Rekomendasi Vercel): Isi "/api/translate" agar API Key aman di Server Vercel (Environment Variable: GEMINI_API_KEY)
+    // Opsi 2 (Langsung Client): Kosongkan GEMINI_API_ENDPOINT & biarkan apiKey = "" (otomatis di Preview) atau isi via ikon gerigi di UI
     const GEMINI_API_ENDPOINT = "";
-    const GEMINI_API_KEY = "AQ.Ab8RN6LKNsnM1yvR6qI4UgChqJ_lnV25Nsr0yHMXqoCsQxgdeg";
+    const apiKey = ""; // Biarkan kosong untuk runtime Canvas; di Vercel atur via /api/translate atau ikon Pengaturan
     const GEMINI_MODEL = "gemini-3-flash-preview";
 
-    // Inisialisasi Supabase Client (hanya saat IS_PREVIEW = false)
-    const supabase = !IS_PREVIEW ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-    // Kontrol pembatalan & timer agar loading Translate AI tidak pernah macet
-    let currentTranslateController = null;
-    let translateTimerInterval = null;
-
-    // =========================================================================
-    // STATE APLIKASI
-    // =========================================================================
-    const state = {
-      currentUser: null, // { id, role: 'admin' | 'user', nama, username }
-      currentView: 'beranda',
-      babList: [],
-      kosakataList: [],
-      percakapanList: [],
-      budayaList: [],
-      usersList: [],
-      progresMap: {}, // { kosakata_id: 'hafal' | 'favorit' }
-      translateDir: 'id-ar',
-      lastTranslateResult: null,
-      fcItems: [],
-      fcIndex: 0,
-      adminSelectedBabId: null,
-      adminSubTab: 'kosakata',
-      adminEditingSubItem: null,
-    };
-
-    // Data Dummy Minimalis (HANYA digunakan saat IS_PREVIEW = true, maks 2 baris per tabel)
-    function createPreviewStore() {
-      return {
-        users: [
-          { id: 'u-prev-1', username: 'jamaah1', password: '123', nama_lengkap: 'Ahmad (Preview)' }
-        ],
-        materi_bab: [
-          { id: 1, judul_id: 'Di Bandara', judul_ar: 'فِي المَطَار', subjudul: 'Check-in, Bagasi, Gate, dan Lainnya', deskripsi: 'Interaksi dasar dengan petugas bandara saat berangkat dan pulang umrah.' },
-          { id: 8, judul_id: 'Di Sekitar Masjidil Haram', judul_ar: 'حَوْلَ المَسْجِدِ الحَرَام', subjudul: 'Tanya arah, tempat wudhu, dan lokasi zamzam', deskripsi: 'Ungkapan penting di area paling padat di sekitar Masjidil Haram.' }
-        ],
-        kosakata: [
-          { id: 'k-prev-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
-          { id: 'k-prev-2', bab_id: 8, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت، فِين مَكَان زَمْزَم؟', transliterasi: 'law samaht, fēn makān zamzam?', arti: 'permisi, di mana tempat zamzam?' }
-        ],
-        percakapan: [
-          { id: 'p-prev-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 1, peran: 'Petugas', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
-          { id: 'p-prev-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket', urutan: 2, peran: 'Penumpang', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' }
-        ],
-        budaya_kaidah: [
-          { id: 'b-prev-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) selalu dipakai sebagai pembuka sopan sebelum bertanya di Arab Saudi.' },
-          { id: 'b-prev-2', bab_id: 1, tipe: 'Kaidah', judul: 'Harakat Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyah dibaca sukun. Contoh: مَطَارْ (mathār), bukan mathārun.' }
-        ],
-        progres_user: []
-      };
-    }
-    const previewStore = IS_PREVIEW ? createPreviewStore() : null;
-
-    // =========================================================================
-    // UTILITAS UI (TOAST, CONFIRM MODAL, ESCAPE HTML, COPY, TTS)
-    // =========================================================================
-    function escapeHtml(str) {
-      return String(str ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    function sanitizeApiKey(raw) {
+      const cleaned = String(raw || '').replace(/[\s"'`]/g, '').trim();
+      if (!cleaned || /^(API_KEY|GEMINI_API_KEY|MASUKKAN|ISI_)/i.test(cleaned)) return '';
+      return cleaned;
     }
 
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      const styles = {
-        success: 'bg-emeraldbrand-700 text-white',
-        error: 'bg-rose-600 text-white',
-        warning: 'bg-amber-600 text-white',
-        info: 'bg-slate-800 text-white'
-      };
-      toast.className = `pointer-events-auto px-4 py-2.5 rounded-2xl text-xs font-bold shadow-xl max-w-sm transition-all duration-300 ${styles[type] || styles.info}`;
-      toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(-6px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3200);
+    function getGeminiConfig() {
+      const localEndpoint = (localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
+      const endpoint = localEndpoint || GEMINI_API_ENDPOINT.trim();
+      const localKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key'));
+      const activeKey = localKey || sanitizeApiKey(apiKey);
+      return { endpoint, activeKey, hasLocalKey: Boolean(localKey) };
     }
 
-    function showConfirmModal(title, message) {
-      return new Promise((resolve) => {
-        const modal = document.getElementById('modal-confirm');
-        document.getElementById('confirm-title').textContent = title;
-        document.getElementById('confirm-message').textContent = message;
-        modal.classList.remove('hidden');
-
-        const btnOk = document.getElementById('confirm-btn-ok');
-        const btnCancel = document.getElementById('confirm-btn-cancel');
-        const cleanup = (val) => {
-          modal.classList.add('hidden');
-          btnOk.removeEventListener('click', onOk);
-          btnCancel.removeEventListener('click', onCancel);
-          resolve(val);
-        };
-        const onOk = () => cleanup(true);
-        const onCancel = () => cleanup(false);
-        btnOk.addEventListener('click', onOk);
-        btnCancel.addEventListener('click', onCancel);
-      });
-    }
-
-    function copyTextSafe(text) {
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('Teks berhasil disalin!', 'success');
-      } catch (e) {
-        showToast('Gagal menyalin teks.', 'error');
+    function updateTranslateStatusBadge() {
+      const badge = document.getElementById('tr-connection-badge');
+      if (!badge) return;
+      const { endpoint, hasLocalKey } = getGeminiConfig();
+      if (endpoint) {
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Mode Proxy: ${escapeHtml(endpoint)}</span>`;
+      } else if (hasLocalKey) {
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>API Key Tersimpan di Perangkat</span>`;
+      } else {
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Mode Default (Atur API Key jika di Vercel)</span>`;
       }
     }
 
@@ -1953,12 +1874,11 @@ ATURAN WAJIB:
       };
 
       try {
-        const localKey = localStorage.getItem('ammiyah_gemini_key') || '';
-        const activeKey = localKey || GEMINI_API_KEY || '';
+        const { endpoint, activeKey } = getGeminiConfig();
         let parsedResult = null;
 
-        if (GEMINI_API_ENDPOINT) {
-          const res = await fetchWithBackoff(GEMINI_API_ENDPOINT, {
+        if (endpoint) {
+          const res = await fetchWithBackoff(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text, direction: state.translateDir, lawanBicara, gayaBahasa, model: GEMINI_MODEL, payload: geminiPayload })
@@ -1969,12 +1889,12 @@ ATURAN WAJIB:
 
           if (!res.ok) {
             const errTxt = await res.text().catch(() => '');
-            throw new Error(`Proxy ${GEMINI_API_ENDPOINT} error (${res.status}): ${errTxt || res.statusText}`);
+            throw new Error(`Proxy ${endpoint} error (${res.status}): ${errTxt || res.statusText}`);
           }
           const data = await res.json();
           parsedResult = data.arab_amiyah ? data : parseGeminiJsonSafely(data?.candidates?.[0]?.content?.parts?.[0]?.text);
         } else {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(activeKey)}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${activeKey}`;
           const res = await fetchWithBackoff(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1987,8 +1907,8 @@ ATURAN WAJIB:
           if (!res.ok) {
             const errJson = await res.json().catch(() => ({}));
             const apiMsg = errJson?.error?.message || `HTTP ${res.status}`;
-            if (res.status === 400 || res.status === 401 || res.status === 403) {
-              throw new Error(`API Key Gemini belum valid atau belum diisi (${apiMsg}). Klik "Atur API Key Gemini" untuk mengisi kunci Anda.`);
+            if (res.status === 400 || res.status === 401 || res.status === 403 || /api key/i.test(apiMsg)) {
+              throw new Error(`API Key Gemini tidak valid atau belum diatur (${apiMsg}). Klik tombol "Atur API Key Gemini" di bawah untuk memasukkan API Key dari Google AI Studio, atau aktifkan Proxy Vercel (/api/translate).`);
             }
             throw new Error(apiMsg);
           }
@@ -2105,6 +2025,11 @@ ATURAN WAJIB:
     // Modal Pengaturan API Key Gemini
     const openGeminiSettings = () => {
       document.getElementById('input-gemini-key').value = localStorage.getItem('ammiyah_gemini_key') || '';
+      document.getElementById('input-gemini-endpoint').value = localStorage.getItem('ammiyah_gemini_endpoint') || GEMINI_API_ENDPOINT || '';
+      document.getElementById('input-gemini-key').type = 'password';
+      document.getElementById('btn-toggle-key-vis').textContent = 'Lihat';
+      const statusBox = document.getElementById('gemini-test-status');
+      statusBox.classList.add('hidden');
       document.getElementById('modal-gemini-settings').classList.remove('hidden');
     };
     document.getElementById('btn-open-gemini-settings').addEventListener('click', openGeminiSettings);
@@ -2112,203 +2037,71 @@ ATURAN WAJIB:
     document.getElementById('close-gemini-settings').addEventListener('click', () => {
       document.getElementById('modal-gemini-settings').classList.add('hidden');
     });
+    document.getElementById('btn-toggle-key-vis').addEventListener('click', () => {
+      const inp = document.getElementById('input-gemini-key');
+      const btn = document.getElementById('btn-toggle-key-vis');
+      const isHidden = inp.type === 'password';
+      inp.type = isHidden ? 'text' : 'password';
+      btn.textContent = isHidden ? 'Tutup' : 'Lihat';
+    });
     document.getElementById('btn-save-gemini-key').addEventListener('click', () => {
-      const val = document.getElementById('input-gemini-key').value.trim();
-      localStorage.setItem('ammiyah_gemini_key', val);
+      const cleanedKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
+      const cleanedEp = document.getElementById('input-gemini-endpoint').value.trim();
+      if (cleanedKey) localStorage.setItem('ammiyah_gemini_key', cleanedKey);
+      else localStorage.removeItem('ammiyah_gemini_key');
+      if (cleanedEp) localStorage.setItem('ammiyah_gemini_endpoint', cleanedEp);
+      else localStorage.removeItem('ammiyah_gemini_endpoint');
+      updateTranslateStatusBadge();
       document.getElementById('modal-gemini-settings').classList.add('hidden');
-      showToast('API Key Gemini tersimpan di perangkat ini.', 'success');
+      showToast('Pengaturan AI Gemini berhasil disimpan.', 'success');
     });
     document.getElementById('btn-clear-gemini-key').addEventListener('click', () => {
       localStorage.removeItem('ammiyah_gemini_key');
+      localStorage.removeItem('ammiyah_gemini_endpoint');
       document.getElementById('input-gemini-key').value = '';
-      showToast('API Key Gemini dihapus.', 'info');
+      document.getElementById('input-gemini-endpoint').value = '';
+      document.getElementById('gemini-test-status').classList.add('hidden');
+      updateTranslateStatusBadge();
+      showToast('Pengaturan AI Gemini dihapus.', 'info');
     });
+    document.getElementById('btn-test-gemini-key').addEventListener('click', async () => {
+      const testKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
+      const testEp = document.getElementById('input-gemini-endpoint').value.trim();
+      const statusBox = document.getElementById('gemini-test-status');
+      const btnTest = document.getElementById('btn-test-gemini-key');
 
-    // =========================================================================
-    // VIEW 5: BUDAYA & KAIDAH 'AMMIYAH
-    // =========================================================================
-    function renderBudaya() {
-      const babVal = document.getElementById('budaya-filter-bab').value;
-      const tipeVal = document.getElementById('budaya-filter-tipe').value;
-      const container = document.getElementById('budaya-list');
+      statusBox.className = 'p-2.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700';
+      statusBox.textContent = 'Menguji koneksi ke AI Gemini...';
+      statusBox.classList.remove('hidden');
+      btnTest.disabled = true;
 
-      const filtered = state.budayaList.filter(b => {
-        if (babVal !== 'all' && String(b.bab_id) !== babVal) return false;
-        if (tipeVal !== 'all' && b.tipe !== tipeVal) return false;
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada catatan budaya atau kaidah pada filter ini.</div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map(b => {
-        const isKaidah = b.tipe === 'Kaidah';
-        return `
-          <article class="glass-panel rounded-2xl p-4 sm:p-5 space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${isKaidah ? 'bg-indigo-100 text-indigo-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(b.tipe)} &bull; Bab ${b.bab_id}</span>
-            </div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${escapeHtml(b.judul)}</h3>
-            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(b.konten)}</p>
-          </article>
-        `;
-      }).join('');
-    }
-
-    ['budaya-filter-bab', 'budaya-filter-tipe'].forEach(id => {
-      document.getElementById(id).addEventListener('change', renderBudaya);
-    });
-
-    // =========================================================================
-    // VIEW 6: MODE LATIHAN FLASHCARD
-    // =========================================================================
-    function initFlashcardDeck() {
-      const babVal = document.getElementById('fc-filter-bab').value;
-      state.fcItems = state.kosakataList.filter(k => babVal === 'all' || String(k.bab_id) === babVal);
-      state.fcIndex = 0;
-      renderFlashcard();
-    }
-
-    function renderFlashcard() {
-      const emptyEl = document.getElementById('fc-empty');
-      const stageEl = document.getElementById('fc-stage');
-      const inner = document.getElementById('fc-card-inner');
-      inner.classList.remove('is-flipped');
-
-      if (state.fcItems.length === 0) {
-        emptyEl.classList.remove('hidden');
-        stageEl.classList.add('hidden');
-        document.getElementById('fc-counter').textContent = '0 / 0';
-        return;
-      }
-
-      emptyEl.classList.add('hidden');
-      stageEl.classList.remove('hidden');
-      const item = state.fcItems[state.fcIndex];
-      const bab = state.babList.find(b => b.id === item.bab_id);
-
-      document.getElementById('fc-counter').textContent = `${state.fcIndex + 1} / ${state.fcItems.length}`;
-      document.getElementById('fc-front-kat').textContent = item.kategori || 'Kosakata';
-      document.getElementById('fc-front-arab').textContent = item.arab;
-      document.getElementById('fc-front-translit').textContent = item.transliterasi;
-      document.getElementById('fc-back-arti').textContent = item.arti;
-      document.getElementById('fc-back-bab').textContent = bab ? `Bab ${bab.id} — ${bab.judul_id}` : `Bab ${item.bab_id}`;
-
-      const isHafal = state.progresMap[item.id] === 'hafal';
-      document.getElementById('fc-btn-hafal').textContent = isHafal ? '✓ Sudah Hafal' : 'Tandai Hafal';
-    }
-
-    document.getElementById('fc-filter-bab').addEventListener('change', initFlashcardDeck);
-    document.getElementById('fc-card-inner').addEventListener('click', () => {
-      document.getElementById('fc-card-inner').classList.toggle('is-flipped');
-    });
-    document.getElementById('fc-btn-prev').addEventListener('click', () => {
-      if (state.fcItems.length === 0) return;
-      state.fcIndex = (state.fcIndex - 1 + state.fcItems.length) % state.fcItems.length;
-      renderFlashcard();
-    });
-    document.getElementById('fc-btn-next').addEventListener('click', () => {
-      if (state.fcItems.length === 0) return;
-      state.fcIndex = (state.fcIndex + 1) % state.fcItems.length;
-      renderFlashcard();
-    });
-    document.getElementById('fc-btn-shuffle').addEventListener('click', () => {
-      for (let i = state.fcItems.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [state.fcItems[i], state.fcItems[j]] = [state.fcItems[j], state.fcItems[i]];
-      }
-      state.fcIndex = 0;
-      renderFlashcard();
-      showToast('Urutan kartu diacak!', 'info');
-    });
-    document.getElementById('fc-btn-audio').addEventListener('click', () => {
-      const item = state.fcItems[state.fcIndex];
-      if (item) speakArabic(item.arab);
-    });
-    document.getElementById('fc-btn-hafal').addEventListener('click', async () => {
-      const item = state.fcItems[state.fcIndex];
-      if (!item) return;
-      await window.__toggleProgres(item.id, 'hafal');
-      renderFlashcard();
-    });
-
-    // =========================================================================
-    // VIEW 7: PANEL ADMIN (KELOLA MATERI & AKUN PESERTA)
-    // =========================================================================
-    document.getElementById('admin-tab-materi').addEventListener('click', () => {
-      document.getElementById('admin-panel-materi').classList.remove('hidden');
-      document.getElementById('admin-panel-users').classList.add('hidden');
-      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
-      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
-    });
-
-    document.getElementById('admin-tab-users').addEventListener('click', () => {
-      document.getElementById('admin-panel-users').classList.remove('hidden');
-      document.getElementById('admin-panel-materi').classList.add('hidden');
-      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
-      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
-    });
-
-    function renderAdminBabEditor() {
-      const bab = state.babList.find(b => b.id === Number(state.adminSelectedBabId));
-      const titleEl = document.getElementById('admin-form-bab-title');
-      if (bab) {
-        titleEl.textContent = `Edit Detail Materi Bab ${bab.id}`;
-        document.getElementById('admin-bab-id').value = bab.id;
-        document.getElementById('admin-bab-judul-id').value = bab.judul_id || '';
-        document.getElementById('admin-bab-judul-ar').value = bab.judul_ar || '';
-        document.getElementById('admin-bab-subjudul').value = bab.subjudul || '';
-        document.getElementById('admin-bab-deskripsi').value = bab.deskripsi || '';
-        document.getElementById('admin-submateri-box').classList.remove('hidden');
-        renderAdminSubMateri();
-      } else {
-        const nextId = state.babList.length > 0 ? Math.max(...state.babList.map(b => b.id)) + 1 : 1;
-        titleEl.textContent = 'Tambah Materi Bab Baru';
-        document.getElementById('admin-bab-id').value = nextId;
-        document.getElementById('admin-bab-judul-id').value = '';
-        document.getElementById('admin-bab-judul-ar').value = '';
-        document.getElementById('admin-bab-subjudul').value = '';
-        document.getElementById('admin-bab-deskripsi').value = '';
-        document.getElementById('admin-submateri-box').classList.add('hidden');
-      }
-    }
-
-    document.getElementById('admin-select-bab').addEventListener('change', (e) => {
-      state.adminSelectedBabId = e.target.value ? Number(e.target.value) : null;
-      renderAdminBabEditor();
-    });
-
-    document.getElementById('admin-btn-new-bab').addEventListener('click', () => {
-      state.adminSelectedBabId = null;
-      renderAdminBabEditor();
-      document.getElementById('admin-bab-judul-id').focus();
-    });
-
-    document.getElementById('admin-form-bab').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        id: Number(document.getElementById('admin-bab-id').value),
-        judul_id: document.getElementById('admin-bab-judul-id').value.trim(),
-        judul_ar: document.getElementById('admin-bab-judul-ar').value.trim(),
-        subjudul: document.getElementById('admin-bab-subjudul').value.trim(),
-        deskripsi: document.getElementById('admin-bab-deskripsi').value.trim(),
-      };
       try {
-        if (IS_PREVIEW) {
-          const idx = previewStore.materi_bab.findIndex(b => b.id === payload.id);
-          if (idx >= 0) previewStore.materi_bab[idx] = payload;
-          else previewStore.materi_bab.push(payload);
+        const pingPayload = { contents: [{ parts: [{ text: 'Balas hanya dengan kata: OK' }] }] };
+        let res;
+        if (testEp) {
+          res = await fetch(testEp, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: 'Halo', direction: 'id-ar', lawanBicara: 'Laki-laki tunggal', gayaBahasa: 'Sopan & Ramah', model: GEMINI_MODEL, payload: pingPayload })
+          });
         } else {
-          const { error } = await supabase.from('materi_bab').upsert(payload, { onConflict: 'id' });
-          if (error) throw error;
+          res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${testKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pingPayload)
+          });
         }
-        state.adminSelectedBabId = payload.id;
-        await loadAllData();
-        showToast(`Materi Bab ${payload.id} berhasil disimpan!`, 'success');
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `HTTP ${res.status}`);
+        }
+        statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
+        statusBox.textContent = '✓ Koneksi berhasil! API Key / Proxy Gemini valid dan siap dipakai.';
       } catch (err) {
-        showToast('Gagal menyimpan bab: ' + err.message, 'error');
+        statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200';
+        statusBox.textContent = `✗ Gagal: ${err.message}`;
+      } finally {
+        btnTest.disabled = false;
       }
     });
 
@@ -2582,6 +2375,7 @@ ATURAN WAJIB:
     // =========================================================================
     initPWA();
     initAuthUI();
+    updateTranslateStatusBadge();
     checkExistingSession();
   </script>
 </body>
