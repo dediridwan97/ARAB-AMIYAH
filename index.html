@@ -962,6 +962,133 @@
     const apiKey = ""; // Biarkan kosong untuk runtime Canvas; di Vercel atur via /api/translate atau ikon Pengaturan
     const GEMINI_MODEL = "gemini-3-flash-preview";
 
+    // Inisialisasi Client Supabase (hanya saat IS_PREVIEW = false)
+    let supabase = null;
+    if (!IS_PREVIEW) {
+      if (SUPABASE_URL && !SUPABASE_URL.includes('URL_SUPABASE_ANDA') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('ANON_KEY_ANDA')) {
+        supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    }
+
+    // State Global Aplikasi
+    const state = {
+      currentUser: null,
+      currentView: 'beranda',
+      babList: [],
+      kosakataList: [],
+      percakapanList: [],
+      budayaList: [],
+      usersList: [],
+      progresMap: {},
+      translateDir: 'id-ar',
+      lastTranslateResult: null,
+      fcDeck: [],
+      fcIndex: 0,
+      adminSelectedBabId: null,
+      adminSubTab: 'kosakata',
+      adminEditingSubItem: null,
+    };
+
+    let currentTranslateController = null;
+    let translateTimerInterval = null;
+
+    // Data Dummy Minimalis (Hanya aktif saat IS_PREVIEW = true; null saat produksi)
+    const previewStore = IS_PREVIEW ? {
+      users: [
+        { id: 'u-prev-1', username: 'jamaah1', password: '123', nama_lengkap: 'Ahmad Jamaah (Preview)' }
+      ],
+      materi_bab: [
+        { id: 1, judul_id: 'Di Bandara', judul_ar: 'فِي المَطَار', subjudul: 'Check-in, Bagasi, Gate, dan Lainnya', deskripsi: 'Percakapan praktis saat check-in, pemeriksaan tiket, dan bagasi di bandara.' },
+        { id: 8, judul_id: 'Di Sekitar Masjidil Haram', judul_ar: 'حَوْلَ المَسْجِدِ الحَرَام', subjudul: 'Tanya arah, tempat wudhu, dan lokasi zamzam', deskripsi: 'Ungkapan penting saat berada di sekitar Masjidil Haram.' }
+      ],
+      kosakata: [
+        { id: 'k-prev-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
+        { id: 'k-prev-2', bab_id: 8, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت، فِين مَكَان زَمْزَم؟', transliterasi: 'law samaht, fēn makān zamzam?', arti: 'permisi, di mana tempat air zamzam?' }
+      ],
+      percakapan: [
+        { id: 'p-prev-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 1, peran: 'Petugas (المُوَظَّف)', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
+        { id: 'p-prev-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 2, peran: 'Penumpang (المُسَافِر)', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' }
+      ],
+      budaya_kaidah: [
+        { id: 'b-prev-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) selalu digunakan sebagai pembuka sopan sebelum bertanya atau meminta bantuan.' },
+        { id: 'b-prev-2', bab_id: 1, tipe: 'Kaidah', judul: 'Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyah dibaca sukun, misalnya مَطَارْ (mathār).' }
+      ],
+      progres_user: []
+    } : null;
+
+    // =========================================================================
+    // HELPER UTILITAS (ESCAPE HTML, TOAST, COPY, MODAL KONFIRMASI)
+    // =========================================================================
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const colors = {
+        success: 'bg-emeraldbrand-700 text-white',
+        error: 'bg-rose-600 text-white',
+        warning: 'bg-amber-600 text-white',
+        info: 'bg-slate-800 text-white',
+      };
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-xl max-w-sm transition-all duration-300 ${colors[type] || colors.info}`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+        setTimeout(() => el.remove(), 300);
+      }, 3600);
+    }
+
+    function copyTextSafe(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('Teks berhasil disalin!', 'success');
+      } catch (e) {
+        showToast('Gagal menyalin teks.', 'error');
+      }
+    }
+
+    function showConfirmModal(title, message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('modal-confirm');
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        modal.classList.remove('hidden');
+
+        const btnOk = document.getElementById('confirm-btn-ok');
+        const btnCancel = document.getElementById('confirm-btn-cancel');
+
+        const cleanup = (result) => {
+          modal.classList.add('hidden');
+          btnOk.removeEventListener('click', onOk);
+          btnCancel.removeEventListener('click', onCancel);
+          resolve(result);
+        };
+        const onOk = () => cleanup(true);
+        const onCancel = () => cleanup(false);
+
+        btnOk.addEventListener('click', onOk);
+        btnCancel.addEventListener('click', onCancel);
+      });
+    }
+
     function sanitizeApiKey(raw) {
       const cleaned = String(raw || '').replace(/[\s"'`]/g, '').trim();
       if (!cleaned || /^(API_KEY|GEMINI_API_KEY|MASUKKAN|ISI_)/i.test(cleaned)) return '';
@@ -1146,6 +1273,7 @@
             if (!found) throw new Error('Username atau password tidak cocok (Preview: jamaah1 / 123).');
             await enterApp({ id: found.id, role: 'user', nama: found.nama_lengkap || found.username, username: found.username });
           } else {
+            if (!supabase) throw new Error('Konfigurasi SUPABASE_URL atau SUPABASE_ANON_KEY belum diisi.');
             const { data, error } = await supabase
               .from('users')
               .select('*')
@@ -1179,6 +1307,7 @@
           if (IS_PREVIEW) {
             await enterApp({ id: 'admin-prev', role: 'admin', nama: 'Administrator', username: email || 'admin@preview' });
           } else {
+            if (!supabase) throw new Error('Konfigurasi SUPABASE_URL atau SUPABASE_ANON_KEY belum diisi.');
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
             localStorage.removeItem('ammiyah_peserta_session');
@@ -1223,7 +1352,7 @@
     }
 
     async function checkExistingSession() {
-      if (IS_PREVIEW) return;
+      if (IS_PREVIEW || !supabase) return;
       try {
         const { data } = await supabase.auth.getSession();
         if (data?.session?.user) {
@@ -2115,6 +2244,197 @@ ATURAN WAJIB:
         statusBox.textContent = `✗ Gagal: ${err.message}`;
       } finally {
         btnTest.disabled = false;
+      }
+    });
+
+    // =========================================================================
+    // VIEW 5: BUDAYA & KAIDAH 'AMMIYAH
+    // =========================================================================
+    function renderBudaya() {
+      const babVal = document.getElementById('budaya-filter-bab').value;
+      const tipeVal = document.getElementById('budaya-filter-tipe').value;
+      const container = document.getElementById('budaya-list');
+
+      const filtered = state.budayaList.filter(b => {
+        if (babVal !== 'all' && String(b.bab_id) !== babVal) return false;
+        if (tipeVal !== 'all' && b.tipe !== tipeVal) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-sm text-slate-500">Belum ada catatan budaya atau kaidah pada filter ini.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(b => {
+        const isKaidah = b.tipe === 'Kaidah';
+        return `
+          <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-2 border-l-4 ${isKaidah ? 'border-l-emeraldbrand-700' : 'border-l-goldaccent-500'}">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${escapeHtml(b.judul)}</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isKaidah ? 'bg-emeraldbrand-100 text-emeraldbrand-800' : 'bg-amber-100 text-amber-800'}">Bab ${b.bab_id} &bull; ${escapeHtml(b.tipe)}</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(b.konten)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    ['budaya-filter-bab', 'budaya-filter-tipe'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderBudaya);
+    });
+
+    // =========================================================================
+    // VIEW 6: MODE LATIHAN / FLASHCARD
+    // =========================================================================
+    function initFlashcardDeck() {
+      const babVal = document.getElementById('fc-filter-bab').value;
+      state.fcDeck = state.kosakataList.filter(k => babVal === 'all' || String(k.bab_id) === babVal);
+      state.fcIndex = 0;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const emptyEl = document.getElementById('fc-empty');
+      const stageEl = document.getElementById('fc-stage');
+      const counterEl = document.getElementById('fc-counter');
+      const cardInner = document.getElementById('fc-card-inner');
+
+      cardInner.classList.remove('is-flipped');
+
+      if (!state.fcDeck.length) {
+        emptyEl.classList.remove('hidden');
+        stageEl.classList.add('hidden');
+        counterEl.textContent = '0 / 0';
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      stageEl.classList.remove('hidden');
+      const item = state.fcDeck[state.fcIndex];
+      const bab = state.babList.find(b => b.id === item.bab_id);
+
+      counterEl.textContent = `${state.fcIndex + 1} / ${state.fcDeck.length}`;
+      document.getElementById('fc-front-kat').textContent = item.kategori || 'Kosakata';
+      document.getElementById('fc-front-arab').textContent = item.arab || '-';
+      document.getElementById('fc-front-translit').textContent = item.transliterasi || '-';
+      document.getElementById('fc-back-arti').textContent = item.arti || '-';
+      document.getElementById('fc-back-bab').textContent = bab ? `Bab ${String(bab.id).padStart(2, '0')} — ${bab.judul_id}` : `Bab ${item.bab_id}`;
+
+      const isHafal = state.progresMap[item.id] === 'hafal';
+      const btnHafal = document.getElementById('fc-btn-hafal');
+      btnHafal.textContent = isHafal ? '✓ Sudah Hafal' : 'Tandai Hafal';
+    }
+
+    document.getElementById('fc-filter-bab').addEventListener('change', initFlashcardDeck);
+    document.getElementById('fc-card-inner').addEventListener('click', () => {
+      document.getElementById('fc-card-inner').classList.toggle('is-flipped');
+    });
+    document.getElementById('fc-btn-prev').addEventListener('click', () => {
+      if (!state.fcDeck.length) return;
+      state.fcIndex = (state.fcIndex - 1 + state.fcDeck.length) % state.fcDeck.length;
+      renderFlashcard();
+    });
+    document.getElementById('fc-btn-next').addEventListener('click', () => {
+      if (!state.fcDeck.length) return;
+      state.fcIndex = (state.fcIndex + 1) % state.fcDeck.length;
+      renderFlashcard();
+    });
+    document.getElementById('fc-btn-shuffle').addEventListener('click', () => {
+      for (let i = state.fcDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [state.fcDeck[i], state.fcDeck[j]] = [state.fcDeck[j], state.fcDeck[i]];
+      }
+      state.fcIndex = 0;
+      renderFlashcard();
+      showToast('Urutan kartu diacak!', 'info');
+    });
+    document.getElementById('fc-btn-audio').addEventListener('click', () => {
+      const item = state.fcDeck[state.fcIndex];
+      if (item?.arab) speakArabic(item.arab);
+    });
+    document.getElementById('fc-btn-hafal').addEventListener('click', async () => {
+      const item = state.fcDeck[state.fcIndex];
+      if (!item) return;
+      await window.__toggleProgres(item.id, 'hafal');
+      renderFlashcard();
+    });
+
+    // =========================================================================
+    // VIEW 7: PANEL ADMIN (KELOLA MATERI BAB & SUB-MATERI)
+    // =========================================================================
+    document.getElementById('admin-tab-materi').addEventListener('click', () => {
+      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
+      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      document.getElementById('admin-panel-materi').classList.remove('hidden');
+      document.getElementById('admin-panel-users').classList.add('hidden');
+    });
+
+    document.getElementById('admin-tab-users').addEventListener('click', () => {
+      document.getElementById('admin-tab-users').className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-emeraldbrand-700 shadow-sm transition';
+      document.getElementById('admin-tab-materi').className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      document.getElementById('admin-panel-users').classList.remove('hidden');
+      document.getElementById('admin-panel-materi').classList.add('hidden');
+    });
+
+    function renderAdminBabEditor() {
+      const bab = state.babList.find(b => b.id === Number(state.adminSelectedBabId));
+      const subBox = document.getElementById('admin-submateri-box');
+      if (bab) {
+        document.getElementById('admin-form-bab-title').textContent = `Edit Detail Materi Bab ${String(bab.id).padStart(2, '0')}`;
+        document.getElementById('admin-bab-id').value = bab.id;
+        document.getElementById('admin-bab-judul-id').value = bab.judul_id || '';
+        document.getElementById('admin-bab-judul-ar').value = bab.judul_ar || '';
+        document.getElementById('admin-bab-subjudul').value = bab.subjudul || '';
+        document.getElementById('admin-bab-deskripsi').value = bab.deskripsi || '';
+        subBox.classList.remove('hidden');
+        renderAdminSubMateri();
+      } else {
+        const nextId = state.babList.length ? Math.max(...state.babList.map(b => b.id)) + 1 : 1;
+        document.getElementById('admin-form-bab-title').textContent = 'Tambah Materi Bab Baru';
+        document.getElementById('admin-bab-id').value = nextId;
+        document.getElementById('admin-bab-judul-id').value = '';
+        document.getElementById('admin-bab-judul-ar').value = '';
+        document.getElementById('admin-bab-subjudul').value = '';
+        document.getElementById('admin-bab-deskripsi').value = '';
+        subBox.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('admin-select-bab').addEventListener('change', (e) => {
+      state.adminSelectedBabId = e.target.value ? Number(e.target.value) : null;
+      renderAdminBabEditor();
+    });
+
+    document.getElementById('admin-btn-new-bab').addEventListener('click', () => {
+      state.adminSelectedBabId = null;
+      renderAdminBabEditor();
+      document.getElementById('admin-bab-judul-id').focus();
+    });
+
+    document.getElementById('admin-form-bab').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        id: Number(document.getElementById('admin-bab-id').value),
+        judul_id: document.getElementById('admin-bab-judul-id').value.trim(),
+        judul_ar: document.getElementById('admin-bab-judul-ar').value.trim(),
+        subjudul: document.getElementById('admin-bab-subjudul').value.trim(),
+        deskripsi: document.getElementById('admin-bab-deskripsi').value.trim(),
+      };
+      try {
+        if (IS_PREVIEW) {
+          const idx = previewStore.materi_bab.findIndex(b => b.id === payload.id);
+          if (idx >= 0) previewStore.materi_bab[idx] = payload;
+          else previewStore.materi_bab.push(payload);
+        } else {
+          const { error } = await supabase.from('materi_bab').upsert(payload, { onConflict: 'id' });
+          if (error) throw error;
+        }
+        state.adminSelectedBabId = payload.id;
+        await loadAllData();
+        showToast(`Materi Bab ${payload.id} berhasil disimpan!`, 'success');
+      } catch (err) {
+        showToast('Gagal menyimpan bab: ' + err.message, 'error');
       }
     });
 
