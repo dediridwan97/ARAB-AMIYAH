@@ -338,26 +338,27 @@
             <section id="view-beranda" class="app-view space-y-3.5">
               <div class="glass-panel rounded-3xl p-4 space-y-3">
                 <div>
-                  <h2 class="text-base font-extrabold text-slate-900">Cari Kosakata &amp; Dialog</h2>
-                  <p class="text-[11px] text-slate-500">Cari cepat dalam Bahasa Indonesia, Latin, atau Arab.</p>
+                  <h2 class="text-base font-extrabold text-slate-900">Cari Cepat 30 Bab 'Ammiyah</h2>
+                  <p class="text-[11px] text-slate-500">Ketik kata Indonesia, Latin Saudi, atau Arab.</p>
                 </div>
                 <div class="relative">
-                  <input id="beranda-search" type="search" placeholder="Cari kata: taksi, wudhu, berapa, abghā..."
-                    class="w-full pl-10 pr-4 py-3 rounded-2xl bg-white border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
+                  <input id="beranda-search" type="text" placeholder="Cari: air, taksi, wudhu, bikam, abgha..."
+                    class="w-full pl-10 pr-9 py-3 rounded-2xl bg-white border border-slate-200 focus:border-emeraldbrand-600 focus:ring-4 focus:ring-emeraldbrand-100 outline-none text-sm transition" />
                   <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <button type="button" id="beranda-search-clear" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-100 text-slate-500 text-xs font-bold">&times;</button>
                 </div>
                 <div class="grid grid-cols-3 gap-2 pt-1">
                   <div class="p-2.5 rounded-2xl bg-emeraldbrand-50/80 border border-emeraldbrand-100 text-center">
-                    <p id="stat-total-bab" class="text-lg font-extrabold text-emeraldbrand-800 leading-none">0</p>
-                    <p class="text-[10px] font-bold text-slate-600 mt-1">Bab Materi</p>
+                    <p id="beranda-stats-bab" class="text-base font-extrabold text-emeraldbrand-800">0</p>
+                    <p class="text-[10px] font-bold text-slate-500">Total Bab</p>
                   </div>
                   <div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-100 text-center">
-                    <p id="stat-total-kata" class="text-lg font-extrabold text-amber-800 leading-none">0</p>
-                    <p class="text-[10px] font-bold text-slate-600 mt-1">Kosakata</p>
+                    <p id="beranda-stats-kosakata" class="text-base font-extrabold text-amber-800">0</p>
+                    <p class="text-[10px] font-bold text-slate-500">Kosakata</p>
                   </div>
-                  <div class="p-2.5 rounded-2xl bg-teal-50/80 border border-teal-100 text-center">
-                    <p id="stat-hafal" class="text-lg font-extrabold text-teal-800 leading-none">0</p>
-                    <p class="text-[10px] font-bold text-slate-600 mt-1">Sudah Hafal</p>
+                  <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/70 text-center">
+                    <p id="beranda-stats-hafal" class="text-base font-extrabold text-slate-800">0</p>
+                    <p class="text-[10px] font-bold text-slate-500">Hafal</p>
                   </div>
                 </div>
               </div>
@@ -365,11 +366,8 @@
               <div id="beranda-search-results" class="hidden space-y-2.5"></div>
 
               <div class="space-y-2.5">
-                <div class="flex items-center justify-between px-1">
-                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Daftar Bab Materi</h3>
-                  <span class="text-[11px] font-semibold text-emeraldbrand-700">Pilih untuk belajar</span>
-                </div>
-                <div id="beranda-bab-list" class="space-y-2.5"></div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 px-1">Daftar Materi Per Bab</h3>
+                <div id="beranda-bab-grid" class="grid grid-cols-1 gap-2.5"></div>
               </div>
             </section>
 
@@ -383,23 +381,25 @@
                     <h2 class="text-base font-extrabold text-slate-900">Kamus Kosakata 'Ammiyah</h2>
                     <p class="text-[11px] text-slate-500">Saring berdasarkan bab, kategori, atau hafalan.</p>
                   </div>
-                  <span id="kamus-count-badge" class="px-2.5 py-1 rounded-full bg-emeraldbrand-50 text-emeraldbrand-800 border border-emeraldbrand-200 text-[11px] font-extrabold shrink-0">0 Kosakata</span>
+                  <span id="kamus-count-badge" class="px-2.5 py-1 rounded-full bg-emeraldbrand-50 text-emeraldbrand-800 border border-emeraldbrand-200 text-[11px] font-extrabold shrink-0">0 Kata</span>
                 </div>
                 <select id="kamus-filter-bab" class="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-semibold outline-none focus:border-emeraldbrand-600"></select>
                 <div class="grid grid-cols-2 gap-2">
-                  <select id="kamus-filter-kat" class="w-full px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs font-semibold outline-none focus:border-emeraldbrand-600">
+                  <select id="kamus-filter-kategori" class="w-full px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-semibold outline-none focus:border-emeraldbrand-600">
                     <option value="all">Semua Kategori</option>
                     <option value="Kata Benda">Kata Benda</option>
                     <option value="Kata Kerja">Kata Kerja</option>
                     <option value="Partikel">Partikel</option>
                     <option value="Ungkapan">Ungkapan</option>
+                  </select>
+                  <select id="kamus-filter-status" class="w-full px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-semibold outline-none focus:border-emeraldbrand-600">
+                    <option value="all">Semua Status</option>
                     <option value="hafal">Sudah Hafal</option>
                     <option value="favorit">Favorit</option>
                   </select>
-                  <input id="kamus-filter-search" type="search" placeholder="Filter kata..."
-                    class="w-full px-3 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs outline-none focus:border-emeraldbrand-600" />
                 </div>
-                <div id="kamus-bab-desc" class="hidden p-3 rounded-2xl bg-emeraldbrand-50/70 border border-emeraldbrand-100 text-xs text-slate-700 leading-relaxed"></div>
+                <input id="kamus-search" type="text" placeholder="Filter kata di bab ini..." class="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs outline-none focus:border-emeraldbrand-600" />
+                <div id="kamus-bab-desc" class="hidden p-3 rounded-2xl bg-emeraldbrand-50/60 border border-emeraldbrand-100 text-xs text-slate-700 leading-relaxed"></div>
               </div>
               <div id="kamus-list" class="space-y-2.5"></div>
             </section>
@@ -410,11 +410,11 @@
             <section id="view-dialog" class="app-view hidden space-y-3.5">
               <div class="glass-panel rounded-3xl p-4 space-y-3">
                 <div>
-                  <h2 class="text-base font-extrabold text-slate-900">Percakapan &amp; Mini Dialog</h2>
-                  <p class="text-[11px] text-slate-500">Contoh kalimat praktis &amp; simulasi dialog harian di Saudi.</p>
+                  <h2 class="text-base font-extrabold text-slate-900">Contoh Kalimat &amp; Mini Dialog</h2>
+                  <p class="text-[11px] text-slate-500">Praktik percakapan harian jamaah di Arab Saudi.</p>
                 </div>
                 <select id="dialog-filter-bab" class="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-semibold outline-none focus:border-emeraldbrand-600"></select>
-                <select id="dialog-filter-jenis" class="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs font-semibold outline-none focus:border-emeraldbrand-600">
+                <select id="dialog-filter-jenis" class="w-full px-3.5 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-semibold outline-none focus:border-emeraldbrand-600">
                   <option value="all">Semua (Contoh Kalimat &amp; Mini Dialog)</option>
                   <option value="Contoh Kalimat">Contoh Kalimat</option>
                   <option value="Mini Dialog">Mini Dialog</option>
@@ -424,20 +424,20 @@
             </section>
 
             <!-- ========================================== -->
-            <!-- VIEW 4: TRANSLATE AI GEMINI 'AMMIYAH SAUDI -->
+            <!-- VIEW 4: TRANSLATE AI CHATGPT 'AMMIYAH      -->
             <!-- ========================================== -->
             <section id="view-translate" class="app-view hidden space-y-3.5">
               <div class="glass-panel rounded-3xl p-4 space-y-3.5">
                 <div class="flex items-start justify-between gap-2.5">
                   <div class="min-w-0">
-                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-emeraldbrand-100 text-emeraldbrand-800 text-[10px] font-bold uppercase tracking-wider mb-1">AI Gemini &bull; Akurat Dialek Saudi</span>
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-emeraldbrand-100 text-emeraldbrand-800 text-[10px] font-bold uppercase tracking-wider mb-1">AI ChatGPT &bull; Akurat Dialek Saudi</span>
                     <h2 class="text-base font-extrabold text-slate-900 leading-snug">Translate AI ID &#8644; Arab 'Ammiyah</h2>
                     <p id="tr-connection-badge" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                      <span>AI Gemini + Konteks Kamus 30 Bab</span>
+                      <span>ChatGPT (gpt-4o-mini) + Kamus 30 Bab</span>
                     </p>
                   </div>
-                  <button type="button" id="btn-open-gemini-settings" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 transition" title="Pengaturan AI Gemini">
+                  <button type="button" id="btn-open-gemini-settings" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 transition" title="Pengaturan AI ChatGPT">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                   </button>
                 </div>
@@ -483,7 +483,7 @@
 
                 <button type="button" id="tr-submit-btn" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emeraldbrand-700 to-teal-800 hover:from-emeraldbrand-800 hover:to-teal-900 text-white font-extrabold text-sm shadow-lg shadow-emeraldbrand-800/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
                   <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                  <span id="tr-submit-label">Terjemahkan dengan AI Gemini</span>
+                  <span id="tr-submit-label">Terjemahkan dengan AI ChatGPT</span>
                 </button>
               </div>
 
@@ -493,7 +493,7 @@
                   <div class="flex items-center gap-2.5 min-w-0">
                     <div class="w-7 h-7 border-[3px] border-emeraldbrand-200 border-t-emeraldbrand-700 rounded-full animate-spin shrink-0"></div>
                     <div class="min-w-0">
-                      <p id="tr-loading-status" class="text-xs font-extrabold text-slate-800 truncate">AI Gemini sedang merangkai 'Ammiyah...</p>
+                      <p id="tr-loading-status" class="text-xs font-extrabold text-slate-800 truncate">ChatGPT sedang merangkai 'Ammiyah...</p>
                       <p id="tr-loading-timer" class="text-[11px] font-semibold text-slate-500">Menyesuaikan dialek Saudi &amp; harakat (0 dtk)</p>
                     </div>
                   </div>
@@ -514,7 +514,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </div>
                   <div class="min-w-0 flex-1">
-                    <h4 class="text-sm font-extrabold text-rose-900">AI Gemini Belum Terhubung</h4>
+                    <h4 class="text-sm font-extrabold text-rose-900">AI ChatGPT Belum Terhubung</h4>
                     <p id="tr-error-message" class="text-xs text-rose-700 mt-0.5 leading-relaxed"></p>
                   </div>
                 </div>
@@ -530,7 +530,7 @@
                 <div class="flex items-center justify-between gap-2 flex-wrap">
                   <div class="flex items-center gap-1.5">
                     <span class="px-2.5 py-0.5 rounded-full bg-emeraldbrand-100 text-emeraldbrand-800 text-[11px] font-bold">Hasil 'Ammiyah Saudi</span>
-                    <span id="tr-preview-sim-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">AI Gemini</span>
+                    <span id="tr-preview-sim-badge" class="hidden px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">ChatGPT</span>
                   </div>
                   <span id="tr-result-meta" class="text-[11px] font-semibold text-slate-500"></span>
                 </div>
@@ -774,18 +774,18 @@
       <div id="modal-gemini-settings" class="hidden absolute inset-0 z-[1000025] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="glass-panel bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto custom-scroll">
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-extrabold text-slate-900">Pengaturan AI Gemini</h3>
+            <h3 class="text-base font-extrabold text-slate-900">Pengaturan AI ChatGPT</h3>
             <button type="button" id="close-gemini-settings" class="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 text-lg leading-none">&times;</button>
           </div>
           <div class="p-3 rounded-2xl bg-emeraldbrand-50/80 border border-emeraldbrand-200 text-[11px] text-slate-700 space-y-1 leading-relaxed">
-            <p class="font-bold text-emeraldbrand-900">Akurasi Tinggi dengan AI Gemini + Kamus 30 Bab</p>
-            <p>AI Gemini otomatis merujuk kosakata 30 bab untuk menghasilkan dialek <strong>'Ammiyah Saudi asli</strong> (Hijazi/Najdi) lengkap dengan harakat &amp; adab lokal.</p>
-            <p class="text-slate-500 pt-0.5">Mendukung format API Key <code>AIza...</code> maupun <code>AQ...</code> dari Google AI Studio, atau lewat Proxy Vercel <code>/api/translate</code>.</p>
+            <p class="font-bold text-emeraldbrand-900">Akurasi Tinggi dengan ChatGPT (gpt-4o-mini)</p>
+            <p>Otomatis merujuk kosakata 30 bab untuk menghasilkan dialek <strong>'Ammiyah Saudi asli</strong> (Hijazi/Najdi) lengkap dengan harakat &amp; adab lokal.</p>
+            <p class="text-slate-500 pt-0.5">Tempel API Key OpenAI (<code>sk-...</code> / <code>sk-proj-...</code>), atau gunakan Proxy Vercel <code>/api/translate</code> agar semua peserta langsung bisa pakai.</p>
           </div>
           <div>
-            <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Gemini API Key (Langsung)</label>
+            <label for="input-gemini-key" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">OpenAI / ChatGPT API Key (Langsung)</label>
             <div class="relative">
-              <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="AIza... atau AQ...." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
+              <input id="input-gemini-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-proj-... atau sk-..." class="w-full pl-3.5 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm outline-none focus:border-emeraldbrand-600" />
               <button type="button" id="btn-toggle-key-vis" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-200">Lihat</button>
             </div>
           </div>
@@ -795,7 +795,7 @@
           </div>
           <div id="gemini-test-status" class="hidden p-2.5 rounded-xl text-xs font-semibold"></div>
           <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
-            <button type="button" id="btn-test-gemini-key" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">Uji Koneksi AI</button>
+            <button type="button" id="btn-test-gemini-key" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">Uji Koneksi ChatGPT</button>
             <div class="flex gap-2">
               <button type="button" id="btn-clear-gemini-key" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">Reset</button>
               <button type="button" id="btn-save-gemini-key" class="px-4 py-2 rounded-xl bg-emeraldbrand-700 hover:bg-emeraldbrand-800 text-white text-xs font-bold transition">Simpan</button>
@@ -852,8 +852,10 @@
     const IS_PREVIEW = false;
     const SUPABASE_URL = 'https://vajqtviwgrtafmotfqwb.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_Y_XgpjYkg9Z9zMww8IKRZg_6cMm85tr';
-    const GEMINI_API_ENDPOINT = '/api/translate'; // Isi '/api/translate' jika memakai Proxy Vercel
-    const GEMINI_DEFAULT_KEY = '';
+    const AI_API_ENDPOINT = '/api/translate'; // Isi '/api/translate' jika memakai Proxy Vercel
+    const OPENAI_DEFAULT_KEY = ''; // Opsional (lebih aman via Proxy Vercel OPENAI_API_KEY)
+    const OPENAI_MODEL = 'gpt-4o-mini';
+    const GROQ_MODEL = 'llama-3.3-70b-versatile';
     const GEMINI_MODEL = 'gemini-3-flash-preview';
 
     const supabase = (!IS_PREVIEW && SUPABASE_URL.startsWith('http') && !SUPABASE_URL.includes('YOUR-PROJECT'))
@@ -861,11 +863,8 @@
       : null;
 
     // =========================================================================
-    // STATE APLIKASI & DATA PREVIEW
+    // STATE APLIKASI & DATA CONTOH MODE PREVIEW
     // =========================================================================
-    let currentTranslateController = null;
-    let translateTimerInterval = null;
-
     const state = {
       session: null,
       activeView: 'beranda',
@@ -884,6 +883,9 @@
       adminEditingSubItem: null,
     };
 
+    let currentTranslateController = null;
+    let translateTimerInterval = null;
+
     const previewStore = {
       materi_bab: [
         {
@@ -891,71 +893,70 @@
           judul_id: 'Di Bandara',
           judul_ar: 'فِي المَطَار',
           subjudul: 'Check-in, Bagasi, Gate, dan Lainnya',
-          deskripsi: 'Tema "Di Bandara" termasuk salah satu tema paling penting bagi jamaah umrah mandiri, mulai dari check-in, pemeriksaan tiket, penimbangan bagasi, hingga mencari gate keberangkatan.'
-        },
-        {
-          id: 6,
-          judul_id: 'Naik Taksi / Transportasi Umum',
-          judul_ar: 'فِي التَّاكْسِي أَوِ الحَافِلَة',
-          subjudul: 'Tanya tarif, arah, atau minta berhenti',
-          deskripsi: 'Membahas cara berbicara dengan sopir taksi atau bus, menawar tarif perjalanan, memastikan arah jalan, dan meminta berhenti dengan ungkapan khas Saudi.'
+          deskripsi: 'Tema "Di Bandara" sangat penting bagi jamaah umrah mandiri untuk berkomunikasi saat check-in, pemeriksaan tiket, bagasi, dan mencari gate.'
         },
         {
           id: 8,
           judul_id: 'Di Sekitar Masjidil Haram',
           judul_ar: 'حَوْلَ المَسْجِدِ الحَرَام',
           subjudul: 'Tanya arah, cari tempat wudhu, atau lokasi zamzam',
-          deskripsi: 'Ungkapan penting di area Masjidil Haram: mencari tempat wudhu, pintu masuk, lokasi air zamzam, dan memahami arahan petugas (askar).'
+          deskripsi: 'Area sekitar Masjidil Haram sangat padat. Penguasaan ungkapan dasar membantu jamaah mencari pintu, tempat wudhu, dan air zamzam.'
         },
         {
           id: 12,
           judul_id: 'Di Mall / Pasar',
           judul_ar: 'فِي المُول أَوِ السُّوق',
           subjudul: 'Menawar harga, menanyakan ukuran, atau memuji barang',
-          deskripsi: 'Panduan berbelanja di sekitar Masjidil Haram dan Nabawi: menanyakan harga, meminta diskon, menanyakan ukuran atau warna lain.'
-        },
-        {
-          id: 30,
-          judul_id: 'Doa & Ungkapan Islami Sehari-hari',
-          judul_ar: 'الدُّعَاء وَالأَلْفَاظ الإِسْلَامِيَّة',
-          subjudul: 'Ungkapan sehari-hari, doa, dan balasan sosial khas Saudi',
-          deskripsi: 'Kumpulan ungkapan doa harian khas Arab Saudi beserta balasan bakunya untuk interaksi yang hangat dan santun.'
+          deskripsi: 'Ungkapan praktis saat berbelanja di pasar atau toko sekitar Makkah dan Madinah.'
         }
       ],
       kosakata: [
-        { id: 'k-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
-        { id: 'k-2', bab_id: 1, kategori: 'Kata Benda', arab: 'العَفْش', transliterasi: 'al-’afsy', arti: 'bagasi / barang bawaan' },
-        { id: 'k-3', bab_id: 1, kategori: 'Kata Kerja', arab: 'بَغَى - يَبْغَى', transliterasi: 'baghā - yibghā', arti: 'ingin / mau' },
-        { id: 'k-4', bab_id: 1, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت', transliterasi: 'law samaht', arti: 'permisi' },
-        { id: 'k-5', bab_id: 6, kategori: 'Kata Benda', arab: 'المِشْوَار', transliterasi: 'al-misywār', arti: 'perjalanan / tarif perjalanan' },
-        { id: 'k-6', bab_id: 6, kategori: 'Kata Kerja', arab: 'وَصَّل - يُوَصِّل - وَصِّل', transliterasi: 'washshal - yuwashshil - washshil', arti: 'mengantar' },
-        { id: 'k-7', bab_id: 8, kategori: 'Kata Benda', arab: 'مُوْيَة زَمْزَم', transliterasi: 'mōyah zamzam', arti: 'air zamzam' },
-        { id: 'k-8', bab_id: 8, kategori: 'Kata Benda', arab: 'حُرْمَة (ج. حَرِيم)', transliterasi: 'hurmah (jamaknya: harīm)', arti: 'wanita / perempuan' },
-        { id: 'k-9', bab_id: 12, kategori: 'Partikel', arab: 'بِكَم', transliterasi: 'bikam', arti: 'berapa harganya' },
-        { id: 'k-10', bab_id: 12, kategori: 'Kata Benda', arab: 'خَصْم / تَخْفِيض', transliterasi: 'khashm / takhfīdh', arti: 'diskon / potongan harga' },
-        { id: 'k-11', bab_id: 30, kategori: 'Ungkapan', arab: 'أَبْشِر', transliterasi: 'absyir', arti: 'dengan senang hati / siap!' },
-        { id: 'k-12', bab_id: 30, kategori: 'Ungkapan', arab: 'تِسْلَم', transliterasi: 'tislam', arti: 'terima kasih / semoga selamat' }
+        { id: 'k1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
+        { id: 'k2', bab_id: 1, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت', transliterasi: 'law samaht', arti: 'permisi' },
+        { id: 'k3', bab_id: 1, kategori: 'Kata Kerja', arab: 'بَغَى - يَبْغَى', transliterasi: 'baghā - yibghā', arti: 'ingin / mau' },
+        { id: 'k4', bab_id: 8, kategori: 'Kata Benda', arab: 'مُوْيَة زَمْزَم', transliterasi: 'muwyah zamzam', arti: 'air zamzam' },
+        { id: 'k5', bab_id: 8, kategori: 'Kata Benda', arab: 'مَدْخَل', transliterasi: 'madkhal', arti: 'pintu masuk' },
+        { id: 'k6', bab_id: 12, kategori: 'Partikel', arab: 'بِكَم', transliterasi: 'bikam', arti: 'berapa harganya' },
+        { id: 'k7', bab_id: 12, kategori: 'Kata Benda', arab: 'خَصْم / تَخْفِيض', transliterasi: 'khashm / takhfīdh', arti: 'diskon / potongan harga' }
       ],
       percakapan: [
-        { id: 'p-1', bab_id: 1, jenis: 'Contoh Kalimat', judul_dialog: 'Contoh Penggunaan di Bandara', urutan: 1, peran: 'Kalimat', arab: 'لَوْ سَمَحْت، وَيْن البَوَّابَة رَقْم ثَمَانِيَة؟', transliterasi: 'law samaht, wēn al-bawwābah ragm tsamāniyah?', arti: 'Permisi, di mana gerbang nomor delapan?' },
-        { id: 'p-2', bab_id: 6, jenis: 'Mini Dialog', judul_dialog: 'Menawar Ongkos Taksi ke Hotel', urutan: 1, peran: 'Penumpang', arab: 'مُمْكِن تُوَصِّلْنِي لَفُنْدُق الرَّيَّان؟', transliterasi: 'mumkin tuwashshilnī la-fundug ar-rayyān?', arti: 'Bisakah kamu mengantarkan saya ke Hotel Ar-Rayyan?' },
-        { id: 'p-3', bab_id: 6, jenis: 'Mini Dialog', judul_dialog: 'Menawar Ongkos Taksi ke Hotel', urutan: 2, peran: 'Sopir', arab: 'المِشْوَار بِعِشْرِين رِيَال.', transliterasi: 'al-misywār bi-’isyrīn riyāl.', arti: 'Ongkosnya dua puluh riyal.' },
-        { id: 'p-4', bab_id: 8, jenis: 'Contoh Kalimat', judul_dialog: 'Di Sekitar Masjidil Haram', urutan: 1, peran: 'Kalimat', arab: 'لَوْ سَمَحْت، فِين مَكَان الوُضُوء لِلْحَرِيم؟', transliterasi: 'law samaht, fēn makān al-wudhū’ lil-harīm?', arti: 'Permisi, di mana tempat wudhu perempuan?' },
-        { id: 'p-5', bab_id: 12, jenis: 'Contoh Kalimat', judul_dialog: 'Menawar Harga', urutan: 1, peran: 'Kalimat', arab: 'غَالِي مَرَّة! مَا فِيه خَصْم؟', transliterasi: 'ghālī marrah! mā fīh khashm?', arti: 'Mahal sekali! Tidak ada diskon?' }
+        { id: 'p1', bab_id: 1, jenis: 'Contoh Kalimat', judul_dialog: 'Contoh Penggunaan di Bandara', urutan: 1, peran: 'Kalimat', arab: 'لَوْ سَمَحْت، وَيْن البَوَّابَة رَقْم ثَمَانِيَة؟', transliterasi: 'law samaht, wēn al-bawwābah ragm tsamāniyah?', arti: 'Permisi, di mana gerbang nomor delapan?' },
+        { id: 'p2', bab_id: 8, jenis: 'Mini Dialog', judul_dialog: 'Mini Dialog: Tempat Wudhu Perempuan', urutan: 1, peran: 'Pengunjung', arab: 'فِين مَكَان وُضُوء الحَرِيم؟', transliterasi: 'fīn makān wudhū’ al-harīm?', arti: 'Di mana tempat wudhu perempuan?' },
+        { id: 'p3', bab_id: 8, jenis: 'Mini Dialog', judul_dialog: 'Mini Dialog: Tempat Wudhu Perempuan', urutan: 2, peran: 'Petugas', arab: 'بَعْد المِصْعَد عَلَى اليَمِين.', transliterasi: 'ba’d al-mish’ad ’alal-yamīn.', arti: 'Setelah lift di sebelah kanan.' },
+        { id: 'p4', bab_id: 12, jenis: 'Contoh Kalimat', judul_dialog: 'Contoh Penggunaan di Mall / Pasar', urutan: 1, peran: 'Kalimat', arab: 'غَالِي مَرَّة! مَا فِيه خَصْم؟', transliterasi: 'ghālī marrah! mā fīh khashm?', arti: 'Mahal sekali! Tidak ada diskon?' }
       ],
       budaya_kaidah: [
-        { id: 'b-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) hampir selalu digunakan sebagai pembuka sopan sebelum bertanya atau meminta bantuan.' },
-        { id: 'b-2', bab_id: 1, tipe: 'Kaidah', judul: 'Harakat Akhir Disukun & Huruf ق Dibaca "G"', konten: 'Dalam dialek ’Ammiyah Saudi, mayoritas harakat akhir kata disukun (مَطَارْ = mathār) dan huruf ق dilafalkan seperti huruf "g" (فُنْدُق = fundug).' },
-        { id: 'b-3', bab_id: 8, tipe: 'Budaya', judul: 'Doa "Allāh Yukrimak"', konten: 'Saat menanyakan toilet atau tempat sandal, warga Saudi lazim menyertakan doa الله يُكْرِمَك (semoga Allah memuliakanmu).' }
+        { id: 'b1', bab_id: 1, tipe: 'Budaya', judul: 'A. Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) hampir selalu digunakan sebagai pembuka sopan sebelum bertanya atau meminta sesuatu.' },
+        { id: 'b2', bab_id: 1, tipe: 'Kaidah', judul: 'A. Mayoritas Harakat Akhir Kata Disukun', konten: 'Mayoritas harakat akhir kata dalam ’Ammiyyah disukun. Contoh: مَطَارْ (mathār) bukan مَطَارٌ (mathārun).' },
+        { id: 'b3', bab_id: 12, tipe: 'Kaidah', judul: 'Dua Pola Menanyakan Harga', konten: 'Gunakan بِكَم + nama barang atau كَم سِعْر + nama barang. Contoh: بِكَم الثَّوْب؟ (Berapa harga jubah ini?).' }
       ],
       users: [
-        { id: 'u-1', username: 'jamaah', password: '123', nama_lengkap: 'Jamaah Umrah Mandiri' }
+        { id: 'u1', username: 'jamaah', password: '123', nama_lengkap: 'Jamaah Umrah Demo' }
       ]
     };
 
     // =========================================================================
-    // FUNGSI UTILITAS UMUM
+    // UTILITAS UI, AUDIO TTS, CLIPBOARD & KONFIRMASI
     // =========================================================================
+    function showToast(msg, type = 'info') {
+      const box = document.getElementById('toast-container');
+      if (!box) return;
+      const colors = {
+        success: 'bg-emerald-700 text-white',
+        error: 'bg-rose-600 text-white',
+        warning: 'bg-amber-600 text-white',
+        info: 'bg-slate-900 text-white',
+      };
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto px-4 py-2.5 rounded-2xl text-xs font-bold shadow-xl max-w-full text-center transition-all ${colors[type] || colors.info}`;
+      el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 250);
+      }, 3000);
+    }
+
     function escapeHtml(str) {
       return String(str ?? '')
         .replace(/&/g, '&amp;')
@@ -963,26 +964,6 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
-    }
-
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      if (!container) return;
-      const styles = {
-        success: 'bg-emeraldbrand-800 text-white',
-        error: 'bg-rose-600 text-white',
-        warning: 'bg-amber-600 text-white',
-        info: 'bg-slate-900 text-white'
-      };
-      const toast = document.createElement('div');
-      toast.className = `pointer-events-auto max-w-sm w-full px-4 py-2.5 rounded-2xl shadow-lg text-xs font-bold text-center transition-all duration-300 ${styles[type] || styles.info}`;
-      toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(-6px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3200);
     }
 
     function copyTextSafe(text) {
@@ -996,72 +977,68 @@
         document.execCommand('copy');
         ta.remove();
         showToast('Teks berhasil disalin!', 'success');
-      } catch (err) {
+      } catch (e) {
         showToast('Gagal menyalin teks.', 'error');
       }
     }
 
     function speakArabic(text) {
+      if (!text) return;
       if (!('speechSynthesis' in window)) {
-        showToast('Browser tidak mendukung audio TTS.', 'warning');
+        showToast('Browser ini belum mendukung suara TTS.', 'warning');
         return;
       }
       try {
         window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(String(text || ''));
+        const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'ar-SA';
         utter.rate = 0.9;
-        const voices = window.speechSynthesis.getVoices();
-        const arVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ar'));
-        if (arVoice) utter.voice = arVoice;
         window.speechSynthesis.speak(utter);
       } catch (e) {
-        showToast('Gagal memutar audio pengucapan.', 'error');
+        showToast('Gagal memutar audio.', 'error');
       }
     }
 
+    window.__copyEnc = (encoded) => copyTextSafe(decodeURIComponent(encoded));
+    window.__speakEnc = (encoded) => speakArabic(decodeURIComponent(encoded));
+
     function showConfirmModal(title, message) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         const modal = document.getElementById('modal-confirm');
         document.getElementById('confirm-title').textContent = title;
         document.getElementById('confirm-message').textContent = message;
         modal.classList.remove('hidden');
 
-        const btnOk = document.getElementById('confirm-btn-ok');
-        const btnCancel = document.getElementById('confirm-btn-cancel');
-        const cleanup = (val) => {
+        const cleanup = (ans) => {
           modal.classList.add('hidden');
-          btnOk.removeEventListener('click', onOk);
-          btnCancel.removeEventListener('click', onCancel);
-          resolve(val);
+          document.getElementById('confirm-btn-ok').onclick = null;
+          document.getElementById('confirm-btn-cancel').onclick = null;
+          resolve(ans);
         };
-        const onOk = () => cleanup(true);
-        const onCancel = () => cleanup(false);
-        btnOk.addEventListener('click', onOk);
-        btnCancel.addEventListener('click', onCancel);
+        document.getElementById('confirm-btn-ok').onclick = () => cleanup(true);
+        document.getElementById('confirm-btn-cancel').onclick = () => cleanup(false);
       });
     }
 
-    window.__copyEncoded = (encoded) => copyTextSafe(decodeURIComponent(encoded));
-    window.__speakEncoded = (encoded) => speakArabic(decodeURIComponent(encoded));
-
     // =========================================================================
-    // PWA & AUTHENTIKASI HYBRID
+    // PWA & AUTENTIKASI HYBRID (PESERTA & ADMIN)
     // =========================================================================
     function initPWA() {
-      if (IS_PREVIEW) {
-        document.getElementById('preview-mode-banner')?.classList.remove('hidden');
-        document.getElementById('preview-quick-login')?.classList.remove('hidden');
-      } else {
+      if (!IS_PREVIEW && location.protocol.startsWith('http')) {
         const manifestLink = document.getElementById('pwa-manifest-link');
-        if (manifestLink) manifestLink.setAttribute('href', '/manifest.json?v=2');
-        if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        if (manifestLink) manifestLink.href = '/manifest.json?v=2';
+        if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('/sw.js').catch(() => {});
         }
       }
     }
 
     function initAuthUI() {
+      if (IS_PREVIEW) {
+        document.getElementById('preview-mode-banner').classList.remove('hidden');
+        document.getElementById('preview-quick-login').classList.remove('hidden');
+      }
+
       const tabUser = document.getElementById('tab-login-user');
       const tabAdmin = document.getElementById('tab-login-admin');
       const formUser = document.getElementById('form-login-user');
@@ -1085,27 +1062,27 @@
         e.preventDefault();
         const username = document.getElementById('login-user-username').value.trim();
         const password = document.getElementById('login-user-password').value.trim();
-        const btn = document.getElementById('btn-submit-user');
-        btn.disabled = true;
-        btn.textContent = 'Memeriksa...';
+        if (!username || !password) return;
+
         try {
-          let userObj = null;
           if (IS_PREVIEW) {
-            userObj = previewStore.users.find(u => u.username === username && u.password === password);
+            const found = previewStore.users.find(u => u.username === username && u.password === password);
+            if (!found) throw new Error('Username atau password salah (demo: jamaah / 123).');
+            enterApp({ role: 'user', id: found.id, name: found.nama_lengkap || found.username, username: found.username });
           } else {
-            const { data, error } = await supabase.from('users').select('*').eq('username', username).eq('password', password).maybeSingle();
+            if (!supabase) throw new Error('Konfigurasi Supabase belum diisi.');
+            const { data, error } = await supabase
+              .from('users')
+              .select('*')
+              .eq('username', username)
+              .eq('password', password)
+              .maybeSingle();
             if (error) throw error;
-            userObj = data;
+            if (!data) throw new Error('Username atau password peserta tidak ditemukan.');
+            enterApp({ role: 'user', id: data.id, name: data.nama_lengkap || data.username, username: data.username });
           }
-          if (!userObj) throw new Error('Username atau password tidak cocok.');
-          const sess = { role: 'user', id: userObj.id, username: userObj.username, nama: userObj.nama_lengkap || userObj.username };
-          localStorage.setItem('ammiyah_session', JSON.stringify(sess));
-          await enterApp(sess);
         } catch (err) {
-          showToast(err.message || 'Gagal login peserta.', 'error');
-        } finally {
-          btn.disabled = false;
-          btn.textContent = 'Masuk sebagai Peserta';
+          showToast(err.message, 'error');
         }
       });
 
@@ -1113,55 +1090,31 @@
         e.preventDefault();
         const email = document.getElementById('login-admin-email').value.trim();
         const password = document.getElementById('login-admin-password').value.trim();
-        const btn = document.getElementById('btn-submit-admin');
-        btn.disabled = true;
-        btn.textContent = 'Memverifikasi...';
+        if (!email || !password) return;
+
         try {
           if (IS_PREVIEW) {
-            const sess = { role: 'admin', id: 'admin-preview', username: email, nama: 'Admin Pengelola' };
-            localStorage.setItem('ammiyah_session', JSON.stringify(sess));
-            await enterApp(sess);
+            enterApp({ role: 'admin', id: 'admin-preview', name: 'Admin Preview', email });
           } else {
+            if (!supabase) throw new Error('Konfigurasi Supabase belum diisi.');
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            const sess = { role: 'admin', id: data.user.id, username: data.user.email, nama: 'Administrator' };
-            localStorage.setItem('ammiyah_session', JSON.stringify(sess));
-            await enterApp(sess);
+            enterApp({ role: 'admin', id: data.user.id, name: 'Administrator', email: data.user.email });
           }
         } catch (err) {
-          showToast(err.message || 'Gagal login admin.', 'error');
-        } finally {
-          btn.disabled = false;
-          btn.textContent = 'Masuk sebagai Admin';
+          showToast('Login Admin gagal: ' + err.message, 'error');
         }
       });
 
-      document.getElementById('btn-quick-user')?.addEventListener('click', () => {
-        const sess = { role: 'user', id: 'u-1', username: 'jamaah', nama: 'Jamaah Preview' };
-        localStorage.setItem('ammiyah_session', JSON.stringify(sess));
-        enterApp(sess);
+      document.getElementById('btn-quick-user').addEventListener('click', () => {
+        enterApp({ role: 'user', id: 'u1', name: 'Jamaah Umrah Demo', username: 'jamaah' });
       });
-
-      document.getElementById('btn-quick-admin')?.addEventListener('click', () => {
-        const sess = { role: 'admin', id: 'admin-1', username: 'admin@labbaik.id', nama: 'Admin Pengelola' };
-        localStorage.setItem('ammiyah_session', JSON.stringify(sess));
-        enterApp(sess);
+      document.getElementById('btn-quick-admin').addEventListener('click', () => {
+        enterApp({ role: 'admin', id: 'admin-preview', name: 'Admin Preview', email: 'admin@labbaik.id' });
       });
-
-      document.getElementById('btn-logout-mobile').addEventListener('click', async () => {
-        const ok = await showConfirmModal('Keluar Aplikasi', 'Anda yakin ingin keluar dari akun saat ini?');
-        if (!ok) return;
-        if (!IS_PREVIEW && supabase && state.session?.role === 'admin') {
-          await supabase.auth.signOut().catch(() => {});
-        }
-        localStorage.removeItem('ammiyah_session');
-        state.session = null;
-        document.getElementById('app-shell').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
-        showToast('Anda telah keluar.', 'info');
-      });
-
+      document.getElementById('btn-logout-mobile').addEventListener('click', logout);
       document.getElementById('mob-btn-admin').addEventListener('click', () => switchView('admin'));
+
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => switchView(btn.dataset.view));
       });
@@ -1169,55 +1122,90 @@
 
     async function checkExistingSession() {
       try {
-        const raw = localStorage.getItem('ammiyah_session');
-        if (raw) {
-          const sess = JSON.parse(raw);
-          if (sess && sess.role) {
-            await enterApp(sess);
-            return;
+        const saved = JSON.parse(localStorage.getItem('ammiyah_session') || 'null');
+        if (saved && saved.role) {
+          if (!IS_PREVIEW && saved.role === 'admin' && supabase) {
+            const { data } = await supabase.auth.getSession();
+            if (!data?.session) {
+              localStorage.removeItem('ammiyah_session');
+              return;
+            }
           }
+          enterApp(saved);
         }
       } catch (_) {}
-      document.getElementById('login-screen').classList.remove('hidden');
     }
 
-    async function enterApp(sess) {
-      state.session = sess;
+    async function enterApp(sessionObj) {
+      state.session = sessionObj;
+      localStorage.setItem('ammiyah_session', JSON.stringify(sessionObj));
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('app-shell').classList.remove('hidden');
-      document.getElementById('mob-user-label').textContent = `by Abu Syauqi • ${sess.nama || sess.username}`;
+
+      const labelEl = document.getElementById('mob-user-label');
+      if (labelEl) labelEl.textContent = sessionObj.role === 'admin' ? `Admin • ${sessionObj.name}` : `by Abu Syauqi • ${sessionObj.name}`;
 
       const adminBtn = document.getElementById('mob-btn-admin');
-      if (sess.role === 'admin') adminBtn.classList.remove('hidden');
-      else adminBtn.classList.add('hidden');
-
-      try {
-        state.progresMap = JSON.parse(localStorage.getItem(`ammiyah_progres_${sess.id}`) || '{}');
-      } catch (_) {
-        state.progresMap = {};
-      }
+      if (adminBtn) adminBtn.classList.toggle('hidden', sessionObj.role !== 'admin');
 
       await loadAllData();
-      renderTranslateHistory();
       switchView('beranda');
+    }
+
+    async function logout() {
+      if (!IS_PREVIEW && state.session?.role === 'admin' && supabase) {
+        await supabase.auth.signOut().catch(() => {});
+      }
+      state.session = null;
+      localStorage.removeItem('ammiyah_session');
+      document.getElementById('app-shell').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      showToast('Anda telah keluar.', 'info');
     }
 
     function switchView(viewName) {
       state.activeView = viewName;
       document.querySelectorAll('.app-view').forEach(sec => sec.classList.add('hidden'));
-      document.getElementById(`view-${viewName}`)?.classList.remove('hidden');
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.remove('hidden');
+
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        const isActive = btn.dataset.view === viewName;
-        btn.className = isActive
-          ? 'nav-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-[10px] font-bold bg-emeraldbrand-700 text-white shadow-md transition'
+        const active = btn.dataset.view === viewName;
+        btn.className = active
+          ? 'nav-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-[10px] font-extrabold bg-emeraldbrand-700 text-white shadow-md transition'
           : 'nav-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-[10px] font-bold text-slate-500 hover:text-emeraldbrand-700 transition';
       });
-      document.getElementById('main-scroll-area')?.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const scrollArea = document.getElementById('main-scroll-area');
+      if (scrollArea) scrollArea.scrollTop = 0;
+
+      if (viewName === 'beranda') renderBeranda();
+      if (viewName === 'kamus') renderKamus();
+      if (viewName === 'dialog') renderDialog();
+      if (viewName === 'translate') {
+        updateTranslateStatusBadge();
+        renderTranslateHistory();
+      }
+      if (viewName === 'budaya') renderBudaya();
+      if (viewName === 'latihan') initFlashcardDeck();
+      if (viewName === 'admin' && state.session?.role === 'admin') {
+        renderAdminBabEditor();
+        renderAdminUsers();
+      }
     }
 
+    // =========================================================================
+    // MUAT DATA & PROGRES BELAJAR
+    // =========================================================================
     async function loadAllData() {
       try {
-        if (IS_PREVIEW) {
+        try {
+          state.progresMap = JSON.parse(localStorage.getItem(`ammiyah_progres_${state.session?.id || 'guest'}`) || '{}');
+        } catch (_) {
+          state.progresMap = {};
+        }
+
+        if (IS_PREVIEW || !supabase) {
           state.babList = [...previewStore.materi_bab].sort((a, b) => a.id - b.id);
           state.kosakataList = [...previewStore.kosakata];
           state.percakapanList = [...previewStore.percakapan];
@@ -1227,205 +1215,235 @@
           const [bRes, kRes, pRes, bkRes] = await Promise.all([
             supabase.from('materi_bab').select('*').order('id', { ascending: true }),
             supabase.from('kosakata').select('*').order('id', { ascending: true }),
-            supabase.from('percakapan').select('*').order('urutan', { ascending: true }),
-            supabase.from('budaya_kaidah').select('*').order('id', { ascending: true }),
+            supabase.from('percakapan').select('*').order('bab_id', { ascending: true }).order('urutan', { ascending: true }),
+            supabase.from('budaya_kaidah').select('*').order('id', { ascending: true })
           ]);
-          if (bRes.error) throw bRes.error;
           state.babList = bRes.data || [];
           state.kosakataList = kRes.data || [];
           state.percakapanList = pRes.data || [];
           state.budayaList = bkRes.data || [];
+
           if (state.session?.role === 'admin') {
             const uRes = await supabase.from('users').select('*').order('id', { ascending: true });
             state.usersList = uRes.data || [];
           }
         }
-        populateBabDropdowns();
+
+        populateBabSelectors();
         renderBeranda();
         renderKamus();
         renderDialog();
         renderBudaya();
-        initFlashcardDeck();
         if (state.session?.role === 'admin') {
           renderAdminBabEditor();
           renderAdminUsers();
         }
       } catch (err) {
-        showToast('Gagal memuat materi: ' + err.message, 'error');
+        showToast('Gagal memuat data materi: ' + err.message, 'error');
       }
     }
 
-    function populateBabDropdowns() {
-      const opts = state.babList.map(b => `<option value="${b.id}">Bab ${String(b.id).padStart(2, '0')} — ${escapeHtml(b.judul_id)}</option>`).join('');
-      const allOpt = `<option value="all">Semua Bab (${state.babList.length} Bab)</option>` + opts;
+    function populateBabSelectors() {
+      const optionsAll = '<option value="all">Semua Bab (1 – 30)</option>' +
+        state.babList.map(b => `<option value="${b.id}">Bab ${String(b.id).padStart(2, '0')} — ${escapeHtml(b.judul_id)}</option>`).join('');
 
       ['kamus-filter-bab', 'dialog-filter-bab', 'budaya-filter-bab', 'fc-filter-bab'].forEach(id => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const prev = sel.value;
-        sel.innerHTML = allOpt;
-        if (prev && Array.from(sel.options).some(o => o.value === prev)) sel.value = prev;
+        const el = document.getElementById(id);
+        if (!el) return;
+        const prev = el.value;
+        el.innerHTML = optionsAll;
+        if (prev && Array.from(el.options).some(o => o.value === prev)) el.value = prev;
       });
 
       const adminSel = document.getElementById('admin-select-bab');
       if (adminSel) {
-        adminSel.innerHTML = '<option value="">-- Pilih Bab untuk Diedit --</option>' + opts;
+        adminSel.innerHTML = '<option value="">-- Pilih Bab untuk Diedit --</option>' +
+          state.babList.map(b => `<option value="${b.id}">Bab ${String(b.id).padStart(2, '0')} — ${escapeHtml(b.judul_id)}</option>`).join('');
         if (state.adminSelectedBabId) adminSel.value = String(state.adminSelectedBabId);
       }
     }
 
+    window.__toggleProgres = async (kosakataId, statusType) => {
+      const key = String(kosakataId);
+      if (state.progresMap[key] === statusType) delete state.progresMap[key];
+      else state.progresMap[key] = statusType;
+      localStorage.setItem(`ammiyah_progres_${state.session?.id || 'guest'}`, JSON.stringify(state.progresMap));
+      renderKamus();
+      renderBeranda();
+    };
+
+    window.__openBab = (babId) => {
+      const sel = document.getElementById('kamus-filter-bab');
+      if (sel) sel.value = String(babId);
+      switchView('kamus');
+    };
+
     // =========================================================================
-    // VIEW 1, 2, 3: BERANDA, KAMUS & DIALOG
+    // VIEW 1: BERANDA & PENCARIAN GLOBAL
     // =========================================================================
     function renderBeranda() {
-      document.getElementById('stat-total-bab').textContent = state.babList.length;
-      document.getElementById('stat-total-kata').textContent = state.kosakataList.length;
+      document.getElementById('beranda-stats-bab').textContent = state.babList.length;
+      document.getElementById('beranda-stats-kosakata').textContent = state.kosakataList.length;
       const hafalCount = Object.values(state.progresMap).filter(v => v === 'hafal').length;
-      document.getElementById('stat-hafal').textContent = hafalCount;
+      document.getElementById('beranda-stats-hafal').textContent = hafalCount;
 
-      const babBox = document.getElementById('beranda-bab-list');
+      const q = (document.getElementById('beranda-search').value || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('beranda-search-clear');
+      const resBox = document.getElementById('beranda-search-results');
+      clearBtn.classList.toggle('hidden', !q);
+
+      if (q) {
+        const kHits = state.kosakataList.filter(k =>
+          `${k.arab} ${k.transliterasi} ${k.arti}`.toLowerCase().includes(q)
+        ).slice(0, 15);
+        const pHits = state.percakapanList.filter(p =>
+          `${p.arab} ${p.transliterasi} ${p.arti}`.toLowerCase().includes(q)
+        ).slice(0, 10);
+
+        resBox.classList.remove('hidden');
+        if (!kHits.length && !pHits.length) {
+          resBox.innerHTML = '<div class="glass-panel rounded-3xl p-5 text-center text-xs text-slate-500">Tidak ditemukan di kamus. Coba menu <strong>Translate</strong> untuk kalimat bebas!</div>';
+        } else {
+          resBox.innerHTML = [
+            ...kHits.map(k => `
+              <div class="glass-panel rounded-2xl p-3.5 space-y-1">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="px-2 py-0.5 rounded-full bg-emeraldbrand-50 text-emeraldbrand-800 text-[10px] font-bold">Bab ${k.bab_id} &bull; ${escapeHtml(k.kategori)}</span>
+                  <div class="flex gap-1.5">
+                    <button type="button" onclick="window.__speakEnc('${encodeURIComponent(k.arab)}')" class="p-1.5 rounded-lg bg-emeraldbrand-50 text-emeraldbrand-700 text-xs">&#128266;</button>
+                    <button type="button" onclick="window.__copyEnc('${encodeURIComponent(k.arab + ' (' + k.transliterasi + ') - ' + k.arti)}')" class="p-1.5 rounded-lg bg-slate-100 text-slate-600 text-xs">&#128203;</button>
+                  </div>
+                </div>
+                <p class="arabic-text text-xl font-bold text-slate-900 text-right">${escapeHtml(k.arab)}</p>
+                <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(k.transliterasi)}</p>
+                <p class="text-xs text-slate-700">${escapeHtml(k.arti)}</p>
+              </div>
+            `),
+            ...pHits.map(p => `
+              <div class="glass-panel rounded-2xl p-3.5 space-y-1 border-l-4 border-l-amber-500">
+                <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[10px] font-bold">Bab ${p.bab_id} &bull; ${escapeHtml(p.jenis)}</span>
+                <p class="arabic-text text-lg font-bold text-slate-900 text-right">${escapeHtml(p.arab)}</p>
+                <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(p.transliterasi)}</p>
+                <p class="text-xs text-slate-700">${escapeHtml(p.arti)}</p>
+              </div>
+            `)
+          ].join('');
+        }
+      } else {
+        resBox.classList.add('hidden');
+      }
+
+      const grid = document.getElementById('beranda-bab-grid');
       if (!state.babList.length) {
-        babBox.innerHTML = '<div class="glass-panel rounded-3xl p-6 text-center text-xs text-slate-500">Belum ada bab materi.</div>';
+        grid.innerHTML = '<div class="glass-panel rounded-3xl p-6 text-center text-xs text-slate-500">Belum ada data bab materi.</div>';
         return;
       }
 
-      babBox.innerHTML = state.babList.map(b => {
-        const jmlKata = state.kosakataList.filter(k => k.bab_id === b.id).length;
+      grid.innerHTML = state.babList.map(b => {
+        const kCount = state.kosakataList.filter(k => k.bab_id === b.id).length;
         return `
-          <div onclick="window.__openBabInKamus(${b.id})" class="glass-panel rounded-2xl p-3.5 hover:border-emeraldbrand-300 cursor-pointer transition flex items-center justify-between gap-3">
+          <button type="button" onclick="window.__openBab(${b.id})" class="w-full text-left glass-panel rounded-2xl p-3.5 hover:border-emeraldbrand-300 transition active:scale-[0.99] flex items-center justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-xl bg-emeraldbrand-700 text-white font-extrabold text-xs flex items-center justify-center shrink-0">${String(b.id).padStart(2, '0')}</div>
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emeraldbrand-700 to-teal-800 text-white font-extrabold text-sm flex items-center justify-center shrink-0 shadow-sm">
+                ${String(b.id).padStart(2, '0')}
+              </div>
               <div class="min-w-0">
                 <p class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(b.judul_id)}</p>
-                <p class="text-[11px] text-slate-500 truncate">${escapeHtml(b.subjudul || `${jmlKata} kosakata`)}</p>
+                <p class="text-[11px] text-slate-500 truncate">${escapeHtml(b.subjudul || '')}</p>
               </div>
             </div>
             <div class="text-right shrink-0">
               <p class="arabic-text text-base font-bold text-emeraldbrand-800 leading-tight">${escapeHtml(b.judul_ar)}</p>
-              <span class="text-[10px] font-bold text-slate-400">${jmlKata} kata</span>
+              <p class="text-[10px] font-bold text-slate-400">${kCount} kata</p>
             </div>
-          </div>
+          </button>
         `;
       }).join('');
     }
 
-    window.__openBabInKamus = (babId) => {
-      document.getElementById('kamus-filter-bab').value = String(babId);
-      renderKamus();
-      switchView('kamus');
-    };
-
-    document.getElementById('beranda-search').addEventListener('input', (e) => {
-      const q = e.target.value.trim().toLowerCase();
-      const resBox = document.getElementById('beranda-search-results');
-      if (!q) {
-        resBox.classList.add('hidden');
-        resBox.innerHTML = '';
-        return;
-      }
-      const hits = state.kosakataList.filter(k =>
-        `${k.arab} ${k.transliterasi} ${k.arti}`.toLowerCase().includes(q)
-      ).slice(0, 15);
-
-      resBox.classList.remove('hidden');
-      if (!hits.length) {
-        resBox.innerHTML = '<div class="glass-panel rounded-2xl p-4 text-center text-xs text-slate-500">Kata tidak ditemukan di kamus. Coba menu <strong>Translate</strong>.</div>';
-        return;
-      }
-      resBox.innerHTML = hits.map(k => `
-        <div class="glass-panel rounded-2xl p-3.5 space-y-1">
-          <div class="flex items-center justify-between gap-2">
-            <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">Bab ${k.bab_id} &bull; ${escapeHtml(k.kategori)}</span>
-            <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(k.arab)}')" class="text-xs font-bold text-emeraldbrand-700">Dengar</button>
-          </div>
-          <p class="arabic-text text-xl font-bold text-slate-900 text-right">${escapeHtml(k.arab)}</p>
-          <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(k.transliterasi)}</p>
-          <p class="text-xs text-slate-700">${escapeHtml(k.arti)}</p>
-        </div>
-      `).join('');
+    document.getElementById('beranda-search').addEventListener('input', renderBeranda);
+    document.getElementById('beranda-search-clear').addEventListener('click', () => {
+      document.getElementById('beranda-search').value = '';
+      renderBeranda();
     });
 
+    // =========================================================================
+    // VIEW 2: KAMUS KOSAKATA 'AMMIYAH
+    // =========================================================================
     function renderKamus() {
       const babVal = document.getElementById('kamus-filter-bab').value;
-      const katVal = document.getElementById('kamus-filter-kat').value;
-      const q = document.getElementById('kamus-filter-search').value.trim().toLowerCase();
-      const descBox = document.getElementById('kamus-bab-desc');
+      const katVal = document.getElementById('kamus-filter-kategori').value;
+      const statVal = document.getElementById('kamus-filter-status').value;
+      const q = (document.getElementById('kamus-search').value || '').trim().toLowerCase();
 
+      const descEl = document.getElementById('kamus-bab-desc');
       if (babVal !== 'all') {
         const bab = state.babList.find(b => String(b.id) === babVal);
         if (bab?.deskripsi) {
-          descBox.textContent = bab.deskripsi;
-          descBox.classList.remove('hidden');
+          descEl.textContent = bab.deskripsi;
+          descEl.classList.remove('hidden');
         } else {
-          descBox.classList.add('hidden');
+          descEl.classList.add('hidden');
         }
       } else {
-        descBox.classList.add('hidden');
+        descEl.classList.add('hidden');
       }
 
       const filtered = state.kosakataList.filter(k => {
         if (babVal !== 'all' && String(k.bab_id) !== babVal) return false;
-        if (katVal === 'hafal' && state.progresMap[k.id] !== 'hafal') return false;
-        else if (katVal === 'favorit' && state.progresMap[k.id] !== 'favorit') return false;
-        else if (katVal !== 'all' && katVal !== 'hafal' && katVal !== 'favorit' && k.kategori !== katVal) return false;
+        if (katVal !== 'all' && k.kategori !== katVal) return false;
+        if (statVal !== 'all' && state.progresMap[String(k.id)] !== statVal) return false;
         if (q && !`${k.arab} ${k.transliterasi} ${k.arti}`.toLowerCase().includes(q)) return false;
         return true;
       });
 
       document.getElementById('kamus-count-badge').textContent = `${filtered.length} Kosakata`;
       const box = document.getElementById('kamus-list');
+
       if (!filtered.length) {
-        box.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-xs text-slate-500">Tidak ada kosakata yang cocok dengan filter ini.</div>';
+        box.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-xs text-slate-500">Tidak ada kosakata yang sesuai filter.</div>';
         return;
       }
 
       box.innerHTML = filtered.map(k => {
-        const st = state.progresMap[k.id] || '';
-        const copyPayload = encodeURIComponent(`${k.arab} (${k.transliterasi}) = ${k.arti}`);
-        const speakPayload = encodeURIComponent(k.arab);
+        const st = state.progresMap[String(k.id)];
         return `
-          <div class="glass-panel rounded-3xl p-4 space-y-2">
+          <div class="glass-panel rounded-3xl p-4 space-y-2.5">
             <div class="flex items-center justify-between gap-2">
               <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">Bab ${k.bab_id} &bull; ${escapeHtml(k.kategori)}</span>
               <div class="flex items-center gap-1.5">
-                <button type="button" onclick="window.__speakEncoded('${speakPayload}')" class="p-1.5 rounded-lg bg-emeraldbrand-50 text-emeraldbrand-700 hover:bg-emeraldbrand-100" title="Dengar">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-                </button>
-                <button type="button" onclick="window.__copyEncoded('${copyPayload}')" class="p-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" title="Salin">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                </button>
+                <button type="button" onclick="window.__speakEnc('${encodeURIComponent(k.arab)}')" class="p-1.5 rounded-xl bg-emeraldbrand-50 hover:bg-emeraldbrand-100 text-emeraldbrand-700 text-xs" title="Dengar Audio">&#128266;</button>
+                <button type="button" onclick="window.__copyEnc('${encodeURIComponent(k.arab + ' (' + k.transliterasi + ') = ' + k.arti)}')" class="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs" title="Salin">&#128203;</button>
               </div>
             </div>
             <p class="arabic-text text-2xl font-bold text-slate-900 text-right">${escapeHtml(k.arab)}</p>
             <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(k.transliterasi)}</p>
-            <p class="text-sm text-slate-700 font-medium">${escapeHtml(k.arti)}</p>
-            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
-              <button type="button" onclick="window.__toggleProgres('${k.id}','hafal')" class="py-1.5 rounded-xl text-[11px] font-bold transition ${st === 'hafal' ? 'bg-emeraldbrand-700 text-white' : 'bg-white border border-slate-200 text-slate-600'}">${st === 'hafal' ? '✓ Sudah Hafal' : 'Tandai Hafal'}</button>
-              <button type="button" onclick="window.__toggleProgres('${k.id}','favorit')" class="py-1.5 rounded-xl text-[11px] font-bold transition ${st === 'favorit' ? 'bg-amber-500 text-white' : 'bg-white border border-slate-200 text-slate-600'}">${st === 'favorit' ? '★ Favorit' : '☆ Favorit'}</button>
+            <p class="text-sm font-medium text-slate-700">${escapeHtml(k.arti)}</p>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button type="button" onclick="window.__toggleProgres('${k.id}', 'hafal')" class="py-2 rounded-xl text-xs font-bold border transition ${st === 'hafal' ? 'bg-emeraldbrand-700 text-white border-emeraldbrand-700' : 'bg-white text-slate-600 border-slate-200'}">
+                ${st === 'hafal' ? '✓ Sudah Hafal' : 'Tandai Hafal'}
+              </button>
+              <button type="button" onclick="window.__toggleProgres('${k.id}', 'favorit')" class="py-2 rounded-xl text-xs font-bold border transition ${st === 'favorit' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-slate-600 border-slate-200'}">
+                ${st === 'favorit' ? '★ Favorit' : '☆ Favorit'}
+              </button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    window.__toggleProgres = async (kataId, status) => {
-      if (!state.session) return;
-      if (state.progresMap[kataId] === status) delete state.progresMap[kataId];
-      else state.progresMap[kataId] = status;
-      localStorage.setItem(`ammiyah_progres_${state.session.id}`, JSON.stringify(state.progresMap));
-      renderKamus();
-      renderBeranda();
-    };
-
-    ['kamus-filter-bab', 'kamus-filter-kat'].forEach(id => {
+    ['kamus-filter-bab', 'kamus-filter-kategori', 'kamus-filter-status'].forEach(id => {
       document.getElementById(id).addEventListener('change', renderKamus);
     });
-    document.getElementById('kamus-filter-search').addEventListener('input', renderKamus);
+    document.getElementById('kamus-search').addEventListener('input', renderKamus);
 
+    // =========================================================================
+    // VIEW 3: PERCAKAPAN & MINI DIALOG
+    // =========================================================================
     function renderDialog() {
       const babVal = document.getElementById('dialog-filter-bab').value;
       const jenisVal = document.getElementById('dialog-filter-jenis').value;
-      const box = document.getElementById('dialog-list');
+      const container = document.getElementById('dialog-list');
 
       const filtered = state.percakapanList.filter(p => {
         if (babVal !== 'all' && String(p.bab_id) !== babVal) return false;
@@ -1434,36 +1452,36 @@
       });
 
       if (!filtered.length) {
-        box.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-xs text-slate-500">Belum ada percakapan pada filter ini.</div>';
+        container.innerHTML = '<div class="glass-panel rounded-3xl p-8 text-center text-xs text-slate-500">Belum ada contoh kalimat atau dialog pada filter ini.</div>';
         return;
       }
 
-      const groups = {};
-      filtered.forEach(item => {
-        const key = `${item.bab_id}__${item.jenis}__${item.judul_dialog || item.jenis}`;
-        if (!groups[key]) groups[key] = { bab_id: item.bab_id, jenis: item.jenis, judul: item.judul_dialog || item.jenis, rows: [] };
-        groups[key].rows.push(item);
+      const groups = new Map();
+      filtered.forEach(p => {
+        const gKey = `${p.bab_id}::${p.jenis}::${p.judul_dialog}`;
+        if (!groups.has(gKey)) groups.set(gKey, { bab_id: p.bab_id, jenis: p.jenis, judul: p.judul_dialog, items: [] });
+        groups.get(gKey).items.push(p);
       });
 
-      box.innerHTML = Object.values(groups).map(g => `
+      container.innerHTML = Array.from(groups.values()).map(g => `
         <div class="glass-panel rounded-3xl p-4 space-y-3">
           <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
-            <h3 class="text-sm font-extrabold text-slate-900">${escapeHtml(g.judul)}</h3>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${g.jenis === 'Mini Dialog' ? 'bg-amber-100 text-amber-800' : 'bg-emeraldbrand-100 text-emeraldbrand-800'}">Bab ${g.bab_id}</span>
+            <h3 class="text-xs font-extrabold text-slate-900">${escapeHtml(g.judul || g.jenis)}</h3>
+            <span class="px-2 py-0.5 rounded-full bg-emeraldbrand-50 text-emeraldbrand-800 text-[10px] font-bold shrink-0">Bab ${g.bab_id}</span>
           </div>
           <div class="space-y-2.5">
-            ${g.rows.map(r => `
-              <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 space-y-1">
+            ${g.items.map(it => `
+              <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/60 space-y-1">
                 <div class="flex items-center justify-between gap-2">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-emeraldbrand-700">${escapeHtml(r.peran || 'Kalimat')}</span>
-                  <div class="flex items-center gap-1">
-                    <button type="button" onclick="window.__speakEncoded('${encodeURIComponent(r.arab)}')" class="px-2 py-0.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold text-emeraldbrand-700">Dengar</button>
-                    <button type="button" onclick="window.__copyEncoded('${encodeURIComponent(`${r.arab}\n(${r.transliterasi})\n${r.arti}`)}')" class="px-2 py-0.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold text-slate-600">Salin</button>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-emeraldbrand-800">${escapeHtml(it.peran || 'Kalimat')}</span>
+                  <div class="flex gap-1">
+                    <button type="button" onclick="window.__speakEnc('${encodeURIComponent(it.arab)}')" class="p-1 rounded-lg bg-white text-emeraldbrand-700 text-xs shadow-sm">&#128266;</button>
+                    <button type="button" onclick="window.__copyEnc('${encodeURIComponent(it.arab + ' (' + it.transliterasi + ') - ' + it.arti)}')" class="p-1 rounded-lg bg-white text-slate-600 text-xs shadow-sm">&#128203;</button>
                   </div>
                 </div>
-                <p class="arabic-text text-xl font-bold text-slate-900 text-right">${escapeHtml(r.arab)}</p>
-                <p class="text-xs font-bold text-emeraldbrand-800 italic">${escapeHtml(r.transliterasi)}</p>
-                <p class="text-xs text-slate-700">${escapeHtml(r.arti)}</p>
+                <p class="arabic-text text-xl font-bold text-slate-900 text-right">${escapeHtml(it.arab)}</p>
+                <p class="text-xs font-bold text-emeraldbrand-700 italic">${escapeHtml(it.transliterasi)}</p>
+                <p class="text-xs text-slate-700">${escapeHtml(it.arti)}</p>
               </div>
             `).join('')}
           </div>
@@ -1476,62 +1494,45 @@
     });
 
     // =========================================================================
-    // VIEW 4: MESIN TRANSLATE AI GEMINI 'AMMIYAH SAUDI (AKURAT + KONTEKS 30 BAB)
+    // VIEW 4: MESIN TRANSLATE AI CHATGPT 'AMMIYAH SAUDI (AKURAT + KONTEKS 30 BAB)
     // =========================================================================
     function sanitizeApiKey(raw) {
       return String(raw || '').trim().replace(/^["']+|["']+$/g, '').replace(/\s+/g, '');
     }
 
-    function getGeminiConfig() {
-      const storedEp = (localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
-      const storedKey = sanitizeApiKey(localStorage.getItem('ammiyah_gemini_key') || '');
-      const endpoint = storedEp || GEMINI_API_ENDPOINT.trim();
-      const activeKey = storedKey || sanitizeApiKey(GEMINI_DEFAULT_KEY);
-      return { endpoint, activeKey };
+    function detectAiProvider(apiKey) {
+      const k = sanitizeApiKey(apiKey);
+      if (k.startsWith('sk-')) return 'openai';
+      if (k.startsWith('gsk_')) return 'groq';
+      if (k.startsWith('AIza') || k.startsWith('AQ.')) return 'gemini';
+      return 'openai';
     }
 
-    function buildGeminiDirectRequest(apiKey, model, payload) {
-      const cleanKey = sanitizeApiKey(apiKey);
-      // Jika key kosong (mode Canvas Preview), kirim via ?key= agar runtime otomatis menyuntikkan kunci
-      if (!cleanKey) {
-        return {
-          url: `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=`,
-          options: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          }
-        };
-      }
-      // Mendukung format baru AQ. maupun AIza via header x-goog-api-key
-      return {
-        url: `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-        options: {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': cleanKey,
-          },
-          body: JSON.stringify(payload),
-        }
-      };
+    function getAiConfig() {
+      const storedEp = (localStorage.getItem('ammiyah_ai_endpoint') || localStorage.getItem('ammiyah_gemini_endpoint') || '').trim();
+      const storedKey = sanitizeApiKey(localStorage.getItem('ammiyah_ai_key') || localStorage.getItem('ammiyah_gemini_key') || '');
+      const endpoint = storedEp || AI_API_ENDPOINT.trim();
+      const activeKey = storedKey || sanitizeApiKey(OPENAI_DEFAULT_KEY);
+      const provider = detectAiProvider(activeKey);
+      return { endpoint, activeKey, provider };
     }
 
     function updateTranslateStatusBadge() {
       const badge = document.getElementById('tr-connection-badge');
       if (!badge) return;
-      const { endpoint, activeKey } = getGeminiConfig();
+      const { endpoint, activeKey, provider } = getAiConfig();
       badge.className = 'inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold';
       if (endpoint) {
-        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>AI Gemini via Proxy (${escapeHtml(endpoint)})</span>`;
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>ChatGPT via Proxy (${escapeHtml(endpoint)})</span>`;
       } else if (activeKey) {
-        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>AI Gemini Aktif (API Key Langsung)</span>';
+        const label = provider === 'openai' ? 'ChatGPT (gpt-4o-mini)' : provider === 'groq' ? 'Groq Llama 3.3' : 'AI Gemini';
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>${label} Aktif (API Key)</span>`;
       } else {
-        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>AI Gemini + Konteks Kamus 30 Bab</span>';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Belum diatur &bull; Klik ikon Gerigi untuk isi API Key ChatGPT</span>';
       }
     }
 
-    // RAG-Lite: Ambil hingga 8 kosakata/kalimat paling relevan dari database 30 bab untuk panduan AI
+    // RAG-Lite: Ambil kosakata/kalimat paling relevan dari database 30 bab untuk panduan AI
     function findRelevantLocalContext(text) {
       const tokens = String(text || '')
         .toLowerCase()
@@ -1558,7 +1559,7 @@
       return hits.length ? `\nReferensi kosakata/frasa dari buku panduan kami (prioritaskan memakai padanan ini bila cocok):\n${hits.join('\n')}` : '';
     }
 
-    function buildSaudiAmiyahGeminiPayload(text, direction, lawanBicara, gayaBahasa) {
+    function buildSaudiAmiyahPrompts(text, direction, lawanBicara, gayaBahasa) {
       const dirLabel = direction === 'id-ar'
         ? "Bahasa Indonesia ke Bahasa Arab 'Ammiyah Saudi (dialek Hijazi/Najdi yang dipakai warga Makkah, Madinah, Jeddah, Riyadh)"
         : "Bahasa Arab 'Ammiyah Saudi ke Bahasa Indonesia yang natural";
@@ -1602,36 +1603,20 @@ CONTOH FEW-SHOT:
 - Input: "Berapa harga jubah ini? Bisa kurang sedikit?" (Laki-laki tunggal, Sopan)
   arab_amiyah: "بِكَم الثَّوْب ذَا؟ مُمْكِن تِنَقِّص شُوَيَّة؟"
   transliterasi: "bikam ats-tsawb dzā? mumkin tinaggish syuwayyah?"
-- Input: "Tolong antarkan saya ke hotel dekat Masjid Nabawi" (Laki-laki tunggal, Sopan)
-  arab_amiyah: "بِالله مُمْكِن تُوَصِّلْنِي لَلْفُنْدُق قُرْب المَسْجِد النَّبَوِي؟"
-  transliterasi: "billāh mumkin tuwashshilnī lal-fundug gurb al-masjid an-nabawiyy?"
 
-Balas HANYA dalam format JSON valid sesuai skema.`;
+WAJIB balas HANYA dalam format JSON valid dengan key persis:
+{
+  "arab_amiyah": "...",
+  "transliterasi": "...",
+  "terjemahan_id": "...",
+  "variasi_lain": "...",
+  "arab_fusha": "...",
+  "catatan_budaya_kaidah": "..."
+}`;
 
-      return {
-        contents: [{
-          parts: [{
-            text: `Arah terjemahan: ${dirLabel}\nLawan bicara: ${lawanBicara}\nGaya bahasa: ${gayaBahasa}${localContext}\n\nTeks yang diterjemahkan:\n"""${text}"""`
-          }]
-        }],
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        generationConfig: {
-          temperature: 0.25,
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: 'OBJECT',
-            properties: {
-              arab_amiyah: { type: 'STRING' },
-              transliterasi: { type: 'STRING' },
-              terjemahan_id: { type: 'STRING' },
-              variasi_lain: { type: 'STRING' },
-              arab_fusha: { type: 'STRING' },
-              catatan_budaya_kaidah: { type: 'STRING' }
-            },
-            required: ['arab_amiyah', 'transliterasi', 'terjemahan_id', 'arab_fusha', 'catatan_budaya_kaidah']
-          }
-        }
-      };
+      const userPrompt = `Arah terjemahan: ${dirLabel}\nLawan bicara: ${lawanBicara}\nGaya bahasa: ${gayaBahasa}${localContext}\n\nTeks yang diterjemahkan:\n"""${text}"""`;
+
+      return { systemPrompt, userPrompt };
     }
 
     document.getElementById('tr-swap-btn').addEventListener('click', () => {
@@ -1949,7 +1934,7 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
         btn.disabled = false;
         btn.classList.remove('opacity-70', 'cursor-not-allowed');
       }
-      if (btnLabel) btnLabel.textContent = 'Terjemahkan dengan AI Gemini';
+      if (btnLabel) btnLabel.textContent = 'Terjemahkan dengan AI ChatGPT';
       if (loadingCard) loadingCard.classList.add('hidden');
     }
 
@@ -1987,7 +1972,7 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
             transliterasi: transliterateSaudiArabic(conv.amiyah),
             terjemahan_id: text,
             arab_fusha: fusha,
-            catatan_budaya_kaidah: conv.catatan + ' (Mode cadangan — untuk akurasi dialek penuh, aktifkan AI Gemini di Pengaturan.)',
+            catatan_budaya_kaidah: conv.catatan + ' (Mode cadangan — untuk akurasi dialek penuh, aktifkan AI ChatGPT di Pengaturan.)',
             _engineLabel: 'Mode Cadangan'
           };
         } else {
@@ -1998,15 +1983,174 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
             transliterasi: transliterateSaudiArabic(text),
             terjemahan_id: tr.text,
             arab_fusha: normFusha,
-            catatan_budaya_kaidah: 'Diterjemahkan dengan mode cadangan. Aktifkan AI Gemini untuk akurasi konteks terbaik.',
+            catatan_budaya_kaidah: 'Diterjemahkan dengan mode cadangan. Aktifkan AI ChatGPT untuk akurasi konteks terbaik.',
             _engineLabel: 'Mode Cadangan'
           };
         }
+
         if (runController.signal.aborted) return;
         displayTranslateResult(parsedResult, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
         saveTranslateHistory({ text, direction: state.translateDir, lawanBicara, gayaBahasa, result: parsedResult });
       } catch (err) {
+        if (err.name === 'AbortError' && runController.signal.aborted) return;
+        showTranslateError('Mode cadangan gagal: ' + err.message);
+        showToast('Terjemahan cadangan gagal.', 'error');
+      } finally {
+        if (currentTranslateController === runController) {
+          currentTranslateController = null;
+          stopTranslateLoadingUI();
+        }
+      }
+    }
+
+    async function runAiTranslate() {
+      const text = document.getElementById('tr-input-text').value.trim();
+      if (!text) {
+        showToast('Masukkan teks yang ingin diterjemahkan terlebih dahulu.', 'warning');
+        return;
+      }
+
+      if (currentTranslateController) currentTranslateController.abort();
+      const runController = new AbortController();
+      currentTranslateController = runController;
+
+      const lawanBicara = document.getElementById('tr-lawan-bicara').value;
+      const gayaBahasa = document.getElementById('tr-gaya-bahasa').value;
+
+      // 1. Cek kecocokan persis di Kamus 30 Bab terlebih dahulu (instan & 100% sesuai buku)
+      const localHit = searchLocalDatabaseMatch(text, state.translateDir);
+      if (localHit) {
+        displayTranslateResult(localHit, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
+        saveTranslateHistory({ text, direction: state.translateDir, lawanBicara, gayaBahasa, result: localHit });
+        return;
+      }
+
+      const btn = document.getElementById('tr-submit-btn');
+      const btnLabel = document.getElementById('tr-submit-label');
+      const loadingCard = document.getElementById('tr-loading-card');
+      const loadingStatus = document.getElementById('tr-loading-status');
+      const loadingTimer = document.getElementById('tr-loading-timer');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-70', 'cursor-not-allowed');
+      btnLabel.textContent = 'ChatGPT menerjemahkan...';
+      loadingStatus.textContent = "ChatGPT sedang merangkai 'Ammiyah...";
+      loadingTimer.textContent = 'Menyesuaikan dialek Saudi & harakat (0 dtk)';
+      loadingCard.classList.remove('hidden');
+      document.getElementById('tr-result-card').classList.add('hidden');
+      document.getElementById('tr-error-card').classList.add('hidden');
+
+      let elapsedSec = 0;
+      if (translateTimerInterval) clearInterval(translateTimerInterval);
+      translateTimerInterval = setInterval(() => {
+        elapsedSec += 1;
+        loadingTimer.textContent = `Menyesuaikan dialek Saudi & harakat (${elapsedSec} dtk)`;
+      }, 1000);
+
+      try {
+        const { endpoint, activeKey, provider } = getAiConfig();
+        const { systemPrompt, userPrompt } = buildSaudiAmiyahPrompts(text, state.translateDir, lawanBicara, gayaBahasa);
+        let res;
+        let engineLabel = 'ChatGPT (gpt-4o-mini)';
+
+        if (endpoint) {
+          loadingStatus.textContent = `Menghubungi Proxy ${endpoint}...`;
+          res = await fetchWithBackoff(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: OPENAI_MODEL,
+              systemPrompt,
+              userPrompt
+            })
+          }, { maxRetries: 2, timeoutMs: 20000, outerSignal: runController.signal });
+        } else {
+          if (!activeKey) {
+            throw new Error('API Key ChatGPT (OpenAI) belum diatur. Klik "Atur API Key / Proxy" untuk mengisi API Key (sk-...) atau gunakan Mode Cadangan.');
+          }
+          if (provider === 'openai') {
+            res = await fetchWithBackoff('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${activeKey}`
+              },
+              body: JSON.stringify({
+                model: OPENAI_MODEL,
+                temperature: 0.25,
+                response_format: { type: 'json_object' },
+                messages: [
+                  { role: 'system', content: systemPrompt },
+                  { role: 'user', content: userPrompt }
+                ]
+              })
+            }, { maxRetries: 2, timeoutMs: 20000, outerSignal: runController.signal });
+          } else if (provider === 'groq') {
+            engineLabel = 'Groq Llama 3.3';
+            res = await fetchWithBackoff('https://api.groq.com/openai/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${activeKey}`
+              },
+              body: JSON.stringify({
+                model: GROQ_MODEL,
+                temperature: 0.25,
+                response_format: { type: 'json_object' },
+                messages: [
+                  { role: 'system', content: systemPrompt },
+                  { role: 'user', content: userPrompt }
+                ]
+              })
+            }, { maxRetries: 2, timeoutMs: 20000, outerSignal: runController.signal });
+          } else {
+            engineLabel = 'AI Gemini 3 Flash';
+            res = await fetchWithBackoff(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': activeKey
+              },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { temperature: 0.25, responseMimeType: 'application/json' }
+              })
+            }, { maxRetries: 2, timeoutMs: 20000, outerSignal: runController.signal });
+          }
+        }
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          let errMsg = `HTTP ${res.status}`;
+          try {
+            const errJson = JSON.parse(errText);
+            errMsg = errJson?.error?.message || errJson?.error || errMsg;
+          } catch (_) {
+            if (errText) errMsg = errText.slice(0, 160);
+          }
+          if (res.status === 401 || res.status === 403) {
+            throw new Error(`API Key tidak valid atau saldo kredit API belum aktif (${errMsg}). Cek Pengaturan API Key / Proxy.`);
+          }
+          throw new Error(errMsg);
+        }
+
+        const resultJson = await res.json();
+        const rawText = resultJson?.choices?.[0]?.message?.content
+          || resultJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const parsedResult = parseGeminiJsonSafely(rawText);
+        parsedResult._engineLabel = resultJson?.providerLabel || engineLabel;
+
+        if (runController.signal.aborted) return;
+        displayTranslateResult(parsedResult, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
+        saveTranslateHistory({ text, direction: state.translateDir, lawanBicara, gayaBahasa, result: parsedResult });
+      } catch (err) {
+        if (err.name === 'AbortError' && runController.signal.aborted) {
+          showToast('Proses terjemahan dibatalkan.', 'warning');
+          return;
+        }
         showTranslateError(err.message);
+        showToast('AI ChatGPT belum merespons. Cek pengaturan atau gunakan Mode Cadangan.', 'error');
       } finally {
         if (currentTranslateController === runController) {
           currentTranslateController = null;
@@ -2037,6 +2181,12 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
         return;
       }
 
+      const { endpoint, activeKey, provider } = getGeminiConfig();
+      if (!IS_PREVIEW && !endpoint && !activeKey) {
+        showTranslateError('API Key AI belum diatur. Klik "Atur API Key / Proxy" lalu masukkan API Key gratis Groq (console.groq.com/keys, diawali gsk_...) atau Gemini Anda.');
+        return;
+      }
+
       const btn = document.getElementById('tr-submit-btn');
       const btnLabel = document.getElementById('tr-submit-label');
       const loadingCard = document.getElementById('tr-loading-card');
@@ -2045,8 +2195,8 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
 
       btn.disabled = true;
       btn.classList.add('opacity-70', 'cursor-not-allowed');
-      btnLabel.textContent = 'AI Gemini menerjemahkan...';
-      loadingStatus.textContent = "AI Gemini sedang merangkai 'Ammiyah...";
+      btnLabel.textContent = 'AI sedang menerjemahkan...';
+      loadingStatus.textContent = provider === 'groq' ? "Groq AI sedang merangkai 'Ammiyah..." : "AI sedang merangkai 'Ammiyah...";
       loadingTimer.textContent = 'Menyesuaikan dialek Saudi & harakat (0 dtk)';
       loadingCard.classList.remove('hidden');
       document.getElementById('tr-result-card').classList.add('hidden');
@@ -2060,20 +2210,33 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
       }, 1000);
 
       try {
-        const { endpoint, activeKey } = getGeminiConfig();
+        const { systemPrompt, userPrompt } = buildSaudiAmiyahPromptParts(text, state.translateDir, lawanBicara, gayaBahasa);
         const geminiPayload = buildSaudiAmiyahGeminiPayload(text, state.translateDir, lawanBicara, gayaBahasa);
         let res;
+        let usedEngine = 'AI Gemini 3 Flash';
 
         if (endpoint) {
           loadingStatus.textContent = `Menghubungi Proxy ${endpoint}...`;
           res = await fetchWithBackoff(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model: GEMINI_MODEL, payload: geminiPayload })
+            body: JSON.stringify({
+              model: GEMINI_MODEL,
+              groqModel: GROQ_MODEL,
+              systemPrompt,
+              userPrompt,
+              payload: geminiPayload
+            })
           }, { maxRetries: 2, timeoutMs: 18000, outerSignal: runController.signal });
+          usedEngine = 'AI Proxy Server';
+        } else if (provider === 'groq') {
+          const { url, options } = buildGroqDirectRequest(activeKey, systemPrompt, userPrompt);
+          res = await fetchWithBackoff(url, options, { maxRetries: 2, timeoutMs: 15000, outerSignal: runController.signal });
+          usedEngine = 'Groq AI (Llama 3.3 70B)';
         } else {
           const { url, options } = buildGeminiDirectRequest(activeKey, GEMINI_MODEL, geminiPayload);
           res = await fetchWithBackoff(url, options, { maxRetries: 3, timeoutMs: 18000, outerSignal: runController.signal });
+          usedEngine = 'AI Gemini 3 Flash';
         }
 
         if (!res.ok) {
@@ -2086,15 +2249,17 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
             if (errText) errMsg = errText.slice(0, 160);
           }
           if (res.status === 400 || res.status === 401 || res.status === 403) {
-            throw new Error(`API Key Gemini tidak valid atau belum diatur (${errMsg}). Klik "Atur API Key / Proxy" untuk mengisi API Key Google AI Studio Anda.`);
+            throw new Error(`API Key ditolak (${errMsg}). Jika memakai kunci Gemini AQ. yang terkena bug Google, silakan pakai API Key gratis Groq (gsk_...) di console.groq.com/keys.`);
           }
           throw new Error(errMsg);
         }
 
         const resultJson = await res.json();
-        const rawText = resultJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+        // Mendukung format respons Groq/OpenAI maupun format respons Gemini
+        const rawText = resultJson?.choices?.[0]?.message?.content
+          || resultJson?.candidates?.[0]?.content?.parts?.[0]?.text;
         const parsedResult = parseGeminiJsonSafely(rawText);
-        parsedResult._engineLabel = 'AI Gemini 3 Flash';
+        parsedResult._engineLabel = resultJson?.providerLabel || usedEngine;
 
         if (runController.signal.aborted) return;
         displayTranslateResult(parsedResult, { text, direction: state.translateDir, lawanBicara, gayaBahasa });
@@ -2105,7 +2270,7 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
           return;
         }
         showTranslateError(err.message);
-        showToast('AI Gemini belum merespons. Cek pengaturan atau gunakan Mode Cadangan.', 'error');
+        showToast('AI belum merespons. Cek pengaturan atau gunakan Mode Cadangan.', 'error');
       } finally {
         if (currentTranslateController === runController) {
           currentTranslateController = null;
@@ -2182,8 +2347,8 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
       } catch (e) {}
     };
 
-    document.getElementById('tr-submit-btn').addEventListener('click', runGeminiTranslate);
-    document.getElementById('tr-retry-btn').addEventListener('click', runGeminiTranslate);
+    document.getElementById('tr-submit-btn').addEventListener('click', runAiTranslate);
+    document.getElementById('tr-retry-btn').addEventListener('click', runAiTranslate);
     document.getElementById('tr-fallback-btn').addEventListener('click', runFallbackTranslate);
     document.getElementById('tr-cancel-btn').addEventListener('click', () => {
       if (currentTranslateController) {
@@ -2208,14 +2373,14 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
     document.getElementById('tr-input-text').addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        runGeminiTranslate();
+        runAiTranslate();
       }
     });
 
-    // Modal Pengaturan Mesin Translate
+    // Modal Pengaturan Mesin Translate (ChatGPT / OpenAI / Proxy)
     const openGeminiSettings = () => {
-      document.getElementById('input-gemini-key').value = localStorage.getItem('ammiyah_gemini_key') || '';
-      document.getElementById('input-gemini-endpoint').value = localStorage.getItem('ammiyah_gemini_endpoint') || GEMINI_API_ENDPOINT || '';
+      document.getElementById('input-gemini-key').value = localStorage.getItem('ammiyah_ai_key') || localStorage.getItem('ammiyah_gemini_key') || '';
+      document.getElementById('input-gemini-endpoint').value = localStorage.getItem('ammiyah_ai_endpoint') || localStorage.getItem('ammiyah_gemini_endpoint') || AI_API_ENDPOINT || '';
       document.getElementById('input-gemini-key').type = 'password';
       document.getElementById('btn-toggle-key-vis').textContent = 'Lihat';
       document.getElementById('gemini-test-status').classList.add('hidden');
@@ -2236,22 +2401,26 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
     document.getElementById('btn-save-gemini-key').addEventListener('click', () => {
       const cleanedKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
       const cleanedEp = document.getElementById('input-gemini-endpoint').value.trim();
-      if (cleanedKey) localStorage.setItem('ammiyah_gemini_key', cleanedKey);
-      else localStorage.removeItem('ammiyah_gemini_key');
-      if (cleanedEp) localStorage.setItem('ammiyah_gemini_endpoint', cleanedEp);
-      else localStorage.removeItem('ammiyah_gemini_endpoint');
+      if (cleanedKey) localStorage.setItem('ammiyah_ai_key', cleanedKey);
+      else localStorage.removeItem('ammiyah_ai_key');
+      if (cleanedEp) localStorage.setItem('ammiyah_ai_endpoint', cleanedEp);
+      else localStorage.removeItem('ammiyah_ai_endpoint');
+      localStorage.removeItem('ammiyah_gemini_key');
+      localStorage.removeItem('ammiyah_gemini_endpoint');
       updateTranslateStatusBadge();
       document.getElementById('modal-gemini-settings').classList.add('hidden');
-      showToast('Pengaturan Translate berhasil disimpan.', 'success');
+      showToast('Pengaturan AI ChatGPT berhasil disimpan.', 'success');
     });
     document.getElementById('btn-clear-gemini-key').addEventListener('click', () => {
+      localStorage.removeItem('ammiyah_ai_key');
+      localStorage.removeItem('ammiyah_ai_endpoint');
       localStorage.removeItem('ammiyah_gemini_key');
       localStorage.removeItem('ammiyah_gemini_endpoint');
       document.getElementById('input-gemini-key').value = '';
       document.getElementById('input-gemini-endpoint').value = '';
       document.getElementById('gemini-test-status').classList.add('hidden');
       updateTranslateStatusBadge();
-      showToast('Pengaturan direset ke Mode Gratis.', 'info');
+      showToast('Pengaturan AI berhasil direset.', 'info');
     });
     document.getElementById('btn-test-gemini-key').addEventListener('click', async () => {
       const testKey = sanitizeApiKey(document.getElementById('input-gemini-key').value);
@@ -2260,22 +2429,58 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
       const btnTest = document.getElementById('btn-test-gemini-key');
 
       statusBox.className = 'p-2.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700';
-      statusBox.textContent = testEp ? `Menguji Proxy ${testEp}...` : 'Menguji koneksi AI Gemini...';
+      statusBox.textContent = testEp ? `Menguji Proxy ${testEp}...` : 'Menguji koneksi ChatGPT (OpenAI)...';
       statusBox.classList.remove('hidden');
       btnTest.disabled = true;
 
       try {
-        const pingPayload = { contents: [{ parts: [{ text: 'Balas hanya dengan kata: OK' }] }] };
         let res;
         if (testEp) {
           res = await fetch(testEp, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model: GEMINI_MODEL, payload: pingPayload })
+            body: JSON.stringify({
+              model: OPENAI_MODEL,
+              systemPrompt: 'Balas hanya dalam JSON {"ok":true}',
+              userPrompt: 'Ping'
+            })
           });
         } else {
-          const { url, options } = buildGeminiDirectRequest(testKey, GEMINI_MODEL, pingPayload);
-          res = await fetch(url, options);
+          if (!testKey) throw new Error('Masukkan API Key OpenAI (sk-...) terlebih dahulu.');
+          const prov = detectAiProvider(testKey);
+          if (prov === 'openai') {
+            res = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${testKey}`
+              },
+              body: JSON.stringify({
+                model: OPENAI_MODEL,
+                max_tokens: 10,
+                messages: [{ role: 'user', content: 'OK' }]
+              })
+            });
+          } else if (prov === 'groq') {
+            res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${testKey}`
+              },
+              body: JSON.stringify({
+                model: GROQ_MODEL,
+                max_tokens: 10,
+                messages: [{ role: 'user', content: 'OK' }]
+              })
+            });
+          } else {
+            res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': testKey },
+              body: JSON.stringify({ contents: [{ parts: [{ text: 'OK' }] }] })
+            });
+          }
         }
         if (!res.ok) {
           const errText = await res.text().catch(() => '');
@@ -2284,7 +2489,7 @@ Balas HANYA dalam format JSON valid sesuai skema.`;
           throw new Error(msg);
         }
         statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
-        statusBox.textContent = '✓ Koneksi AI Gemini berhasil! Klik Simpan untuk menggunakannya.';
+        statusBox.textContent = '✓ Koneksi AI ChatGPT berhasil! Klik Simpan untuk menggunakannya.';
       } catch (err) {
         statusBox.className = 'p-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200';
         statusBox.textContent = `✗ Gagal: ${err.message}`;
