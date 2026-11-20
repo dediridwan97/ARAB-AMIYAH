@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kamus & Percakapan Arab 'Ammiyah Saudi — Umrah Mandiri</title>
-  <meta name="theme-color" content="#0d9488" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#b8860b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kamus Amiyah">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
 
   <!-- PWA Manifest via Data URI -->
   <link rel="manifest" href='data:application/manifest+json,{"name":"Kamus Arab Ammiyah Saudi","short_name":"Ammiyah Saudi","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#0d9488","icons":[{"src":"https://placehold.co/192x192/0d9488/ffffff?text=%D8%B9","sizes":"192x192","type":"image/png"},{"src":"https://placehold.co/512x512/0d9488/ffffff?text=%D8%B9","sizes":"512x512","type":"image/png"}]}' />
@@ -982,9 +983,9 @@
     // =========================================================================
     // 1. SAKLAR DEPLOYMENT & KONFIGURASI SUPABASE
     // =========================================================================
-    const IS_PREVIEW = true; // Ubah menjadi false SAAT DEPLOY agar terhubung 100% ke Supabase
-    const SUPABASE_URL = "URL_SUPABASE_ANDA";
-    const SUPABASE_ANON_KEY = "ANON_KEY_ANDA";
+    const IS_PREVIEW = false; // Ubah menjadi false SAAT DEPLOY agar terhubung 100% ke Supabase
+    const SUPABASE_URL = "https://vajqtviwgrtafmotfqwb.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Y_XgpjYkg9Z9zMww8IKRZg_6cMm85tr";
 
     const supabase = (!IS_PREVIEW && SUPABASE_URL !== "URL_SUPABASE_ANDA")
       ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
