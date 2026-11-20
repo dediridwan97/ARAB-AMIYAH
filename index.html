@@ -1,0 +1,2745 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Kamus & Percakapan Arab 'Ammiyah Saudi — Umrah Mandiri</title>
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <!-- PWA Manifest via Data URI -->
+  <link rel="manifest" href='data:application/manifest+json,{"name":"Kamus Arab Ammiyah Saudi","short_name":"Ammiyah Saudi","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#0d9488","icons":[{"src":"https://placehold.co/192x192/0d9488/ffffff?text=%D8%B9","sizes":"192x192","type":"image/png"},{"src":"https://placehold.co/512x512/0d9488/ffffff?text=%D8%B9","sizes":"512x512","type":"image/png"}]}' />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Naskh Arabic / Amiri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            arabic: ['Noto Naskh Arabic', 'Amiri', 'serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+            },
+            gold: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Full Page Wrapper menutupi layar penuh (kompatibel Blogger & Standalone) */
+    #app-root {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      overflow-y: auto;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(20, 184, 166, 0.11), transparent 42%),
+        radial-gradient(circle at 88% 14%, rgba(245, 158, 11, 0.09), transparent 40%),
+        radial-gradient(circle at 50% 92%, rgba(13, 148, 136, 0.07), transparent 45%),
+        #ffffff;
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Light Glassmorphism Utilities */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 10px 34px rgba(15, 23, 42, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(20, 184, 166, 0.45);
+      box-shadow: 0 10px 28px rgba(13, 148, 136, 0.08);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(226, 232, 240, 0.95);
+    }
+
+    /* Typography Arab */
+    .arabic-text {
+      font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+      direction: rtl;
+      unicode-bidi: isolate;
+      line-height: 1.95;
+    }
+
+    /* Flashcard 3D Flip */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Custom Scrollbar */
+    #app-root::-webkit-scrollbar,
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    #app-root::-webkit-scrollbar-thumb,
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app-root" class="font-sans antialiased selection:bg-brand-100 selection:text-brand-800">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[1000010] flex flex-col gap-2 max-w-sm w-[calc(100%-2rem)] pointer-events-none"></div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirm-modal" class="hidden fixed inset-0 z-[1000009] bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-panel rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-white">
+        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </div>
+        <h3 id="confirm-title" class="text-lg font-bold text-slate-900">Konfirmasi Hapus</h3>
+        <p id="confirm-message" class="text-sm text-slate-600 mt-1 mb-6">Apakah Anda yakin ingin menghapus data ini?</p>
+        <div class="flex gap-3">
+          <button id="confirm-cancel-btn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">Batal</button>
+          <button id="confirm-ok-btn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm shadow-md shadow-rose-600/20 transition">Ya, Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Mode Indicator Badge (Otomatis hilang saat IS_PREVIEW = false) -->
+    <div id="preview-badge" class="hidden fixed bottom-20 lg:bottom-4 right-4 z-[1000005] bg-amber-500/95 text-white text-xs font-bold px-3.5 py-2 rounded-full shadow-lg border border-amber-300 flex items-center gap-2 backdrop-blur-md">
+      <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+      <span>Mode Preview Aktif</span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- HALAMAN LOGIN HYBRID (USER & ADMIN)        -->
+    <!-- ========================================== -->
+    <section id="login-screen" class="min-h-full flex items-center justify-center p-4 sm:p-6">
+      <div class="w-full max-w-md">
+        <!-- Header Brand -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-br from-brand-600 to-teal-700 text-white shadow-xl shadow-brand-600/25 mb-4">
+            <span class="arabic-text text-3xl font-bold leading-none">ع</span>
+          </div>
+          <span class="inline-block px-3 py-1 rounded-full bg-gold-100 text-gold-600 text-xs font-bold tracking-wide uppercase mb-2">Panduan Umrah Mandiri</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Kamus Arab 'Ammiyah</h1>
+          <p class="text-sm text-slate-600 mt-1">Dialek Saudi Sehari-hari &bull; 30 Bab Materi Lengkap</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-8">
+          <!-- Tab Switcher User vs Admin -->
+          <div class="grid grid-cols-2 gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl mb-6">
+            <button type="button" id="tab-login-user" class="py-2.5 px-3 rounded-xl text-sm font-bold bg-white text-brand-700 shadow-sm transition">
+              Jamaah / Peserta
+            </button>
+            <button type="button" id="tab-login-admin" class="py-2.5 px-3 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 transition">
+              Admin Pengelola
+            </button>
+          </div>
+
+          <!-- Form Login User (Tabel 'users' Supabase) -->
+          <form id="form-login-user" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Username Peserta</label>
+              <input type="text" id="user-username" required placeholder="Masukkan username Anda" class="w-full px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Kata Sandi / Password</label>
+              <input type="password" id="user-password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none text-sm transition" />
+            </div>
+            <button type="submit" id="btn-submit-user" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-brand-600 to-teal-700 hover:from-brand-700 hover:to-teal-800 text-white font-bold text-sm shadow-lg shadow-brand-600/25 transition active:scale-[0.99]">
+              Masuk sebagai Peserta
+            </button>
+          </form>
+
+          <!-- Form Login Admin (Supabase Auth) -->
+          <form id="form-login-admin" class="hidden space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Email Admin</label>
+              <input type="email" id="admin-email" required placeholder="admin@kampusbahasaarab.com" class="w-full px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Password Admin</label>
+              <input type="password" id="admin-password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none text-sm transition" />
+            </div>
+            <button type="submit" id="btn-submit-admin" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-900 hover:to-black text-white font-bold text-sm shadow-lg shadow-slate-900/20 transition active:scale-[0.99]">
+              Masuk sebagai Admin
+            </button>
+          </form>
+
+          <!-- Quick Login Khusus Preview (Otomatis hilang saat IS_PREVIEW = false) -->
+          <div id="preview-quick-login" class="hidden mt-6 pt-5 border-t border-slate-200/80">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-amber-600 text-center mb-3">Akses Cepat Simulasi Preview</p>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" id="btn-quick-user" class="py-2.5 px-3 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 text-xs font-bold transition">
+                Quick Login User
+              </button>
+              <button type="button" id="btn-quick-admin" class="py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 text-xs font-bold transition">
+                Quick Login Admin
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center text-xs text-slate-400 mt-6">
+          Referensi: Kamus Percakapan Praktis Untuk Umrah Mandiri &bull; Abul 'Abbās Ahmad Rayah As-Silmi
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MAIN DASHBOARD SHELL (SIDEBAR & BOTTOM NAV)-->
+    <!-- ========================================== -->
+    <div id="main-shell" class="hidden min-h-full flex flex-col lg:flex-row">
+      <!-- Fixed Left Sidebar (Desktop / Laptop) -->
+      <aside class="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 glass-nav border-r z-30">
+        <div class="p-6 border-b border-slate-200/70">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-600 to-teal-700 text-white flex items-center justify-center shadow-md shadow-brand-600/20 shrink-0">
+              <span class="arabic-text text-2xl font-bold">ع</span>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-extrabold text-slate-900 text-base truncate">'Ammiyah Saudi</h2>
+              <p class="text-xs text-slate-500 truncate">Umrah Mandiri &bull; 30 Bab</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Info Card in Sidebar -->
+        <div class="px-4 pt-4">
+          <div class="p-3.5 rounded-2xl bg-brand-50/80 border border-brand-100 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <p id="sidebar-user-name" class="text-sm font-bold text-slate-800 truncate">Jamaah Umrah</p>
+              <span id="sidebar-user-role" class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-brand-600 text-white mt-0.5">PESERTA</span>
+            </div>
+            <button type="button" id="desktop-logout-btn" title="Keluar" class="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto custom-scroll" id="desktop-nav">
+          <button type="button" data-nav="beranda" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <span>Beranda & Pencarian</span>
+          </button>
+          <button type="button" data-nav="kamus" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span>Kamus Kosakata</span>
+          </button>
+          <button type="button" data-nav="percakapan" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span>Percakapan & Dialog</span>
+          </button>
+          <button type="button" data-nav="budaya" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            <span>Budaya & Kaidah</span>
+          </button>
+          <button type="button" data-nav="latihan" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span>Latihan Flashcard</span>
+          </button>
+
+          <!-- Menu Admin: Kelola Materi (Khusus Role Admin) -->
+          <div id="desktop-admin-group" class="hidden pt-3 mt-3 border-t border-slate-200/80 space-y-1.5">
+            <p class="px-4 text-[10px] font-extrabold uppercase tracking-wider text-amber-600">Akses Administrator</p>
+            <button type="button" data-nav="admin" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition">
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              <span>Kelola Materi</span>
+            </button>
+          </div>
+        </nav>
+
+        <div class="p-4 border-t border-slate-200/70 text-[11px] text-slate-400 text-center">
+          Kampus Bahasa Arab &bull; Dialek Saudi
+        </div>
+      </aside>
+
+      <!-- Mobile Top Header -->
+      <header class="lg:hidden sticky top-0 z-20 glass-nav border-b px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-600 to-teal-700 text-white flex items-center justify-center shadow-sm shrink-0">
+            <span class="arabic-text text-xl font-bold">ع</span>
+          </div>
+          <div class="min-w-0">
+            <h1 class="font-extrabold text-slate-900 text-sm truncate">'Ammiyah Saudi</h1>
+            <p id="mobile-user-badge" class="text-[11px] text-slate-500 truncate">Jamaah Umrah</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" id="mobile-admin-shortcut" data-nav="admin" class="hidden nav-btn px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold transition">
+            Kelola Materi
+          </button>
+          <button type="button" id="mobile-logout-btn" class="p-2 rounded-xl bg-slate-100 text-slate-600 hover:text-rose-600 transition" title="Keluar">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <main class="flex-1 lg:pl-72 pb-28 lg:pb-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+
+          <!-- ========================================== -->
+          <!-- MENU 1: BERANDA & SMART SEARCH             -->
+          <!-- ========================================== -->
+          <div id="view-beranda" class="view-section space-y-6">
+            <!-- Hero Search Banner -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+              <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-brand-500/10 blur-2xl pointer-events-none"></div>
+              <div class="relative z-10">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <span class="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold">Kamus & Percakapan Praktis</span>
+                  <span class="arabic-text text-lg font-bold text-brand-700">أَهْلًا وَسَهْلًا فِي بِلَادِ الحَرَمَيْن</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Cari Kosakata & Percakapan Arab Saudi</h2>
+                <p class="text-sm text-slate-600 mt-1 mb-5">Ketik kata dalam Bahasa Indonesia, Latin (misal: <i>wēn, abghā, absyir</i>), atau tulisan Arab.</p>
+
+                <!-- Smart Search Input -->
+                <div class="relative">
+                  <input type="text" id="global-search-input" placeholder="Cari: paspor, kamar, berapa harganya, wēn, أَبْغَى..." class="w-full pl-12 pr-24 py-4 rounded-2xl bg-white border border-slate-200 shadow-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none text-sm sm:text-base transition" />
+                  <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <button type="button" id="clear-global-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-600">Reset</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Statistik Ringkas -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <div class="glass-card rounded-2xl p-4">
+                <p class="text-xs font-semibold text-slate-500">Total Materi</p>
+                <p id="stat-total-bab" class="text-2xl font-extrabold text-slate-900 mt-1">0 Bab</p>
+              </div>
+              <div class="glass-card rounded-2xl p-4">
+                <p class="text-xs font-semibold text-slate-500">Total Kosakata</p>
+                <p id="stat-total-kata" class="text-2xl font-extrabold text-brand-600 mt-1">0 Kata</p>
+              </div>
+              <div class="glass-card rounded-2xl p-4">
+                <p class="text-xs font-semibold text-slate-500">Dialog & Kalimat</p>
+                <p id="stat-total-dialog" class="text-2xl font-extrabold text-gold-600 mt-1">0 Baris</p>
+              </div>
+              <div class="glass-card rounded-2xl p-4">
+                <p class="text-xs font-semibold text-slate-500">Sudah Dihafal</p>
+                <p id="stat-total-hafal" class="text-2xl font-extrabold text-emerald-600 mt-1">0 Kata</p>
+              </div>
+            </div>
+
+            <!-- Hasil Pencarian Real-time (Muncul saat user mengetik) -->
+            <div id="global-search-results-box" class="hidden space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-extrabold text-slate-900">Hasil Pencarian Cepat (<span id="global-search-count">0</span>)</h3>
+              </div>
+              <div id="global-search-list" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+            </div>
+
+            <!-- Daftar Bab Materi -->
+            <div class="space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900">Daftar Bab Materi Umrah Mandiri</h3>
+                  <p class="text-xs text-slate-500">Pilih bab untuk langsung membuka kosakata & percakapannya</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="text" id="filter-bab-input" placeholder="Filter judul bab..." class="px-3.5 py-2 rounded-xl bg-white/95 border border-slate-200 text-xs outline-none focus:border-brand-500 sm:w-52" />
+                  <button type="button" id="beranda-btn-kelola" class="hidden px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition shrink-0">
+                    + Kelola Materi
+                  </button>
+                </div>
+              </div>
+
+              <div id="bab-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MENU 2: KAMUS KOSAKATA LENGKAP             -->
+          <!-- ========================================== -->
+          <div id="view-kamus" class="hidden view-section space-y-5">
+            <div class="glass-panel rounded-3xl p-5 sm:p-6">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-extrabold text-slate-900">Kamus Kosakata 'Ammiyah</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">Filter berdasarkan bab, jenis kata, atau tandai hafalan Anda</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <select id="kamus-bab-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500 max-w-full">
+                    <option value="all">Semua Bab Materi</option>
+                  </select>
+                  <select id="kamus-status-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500">
+                    <option value="all">Semua Status</option>
+                    <option value="hafal">Sudah Hafal</option>
+                    <option value="favorit">Favorit</option>
+                    <option value="belum">Belum Hafal</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Filter Kategori Tabs -->
+              <div class="flex gap-2 overflow-x-auto custom-scroll pt-4 pb-1 mt-4 border-t border-slate-200/70" id="kamus-kategori-tabs">
+                <button type="button" data-kat="all" class="kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shrink-0 transition">Semua Jenis</button>
+                <button type="button" data-kat="Kata Benda" class="kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">Kata Benda</button>
+                <button type="button" data-kat="Kata Kerja" class="kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">Kata Kerja</button>
+                <button type="button" data-kat="Partikel" class="kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">Partikel</button>
+                <button type="button" data-kat="Ungkapan" class="kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">Ungkapan</button>
+              </div>
+
+              <div class="mt-3">
+                <input type="text" id="kamus-search-input" placeholder="Cari dalam daftar kosakata..." class="w-full px-4 py-2.5 rounded-xl bg-white/95 border border-slate-200 text-sm outline-none focus:border-brand-500" />
+              </div>
+            </div>
+
+            <!-- Deskripsi Bab Terpilih -->
+            <div id="kamus-bab-info" class="hidden glass-card rounded-2xl p-4 border-l-4 border-l-brand-600">
+              <div class="flex items-center justify-between gap-2">
+                <h3 id="kamus-bab-info-title" class="font-bold text-slate-900 text-sm"></h3>
+                <span id="kamus-bab-info-ar" class="arabic-text text-lg font-bold text-brand-700"></span>
+              </div>
+              <p id="kamus-bab-info-desc" class="text-xs text-slate-600 mt-1 leading-relaxed"></p>
+            </div>
+
+            <!-- Grid Kosakata -->
+            <div id="kamus-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MENU 3: PERCAKAPAN & CONTOH PENGGUNAAN     -->
+          <!-- ========================================== -->
+          <div id="view-percakapan" class="hidden view-section space-y-5">
+            <div class="glass-panel rounded-3xl p-5 sm:p-6">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-extrabold text-slate-900">Percakapan & Contoh Kalimat</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">Simulasi dialog situasional dan contoh penggunaan harian di Tanah Suci</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <select id="dialog-bab-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500 max-w-full">
+                    <option value="all">Semua Bab Materi</option>
+                  </select>
+                  <select id="dialog-jenis-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500">
+                    <option value="all">Semua Tipe</option>
+                    <option value="Mini Dialog">Mini Dialog</option>
+                    <option value="Contoh Kalimat">Contoh Kalimat</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="percakapan-list-container" class="space-y-5"></div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MENU 4: BUDAYA & KAIDAH 'AMMIYAH           -->
+          <!-- ========================================== -->
+          <div id="view-budaya" class="hidden view-section space-y-5">
+            <div class="glass-panel rounded-3xl p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-extrabold text-slate-900">Budaya & Kaidah 'Ammiyah</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">Adab komunikasi penduduk lokal Saudi & pola tata bahasa praktis</p>
+                </div>
+                <select id="budaya-bab-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500">
+                  <option value="all">Semua Bab Materi</option>
+                </select>
+              </div>
+
+              <!-- Sub-Tabs Budaya vs Kaidah -->
+              <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 rounded-2xl mt-4">
+                <button type="button" data-bk="Budaya" class="bk-tab py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-white text-brand-700 shadow-sm transition">
+                  Adab & Budaya Saudi
+                </button>
+                <button type="button" data-bk="Kaidah" class="bk-tab py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition">
+                  Kaidah Tata Bahasa
+                </button>
+              </div>
+            </div>
+
+            <div id="budaya-list-container" class="space-y-4"></div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MENU 5: MODE LATIHAN / FLASHCARD           -->
+          <!-- ========================================== -->
+          <div id="view-latihan" class="hidden view-section space-y-6">
+            <div class="glass-panel rounded-3xl p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-extrabold text-slate-900">Latihan Hafalan Flashcard</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">Ketuk kartu untuk membalik antara teks Arab dan arti/transliterasi</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <select id="flashcard-bab-select" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 outline-none focus:border-brand-500">
+                    <option value="all">Semua Bab</option>
+                    <option value="belum">Hanya Yang Belum Hafal</option>
+                  </select>
+                  <button type="button" id="flashcard-shuffle-btn" class="px-4 py-2.5 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 text-xs font-bold transition">
+                    Acak Kartu
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Area Kartu Flashcard -->
+            <div id="flashcard-stage" class="max-w-xl mx-auto space-y-5">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-500 px-1">
+                <span id="fc-counter">Kartu 0 dari 0</span>
+                <span id="fc-bab-label" class="text-brand-600 truncate max-w-[200px]">-</span>
+              </div>
+
+              <!-- 3D Flip Container -->
+              <div id="fc-card-wrapper" class="perspective-1000 h-72 sm:h-80 cursor-pointer select-none">
+                <div id="fc-card-inner" class="relative w-full h-full transform-style-3d">
+                  <!-- Sisi Depan (Arab) -->
+                  <div class="backface-hidden absolute inset-0 glass-panel rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center text-center border-2 border-white">
+                    <span id="fc-kategori-badge" class="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-[11px] font-bold mb-4">Kata Benda</span>
+                    <p id="fc-arab-text" class="arabic-text text-3xl sm:text-4xl font-bold text-slate-900 px-2">...</p>
+                    <p class="text-xs text-slate-400 mt-6 flex items-center gap-1.5">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                      Ketuk kartu untuk melihat arti
+                    </p>
+                  </div>
+
+                  <!-- Sisi Belakang (Transliterasi & Arti) -->
+                  <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-brand-600 to-teal-800 text-white rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-xl">
+                    <p id="fc-translit-text" class="text-base sm:text-lg font-bold text-brand-100 italic mb-2">...</p>
+                    <p id="fc-arti-text" class="text-2xl sm:text-3xl font-extrabold text-white">...</p>
+                    <p class="text-xs text-brand-200 mt-6">Ketuk lagi untuk kembali ke teks Arab</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Kontrol Navigasi Kartu -->
+              <div class="grid grid-cols-3 gap-3">
+                <button type="button" id="fc-prev-btn" class="py-3 px-4 rounded-2xl glass-card hover:bg-white text-slate-700 font-bold text-sm transition">
+                  &larr; Sebelumnya
+                </button>
+                <button type="button" id="fc-mark-hafal-btn" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition">
+                  Tandai Hafal
+                </button>
+                <button type="button" id="fc-next-btn" class="py-3 px-4 rounded-2xl glass-card hover:bg-white text-slate-700 font-bold text-sm transition">
+                  Berikutnya &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MENU 6: KELOLA MATERI (KHUSUS AKSES ADMIN) -->
+          <!-- ========================================== -->
+          <div id="view-admin" class="hidden view-section space-y-6">
+            <!-- Header Kelola Materi -->
+            <div class="glass-panel rounded-3xl p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider">Panel Administrator</span>
+                  <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">Kelola Materi & Konten Kamus</h2>
+                  <p class="text-xs text-slate-500 mt-0.5">Tambahkan materi baru, edit materi bab, hapus materi, serta kelola kosakata, percakapan & akun peserta.</p>
+                </div>
+                <button type="button" id="btn-open-tambah-materi" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-brand-600 to-teal-700 hover:from-brand-700 hover:to-teal-800 text-white text-xs sm:text-sm font-bold shadow-lg shadow-brand-600/25 flex items-center gap-2 self-start sm:self-auto transition active:scale-[0.99]">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                  <span>Tambah Materi Baru</span>
+                </button>
+              </div>
+
+              <!-- Sub-Navigasi Tab di Panel Admin -->
+              <div class="flex gap-2 overflow-x-auto custom-scroll pt-4 pb-1 mt-5 border-t border-slate-200/70" id="admin-tabs">
+                <button type="button" data-admintab="materi" class="admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white shrink-0 transition">
+                  Kelola Materi Bab
+                </button>
+                <button type="button" data-admintab="kosakata" class="admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">
+                  Kelola Kosakata
+                </button>
+                <button type="button" data-admintab="percakapan" class="admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">
+                  Kelola Percakapan
+                </button>
+                <button type="button" data-admintab="budaya" class="admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">
+                  Budaya & Kaidah
+                </button>
+                <button type="button" data-admintab="users" class="admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition">
+                  Akun Peserta
+                </button>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- TAB 1 ADMIN: KELOLA MATERI (TAMBAH, EDIT, HAPUS)    -->
+            <!-- =================================================== -->
+            <div id="admin-sec-materi" class="admin-section space-y-5">
+              <!-- Toolbar Pencarian & Statistik Materi Bab -->
+              <div class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 class="font-extrabold text-slate-900 text-base">Daftar Seluruh Materi Bab (<span id="adm-count-materi">0</span>)</h3>
+                    <p class="text-xs text-slate-500">Klik <b>Edit Materi</b> untuk mengubah detail bab & isinya, atau <b>Hapus</b> untuk menghapus materi.</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="text" id="adm-search-materi" placeholder="Cari nomor / judul bab..." class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs outline-none focus:border-brand-500 w-full sm:w-60" />
+                  </div>
+                </div>
+
+                <!-- Tabel / List Responsif Daftar Materi -->
+                <div id="adm-materi-list-container" class="space-y-3"></div>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- TAB 2 ADMIN: KELOLA KOSAKATA                        -->
+            <!-- =================================================== -->
+            <div id="admin-sec-kosakata" class="hidden admin-section space-y-4">
+              <form id="form-admin-kosakata" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <h3 id="title-form-kosakata" class="font-extrabold text-slate-900 text-base">Tambah Kosakata Baru</h3>
+                  <button type="button" id="cancel-edit-kosakata" class="hidden text-xs font-bold text-rose-600 hover:underline">Batal Edit</button>
+                </div>
+                <input type="hidden" id="edit-kosakata-id" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Bab Materi</label>
+                    <select id="adm-kosa-bab" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500"></select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Kategori Kata</label>
+                    <select id="adm-kosa-kat" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500">
+                      <option value="Kata Benda">Kata Benda</option>
+                      <option value="Kata Kerja">Kata Kerja</option>
+                      <option value="Partikel">Partikel</option>
+                      <option value="Ungkapan">Ungkapan</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Teks Arab (Berharakat)</label>
+                    <input type="text" id="adm-kosa-arab" required dir="rtl" placeholder="مَطَار" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-lg arabic-text outline-none focus:border-brand-500" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Transliterasi Latin</label>
+                    <input type="text" id="adm-kosa-trans" required placeholder="al-mathār" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Arti Bahasa Indonesia</label>
+                    <input type="text" id="adm-kosa-arti" required placeholder="bandara" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500" />
+                  </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md transition">Simpan Kosakata</button>
+              </form>
+
+              <div class="glass-panel rounded-3xl p-5 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <h4 class="font-bold text-slate-800 text-sm">Daftar Kosakata Tersimpan</h4>
+                  <input type="text" id="adm-search-kosa" placeholder="Cari kosakata..." class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs outline-none sm:w-56" />
+                </div>
+                <div id="adm-table-kosakata" class="space-y-2 max-h-96 overflow-y-auto custom-scroll"></div>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- TAB 3 ADMIN: KELOLA PERCAKAPAN                      -->
+            <!-- =================================================== -->
+            <div id="admin-sec-percakapan" class="hidden admin-section space-y-4">
+              <form id="form-admin-percakapan" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <h3 id="title-form-percakapan" class="font-extrabold text-slate-900 text-base">Tambah Baris Percakapan / Contoh</h3>
+                  <button type="button" id="cancel-edit-percakapan" class="hidden text-xs font-bold text-rose-600 hover:underline">Batal Edit</button>
+                </div>
+                <input type="hidden" id="edit-percakapan-id" />
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Bab Materi</label>
+                    <select id="adm-perc-bab" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none"></select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Jenis</label>
+                    <select id="adm-perc-jenis" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none">
+                      <option value="Mini Dialog">Mini Dialog</option>
+                      <option value="Contoh Kalimat">Contoh Kalimat</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Urutan Baris</label>
+                    <input type="number" id="adm-perc-urutan" value="1" min="1" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Judul Kelompok Dialog</label>
+                    <input type="text" id="adm-perc-judul" required placeholder="Mini Dialog 1 / Contoh Penggunaan" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Peran Pembicara</label>
+                    <input type="text" id="adm-perc-peran" required placeholder="Petugas / Penumpang / Kalimat" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Transliterasi Latin</label>
+                    <input type="text" id="adm-perc-trans" required placeholder="law samaht, wēn al-bawwābah?" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div class="sm:col-span-3">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Teks Arab</label>
+                    <input type="text" id="adm-perc-arab" required dir="rtl" placeholder="لَوْ سَمَحْت، وَيْن البَوَّابَة؟" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-lg arabic-text outline-none" />
+                  </div>
+                  <div class="sm:col-span-3">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Terjemahan Bahasa Indonesia</label>
+                    <input type="text" id="adm-perc-arti" required placeholder="Permisi, di mana pintu gerbang?" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md transition">Simpan Percakapan</button>
+              </form>
+
+              <div class="glass-panel rounded-3xl p-5 space-y-3">
+                <h4 class="font-bold text-slate-800 text-sm">Daftar Percakapan Tersimpan</h4>
+                <div id="adm-table-percakapan" class="space-y-2 max-h-96 overflow-y-auto custom-scroll"></div>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- TAB 4 ADMIN: KELOLA BUDAYA & KAIDAH                 -->
+            <!-- =================================================== -->
+            <div id="admin-sec-budaya" class="hidden admin-section space-y-4">
+              <form id="form-admin-budaya" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <h3 id="title-form-budaya" class="font-extrabold text-slate-900 text-base">Tambah Budaya / Kaidah 'Ammiyah</h3>
+                  <button type="button" id="cancel-edit-budaya" class="hidden text-xs font-bold text-rose-600 hover:underline">Batal Edit</button>
+                </div>
+                <input type="hidden" id="edit-budaya-id" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Bab Materi</label>
+                    <select id="adm-bk-bab" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none"></select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Tipe Materi</label>
+                    <select id="adm-bk-tipe" required class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none">
+                      <option value="Budaya">Budaya</option>
+                      <option value="Kaidah">Kaidah</option>
+                    </select>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Judul Poin</label>
+                    <input type="text" id="adm-bk-judul" required placeholder="Pembuka Sopan Law Samaht" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Isi Penjelasan Lengkap</label>
+                    <textarea id="adm-bk-konten" rows="4" required placeholder="Tuliskan penjelasan budaya atau kaidah tata bahasa beserta contoh..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none"></textarea>
+                  </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md transition">Simpan Budaya / Kaidah</button>
+              </form>
+
+              <div class="glass-panel rounded-3xl p-5 space-y-3">
+                <h4 class="font-bold text-slate-800 text-sm">Daftar Budaya & Kaidah Tersimpan</h4>
+                <div id="adm-table-budaya" class="space-y-2 max-h-96 overflow-y-auto custom-scroll"></div>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- TAB 5 ADMIN: MANAJEMEN AKUN USER / PESERTA          -->
+            <!-- =================================================== -->
+            <div id="admin-sec-users" class="hidden admin-section space-y-4">
+              <form id="form-admin-users" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <h3 id="title-form-users" class="font-extrabold text-slate-900 text-base">Tambah Akun Peserta / Jamaah</h3>
+                  <button type="button" id="cancel-edit-users" class="hidden text-xs font-bold text-rose-600 hover:underline">Batal Edit</button>
+                </div>
+                <input type="hidden" id="edit-user-id" />
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap Jamaah</label>
+                    <input type="text" id="adm-usr-nama" required placeholder="Ahmad Abdullah" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Username Login</label>
+                    <input type="text" id="adm-usr-username" required placeholder="jamaah01" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Password Login</label>
+                    <input type="text" id="adm-usr-password" required placeholder="umrah2025" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none" />
+                  </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md transition">Simpan Akun Peserta</button>
+              </form>
+
+              <div class="glass-panel rounded-3xl p-5 space-y-3">
+                <h4 class="font-bold text-slate-800 text-sm">Daftar Akun Peserta Aktif</h4>
+                <div id="adm-table-users" class="space-y-2 max-h-96 overflow-y-auto custom-scroll"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- Floating Bottom Navigation Bar (Mobile / HP) -->
+      <nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-3 left-3 right-3 z-30 glass-nav border rounded-2xl shadow-xl px-1.5 py-1.5 grid grid-cols-5 gap-1">
+        <button type="button" data-nav="beranda" class="mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span>Cari</span>
+        </button>
+        <button type="button" data-nav="kamus" class="mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>Kamus</span>
+        </button>
+        <button type="button" data-nav="percakapan" class="mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          <span>Dialog</span>
+        </button>
+        <button type="button" data-nav="budaya" class="mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          <span>Kaidah</span>
+        </button>
+        <button type="button" data-nav="latihan" class="mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold transition">
+          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span>Latihan</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL UTAMA KELOLA MATERI: TAMBAH / EDIT MATERI BAB & KELOLA ISI BAB     -->
+    <!-- ========================================================================= -->
+    <div id="modal-kelola-materi" class="hidden fixed inset-0 z-[1000006] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+      <div class="glass-panel rounded-3xl p-5 sm:p-7 max-w-3xl w-full shadow-2xl border border-white my-auto space-y-5 max-h-[92vh] overflow-y-auto custom-scroll">
+        <!-- Header Modal -->
+        <div class="flex items-start justify-between gap-3 border-b border-slate-200/80 pb-4">
+          <div>
+            <span id="modal-materi-mode-badge" class="px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-700 text-[10px] font-extrabold uppercase tracking-wider">Tambah Materi Baru</span>
+            <h3 id="modal-materi-title" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">Form Materi Bab</h3>
+          </div>
+          <button type="button" id="btn-close-modal-materi" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Tab Internal Modal (Info Bab vs Isi Sub-Materi saat Edit) -->
+        <div id="modal-materi-tabs" class="hidden grid grid-cols-4 gap-1.5 p-1.5 bg-slate-100 rounded-2xl">
+          <button type="button" data-mmtab="info" class="mm-tab py-2 px-2 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-sm transition">Info Bab</button>
+          <button type="button" data-mmtab="kosa" class="mm-tab py-2 px-2 rounded-xl text-xs font-semibold text-slate-600 transition">Kosakata (<span id="mm-cnt-kosa">0</span>)</button>
+          <button type="button" data-mmtab="perc" class="mm-tab py-2 px-2 rounded-xl text-xs font-semibold text-slate-600 transition">Dialog (<span id="mm-cnt-perc">0</span>)</button>
+          <button type="button" data-mmtab="bk" class="mm-tab py-2 px-2 rounded-xl text-xs font-semibold text-slate-600 transition">Budaya/Kaidah (<span id="mm-cnt-bk">0</span>)</button>
+        </div>
+
+        <!-- PANEL A: FORM INFO BAB (TAMBAH / EDIT) -->
+        <form id="form-modal-materi-bab" class="space-y-4">
+          <input type="hidden" id="mm-original-id" />
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Nomor Urut Bab</label>
+              <input type="number" id="mm-id" min="1" max="200" required placeholder="1" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold outline-none focus:border-brand-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Judul Bahasa Indonesia</label>
+              <input type="text" id="mm-jid" required placeholder="Contoh: Di Bandara" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Judul Bahasa Arab</label>
+              <input type="text" id="mm-jar" required dir="rtl" placeholder="فِي المَطَار" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-lg arabic-text outline-none focus:border-brand-500" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-xs font-bold text-slate-600 mb-1">Subjudul / Topik Bahasan</label>
+              <input type="text" id="mm-sub" required placeholder="Contoh: Check-in, Bagasi, Gate, dan Lainnya" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-xs font-bold text-slate-600 mb-1">Deskripsi Tema Lengkap</label>
+              <textarea id="mm-desc" rows="3" required placeholder="Jelaskan konteks situasi percakapan pada bab materi ini..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm outline-none focus:border-brand-500"></textarea>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/70">
+            <button type="button" id="btn-modal-hapus-bab" class="hidden px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">
+              Hapus Materi Bab Ini
+            </button>
+            <div class="flex items-center gap-2 ml-auto">
+              <button type="button" onclick="window.closeModalKelolaMateri()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">Tutup</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-600/20 transition">
+                Simpan Materi Bab
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- PANEL B: KELOLA KOSAKATA DALAM BAB -->
+        <div id="mm-sec-kosa" class="hidden space-y-4">
+          <form id="mm-form-kosa" class="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 id="mm-form-kosa-title" class="text-xs font-extrabold uppercase text-brand-700">+ Tambah Kosakata ke Bab Ini</h4>
+              <button type="button" id="mm-cancel-kosa" class="hidden text-[11px] font-bold text-rose-600 hover:underline">Batal Edit</button>
+            </div>
+            <input type="hidden" id="mm-kosa-id" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <select id="mm-kosa-kat" required class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold outline-none">
+                <option value="Kata Benda">Kata Benda</option>
+                <option value="Kata Kerja">Kata Kerja</option>
+                <option value="Partikel">Partikel</option>
+                <option value="Ungkapan">Ungkapan</option>
+              </select>
+              <input type="text" id="mm-kosa-arab" required dir="rtl" placeholder="Teks Arab (مَطَار)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-base arabic-text outline-none" />
+              <input type="text" id="mm-kosa-trans" required placeholder="Transliterasi (al-mathār)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+              <input type="text" id="mm-kosa-arti" required placeholder="Arti Indonesia (bandara)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+            </div>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition">Simpan Kosakata</button>
+          </form>
+          <div id="mm-list-kosa" class="space-y-2 max-h-64 overflow-y-auto custom-scroll"></div>
+        </div>
+
+        <!-- PANEL C: KELOLA PERCAKAPAN DALAM BAB -->
+        <div id="mm-sec-perc" class="hidden space-y-4">
+          <form id="mm-form-perc" class="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 id="mm-form-perc-title" class="text-xs font-extrabold uppercase text-gold-600">+ Tambah Percakapan / Kalimat ke Bab Ini</h4>
+              <button type="button" id="mm-cancel-perc" class="hidden text-[11px] font-bold text-rose-600 hover:underline">Batal Edit</button>
+            </div>
+            <input type="hidden" id="mm-perc-id" />
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <select id="mm-perc-jenis" required class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold outline-none">
+                <option value="Mini Dialog">Mini Dialog</option>
+                <option value="Contoh Kalimat">Contoh Kalimat</option>
+              </select>
+              <input type="text" id="mm-perc-judul" required placeholder="Judul Dialog (Mini Dialog 1)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+              <div class="grid grid-cols-2 gap-1.5">
+                <input type="text" id="mm-perc-peran" required placeholder="Peran (Petugas)" class="px-2.5 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+                <input type="number" id="mm-perc-urutan" value="1" min="1" required placeholder="Urutan" class="px-2.5 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+              </div>
+              <input type="text" id="mm-perc-arab" required dir="rtl" placeholder="Teks Arab" class="sm:col-span-3 px-3 py-2 rounded-xl bg-white border border-slate-200 text-base arabic-text outline-none" />
+              <input type="text" id="mm-perc-trans" required placeholder="Transliterasi Latin" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+              <input type="text" id="mm-perc-arti" required placeholder="Terjemahan Indonesia" class="sm:col-span-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+            </div>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition">Simpan Percakapan</button>
+          </form>
+          <div id="mm-list-perc" class="space-y-2 max-h-64 overflow-y-auto custom-scroll"></div>
+        </div>
+
+        <!-- PANEL D: KELOLA BUDAYA & KAIDAH DALAM BAB -->
+        <div id="mm-sec-bk" class="hidden space-y-4">
+          <form id="mm-form-bk" class="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 id="mm-form-bk-title" class="text-xs font-extrabold uppercase text-slate-800">+ Tambah Budaya / Kaidah ke Bab Ini</h4>
+              <button type="button" id="mm-cancel-bk" class="hidden text-[11px] font-bold text-rose-600 hover:underline">Batal Edit</button>
+            </div>
+            <input type="hidden" id="mm-bk-id" />
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <select id="mm-bk-tipe" required class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold outline-none">
+                <option value="Budaya">Budaya</option>
+                <option value="Kaidah">Kaidah</option>
+              </select>
+              <input type="text" id="mm-bk-judul" required placeholder="Judul Poin Budaya / Kaidah" class="sm:col-span-2 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none" />
+              <textarea id="mm-bk-konten" rows="3" required placeholder="Penjelasan lengkap..." class="sm:col-span-3 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs outline-none"></textarea>
+            </div>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition">Simpan Budaya / Kaidah</button>
+          </form>
+          <div id="mm-list-bk" class="space-y-2 max-h-64 overflow-y-auto custom-scroll"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SCRIPT UTAMA MODULAR & SUPABASE CLIENT     -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    // =========================================================================
+    // 1. SAKLAR DEPLOYMENT & KONFIGURASI SUPABASE
+    // =========================================================================
+    const IS_PREVIEW = true; // Ubah menjadi false SAAT DEPLOY agar terhubung 100% ke Supabase
+    const SUPABASE_URL = "URL_SUPABASE_ANDA";
+    const SUPABASE_ANON_KEY = "ANON_KEY_ANDA";
+
+    const supabase = (!IS_PREVIEW && SUPABASE_URL !== "URL_SUPABASE_ANDA")
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    // =========================================================================
+    // 2. REGISTRASI SERVICE WORKER PWA VIA BLOB
+    // =========================================================================
+    if ('serviceWorker' in navigator && !IS_PREVIEW) {
+      const swCode = `
+        const CACHE_NAME = 'ammiyah-saudi-v1';
+        self.addEventListener('install', (e) => self.skipWaiting());
+        self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+        self.addEventListener('fetch', (e) => {
+          if (e.request.method !== 'GET') return;
+          e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+        });
+      `;
+      const swBlob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    }
+
+    // =========================================================================
+    // 3. DATA DUMMY MINIMALIS (KHUSUS SAAT IS_PREVIEW = true)
+    // =========================================================================
+    const PREVIEW_STORE = {
+      users: [
+        { id: 'u-prev-1', username: 'jamaah01', password: '123', nama_lengkap: 'Ahmad Al-Indonesi (Preview)' }
+      ],
+      materi_bab: [
+        {
+          id: 1,
+          judul_id: 'Di Bandara',
+          judul_ar: 'فِي المَطَار',
+          subjudul: 'Check-in, Bagasi, Gate, dan Lainnya',
+          deskripsi: 'Interaksi langsung dengan petugas bandara mulai dari proses check-in, pemeriksaan tiket, penimbangan bagasi berlebih, hingga menunggu di ruang keberangkatan.'
+        },
+        {
+          id: 2,
+          judul_id: 'Di Imigrasi dan Pemeriksaan Keamanan',
+          judul_ar: 'فِي الجَوَازَاتِ وَالتَّفْتِيش',
+          subjudul: 'Tanya paspor, visa, tujuan kedatangan, dan pemeriksaan',
+          deskripsi: 'Titik kontrol utama sebelum memasuki atau meninggalkan negara. Meliputi pertanyaan paspor, visa, lama tinggal, dan pemeriksaan barang di kotak X-ray.'
+        }
+      ],
+      kosakata: [
+        { id: 'k-1', bab_id: 1, kategori: 'Kata Benda', arab: 'المَطَار', transliterasi: 'al-mathār', arti: 'bandara' },
+        { id: 'k-2', bab_id: 1, kategori: 'Kata Benda', arab: 'التَّذْكِرَة', transliterasi: 'at-tadzkirah', arti: 'tiket' },
+        { id: 'k-3', bab_id: 1, kategori: 'Kata Kerja', arab: 'بَغَى - يَبْغَى', transliterasi: 'baghā - yibghā', arti: 'ingin / mau' },
+        { id: 'k-4', bab_id: 1, kategori: 'Partikel', arab: 'وَيْن / فَيْن', transliterasi: 'wēn / fēn', arti: 'di mana' },
+        { id: 'k-5', bab_id: 1, kategori: 'Ungkapan', arab: 'لَوْ سَمَحْت', transliterasi: 'law samaht', arti: 'permisi' },
+        { id: 'k-6', bab_id: 2, kategori: 'Kata Benda', arab: 'الجَوَاز / جَوَاز السَّفَر', transliterasi: 'al-jawāz / jawāzus-safar', arti: 'paspor' },
+        { id: 'k-7', bab_id: 2, kategori: 'Kata Benda', arab: 'التَّأْشِيرَة / الفِيزَا', transliterasi: 'at-ta’syīrah / al-fīzā', arti: 'visa' },
+        { id: 'k-8', bab_id: 2, kategori: 'Ungkapan', arab: 'أَبْشِر / سَمّ', transliterasi: 'absyir / samm', arti: 'siap dengan senang hati / silakan' }
+      ],
+      percakapan: [
+        { id: 'p-1', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 1, peran: 'Petugas', arab: 'جِب التَّذْكِرَة؟', transliterasi: 'jib at-tadzkirah?', arti: 'Berikan tiketnya?' },
+        { id: 'p-2', bab_id: 1, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Tiket di Bandara', urutan: 2, peran: 'Penumpang', arab: 'تَفَضَّل، ذِي التَّذْكِرَة.', transliterasi: 'tafaddhal, dzī at-tadzkirah.', arti: 'Silakan, ini tiketnya.' },
+        { id: 'p-3', bab_id: 2, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Paspor & Tujuan Umrah', urutan: 1, peran: 'Petugas', arab: 'هَات الجَوَاز، وِش قَصْد الزِّيَارَة؟', transliterasi: 'hāt al-jawāz, wesy gashd az-ziyārah?', arti: 'Berikan paspornya, apa tujuan kunjungannya?' },
+        { id: 'p-4', bab_id: 2, jenis: 'Mini Dialog', judul_dialog: 'Pemeriksaan Paspor & Tujuan Umrah', urutan: 2, peran: 'Penumpang', arab: 'أَبْشِر... سَمّ. العُمْرَة.', transliterasi: 'absyir... samm. al-’umrah.', arti: 'Dengan senang hati... silakan. Umrah.' }
+      ],
+      budaya_kaidah: [
+        { id: 'bk-1', bab_id: 1, tipe: 'Budaya', judul: 'Pembuka Sopan "Law Samaht"', konten: 'Ungkapan لَوْ سَمَحْت (law samaht) hampir selalu digunakan sebagai pembuka sopan sebelum bertanya atau meminta sesuatu kepada orang Saudi.' },
+        { id: 'bk-2', bab_id: 1, tipe: 'Kaidah', judul: 'Akhir Kata Disukun (Tanpa I’rab)', konten: 'Dalam dialek ’Ammiyah Saudi, mayoritas harakat akhir kata disukun untuk mempercepat pengucapan. Contoh: مَطَارْ (mathār), bukan mathārun.' },
+        { id: 'bk-3', bab_id: 2, tipe: 'Budaya', judul: 'Merespons dengan "Absyir" dan "Samm"', konten: 'Saat menyetujui permintaan laki-laki ucapkan أَبْشِر (absyir) dan untuk perempuan أَبْشِرِي (absyirī). Saat menyerahkan barang ucapkan سَمّ (samm) atau تَفَضَّل (tafaddhal).' }
+      ],
+      progres_user: [
+        { id: 'pr-1', user_id: 'u-prev-1', kosakata_id: 'k-1', status: 'hafal' }
+      ]
+    };
+
+    // =========================================================================
+    // 4. STATE APLIKASI & UTILITAS UI
+    // =========================================================================
+    const state = {
+      currentUser: null,
+      activeNav: 'beranda',
+      activeKategori: 'all',
+      activeBKTab: 'Budaya',
+      activeAdminTab: 'materi',
+      editingBabId: null,
+      activeModalTab: 'info',
+      babList: [],
+      kosakataList: [],
+      percakapanList: [],
+      budayaKaidahList: [],
+      progresMap: {},
+      usersList: [],
+      flashcards: [],
+      fcIndex: 0,
+      fcFlipped: false
+    };
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = type === 'error'
+        ? 'bg-rose-600 text-white border-rose-500'
+        : type === 'warning'
+        ? 'bg-amber-500 text-white border-amber-400'
+        : 'bg-slate-900 text-white border-slate-700';
+
+      toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border text-xs font-semibold flex items-center justify-between gap-3 transition-all duration-300 ${colors}`;
+      toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    function askConfirm(title, message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('confirm-modal');
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        modal.classList.remove('hidden');
+
+        const okBtn = document.getElementById('confirm-ok-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
+
+        const cleanup = (result) => {
+          modal.classList.add('hidden');
+          okBtn.removeEventListener('click', onOk);
+          cancelBtn.removeEventListener('click', onCancel);
+          resolve(result);
+        };
+
+        const onOk = () => cleanup(true);
+        const onCancel = () => cleanup(false);
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // =========================================================================
+    // 5. LAPISAN DATA (DATA ACCESS LAYER: PREVIEW vs SUPABASE REAL)
+    // =========================================================================
+    async function loadAllData() {
+      try {
+        if (IS_PREVIEW) {
+          state.babList = [...PREVIEW_STORE.materi_bab].sort((a, b) => Number(a.id) - Number(b.id));
+          state.kosakataList = [...PREVIEW_STORE.kosakata];
+          state.percakapanList = [...PREVIEW_STORE.percakapan].sort((a, b) => Number(a.urutan) - Number(b.urutan));
+          state.budayaKaidahList = [...PREVIEW_STORE.budaya_kaidah];
+          state.usersList = [...PREVIEW_STORE.users];
+          state.progresMap = {};
+          if (state.currentUser?.role === 'user') {
+            PREVIEW_STORE.progres_user
+              .filter(p => p.user_id === state.currentUser.id)
+              .forEach(p => { state.progresMap[p.kosakata_id] = p.status; });
+          }
+          return;
+        }
+
+        if (!supabase) throw new Error("Konfigurasi SUPABASE_URL dan SUPABASE_ANON_KEY belum diisi.");
+
+        const [babRes, kosaRes, percRes, bkRes] = await Promise.all([
+          supabase.from('materi_bab').select('*').order('id', { ascending: true }),
+          supabase.from('kosakata').select('*').order('bab_id', { ascending: true }),
+          supabase.from('percakapan').select('*').order('bab_id', { ascending: true }).order('urutan', { ascending: true }),
+          supabase.from('budaya_kaidah').select('*').order('bab_id', { ascending: true })
+        ]);
+
+        if (babRes.error) throw babRes.error;
+        if (kosaRes.error) throw kosaRes.error;
+        if (percRes.error) throw percRes.error;
+        if (bkRes.error) throw bkRes.error;
+
+        state.babList = babRes.data || [];
+        state.kosakataList = kosaRes.data || [];
+        state.percakapanList = percRes.data || [];
+        state.budayaKaidahList = bkRes.data || [];
+
+        state.progresMap = {};
+        if (state.currentUser?.role === 'user') {
+          const { data: progData, error: progErr } = await supabase
+            .from('progres_user')
+            .select('*')
+            .eq('user_id', state.currentUser.id);
+          if (!progErr && progData) {
+            progData.forEach(item => { state.progresMap[item.kosakata_id] = item.status; });
+          }
+        }
+
+        if (state.currentUser?.role === 'admin') {
+          const { data: usrData, error: usrErr } = await supabase
+            .from('users')
+            .select('*')
+            .order('created_at', { ascending: false });
+          if (!usrErr && usrData) state.usersList = usrData;
+        }
+      } catch (err) {
+        console.error(err);
+        showToast("Gagal memuat data: " + err.message, "error");
+      }
+    }
+
+    // =========================================================================
+    // 6. AUTENTIKASI HYBRID (USER VIA TABEL USERS, ADMIN VIA SUPABASE AUTH)
+    // =========================================================================
+    async function initAuth() {
+      const previewBadge = document.getElementById('preview-badge');
+      const quickLoginBox = document.getElementById('preview-quick-login');
+      if (IS_PREVIEW) {
+        previewBadge.classList.remove('hidden');
+        quickLoginBox.classList.remove('hidden');
+      } else {
+        previewBadge.classList.add('hidden');
+        quickLoginBox.classList.add('hidden');
+      }
+
+      if (!IS_PREVIEW && supabase) {
+        try {
+          const { data } = await supabase.auth.getSession();
+          if (data?.session?.user) {
+            state.currentUser = {
+              id: data.session.user.id,
+              role: 'admin',
+              name: data.session.user.email,
+              email: data.session.user.email
+            };
+            await enterApp();
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      const savedUser = sessionStorage.getItem('ammiyah_user_session');
+      if (savedUser) {
+        try {
+          state.currentUser = JSON.parse(savedUser);
+          await enterApp();
+          return;
+        } catch (e) {
+          sessionStorage.removeItem('ammiyah_user_session');
+        }
+      }
+    }
+
+    document.getElementById('form-login-user').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('user-username').value.trim();
+      const password = document.getElementById('user-password').value.trim();
+      const btn = document.getElementById('btn-submit-user');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Memverifikasi...';
+
+        if (IS_PREVIEW) {
+          const found = PREVIEW_STORE.users.find(u => u.username === username && u.password === password);
+          if (!found) throw new Error("Username atau password salah (Gunakan Quick Login User)");
+          state.currentUser = { id: found.id, role: 'user', name: found.nama_lengkap || found.username, username: found.username };
+        } else {
+          if (!supabase) throw new Error("Supabase belum dikonfigurasi.");
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .eq('password', password)
+            .maybeSingle();
+
+          if (error) throw error;
+          if (!data) throw new Error("Username atau password peserta tidak ditemukan.");
+
+          state.currentUser = {
+            id: data.id,
+            role: 'user',
+            name: data.nama_lengkap || data.username,
+            username: data.username
+          };
+        }
+
+        sessionStorage.setItem('ammiyah_user_session', JSON.stringify(state.currentUser));
+        showToast(`Ahlan wa sahlan, ${state.currentUser.name}!`);
+        await enterApp();
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Masuk sebagai Peserta';
+      }
+    });
+
+    document.getElementById('form-login-admin').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value.trim();
+      const password = document.getElementById('admin-password').value.trim();
+      const btn = document.getElementById('btn-submit-admin');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Masuk ke Panel Admin...';
+
+        if (IS_PREVIEW) {
+          state.currentUser = { id: 'admin-prev', role: 'admin', name: email || 'Admin Preview', email };
+        } else {
+          if (!supabase) throw new Error("Supabase belum dikonfigurasi.");
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+
+          state.currentUser = {
+            id: data.user.id,
+            role: 'admin',
+            name: data.user.email,
+            email: data.user.email
+          };
+        }
+
+        showToast("Berhasil masuk sebagai Administrator");
+        await enterApp();
+      } catch (err) {
+        showToast("Login Admin gagal: " + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Masuk sebagai Admin';
+      }
+    });
+
+    document.getElementById('btn-quick-user').addEventListener('click', async () => {
+      if (!IS_PREVIEW) return;
+      const u = PREVIEW_STORE.users[0];
+      state.currentUser = { id: u.id, role: 'user', name: u.nama_lengkap, username: u.username };
+      sessionStorage.setItem('ammiyah_user_session', JSON.stringify(state.currentUser));
+      showToast("Masuk Mode Preview sebagai Peserta");
+      await enterApp();
+    });
+
+    document.getElementById('btn-quick-admin').addEventListener('click', async () => {
+      if (!IS_PREVIEW) return;
+      state.currentUser = { id: 'admin-prev', role: 'admin', name: 'Admin Kampus Bahasa Arab', email: 'admin@preview.local' };
+      sessionStorage.setItem('ammiyah_user_session', JSON.stringify(state.currentUser));
+      showToast("Masuk Mode Preview sebagai Admin");
+      await enterApp();
+    });
+
+    async function handleLogout() {
+      try {
+        if (!IS_PREVIEW && supabase && state.currentUser?.role === 'admin') {
+          await supabase.auth.signOut();
+        }
+        sessionStorage.removeItem('ammiyah_user_session');
+        state.currentUser = null;
+        document.getElementById('main-shell').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+        showToast("Anda telah keluar dari aplikasi.");
+      } catch (err) {
+        showToast("Gagal logout: " + err.message, 'error');
+      }
+    }
+
+    document.getElementById('desktop-logout-btn').addEventListener('click', handleLogout);
+    document.getElementById('mobile-logout-btn').addEventListener('click', handleLogout);
+
+    const tabUser = document.getElementById('tab-login-user');
+    const tabAdmin = document.getElementById('tab-login-admin');
+    const formUser = document.getElementById('form-login-user');
+    const formAdmin = document.getElementById('form-login-admin');
+
+    tabUser.addEventListener('click', () => {
+      tabUser.className = "py-2.5 px-3 rounded-xl text-sm font-bold bg-white text-brand-700 shadow-sm transition";
+      tabAdmin.className = "py-2.5 px-3 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 transition";
+      formUser.classList.remove('hidden');
+      formAdmin.classList.add('hidden');
+    });
+
+    tabAdmin.addEventListener('click', () => {
+      tabAdmin.className = "py-2.5 px-3 rounded-xl text-sm font-bold bg-white text-slate-900 shadow-sm transition";
+      tabUser.className = "py-2.5 px-3 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 transition";
+      formAdmin.classList.remove('hidden');
+      formUser.classList.add('hidden');
+    });
+
+    // =========================================================================
+    // 7. MASUK KE APLIKASI & RENDER SEMUA KOMPONEN
+    // =========================================================================
+    async function enterApp() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-shell').classList.remove('hidden');
+
+      document.getElementById('sidebar-user-name').textContent = state.currentUser.name;
+      document.getElementById('mobile-user-badge').textContent = `${state.currentUser.name} (${state.currentUser.role.toUpperCase()})`;
+
+      const roleBadge = document.getElementById('sidebar-user-role');
+      const desktopAdminGroup = document.getElementById('desktop-admin-group');
+      const mobileAdminBtn = document.getElementById('mobile-admin-shortcut');
+      const berandaKelolaBtn = document.getElementById('beranda-btn-kelola');
+
+      if (state.currentUser.role === 'admin') {
+        roleBadge.textContent = 'ADMIN PENGELOLA';
+        roleBadge.className = 'inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500 text-white mt-0.5';
+        desktopAdminGroup.classList.remove('hidden');
+        mobileAdminBtn.classList.remove('hidden');
+        berandaKelolaBtn.classList.remove('hidden');
+      } else {
+        roleBadge.textContent = 'PESERTA UMRAH';
+        roleBadge.className = 'inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-brand-600 text-white mt-0.5';
+        desktopAdminGroup.classList.add('hidden');
+        mobileAdminBtn.classList.add('hidden');
+        berandaKelolaBtn.classList.add('hidden');
+      }
+
+      await loadAllData();
+      populateBabDropdowns();
+      refreshAllViews();
+      switchView('beranda');
+    }
+
+    function refreshAllViews() {
+      updateStats();
+      renderBabGrid();
+      renderKamusList();
+      renderPercakapanList();
+      renderBudayaList();
+      initFlashcards();
+      if (state.currentUser?.role === 'admin') {
+        renderAdminKelolaMateriList();
+        renderAdminSecondaryTables();
+        if (state.editingBabId !== null) {
+          refreshModalSubMateriLists();
+        }
+      }
+    }
+
+    function populateBabDropdowns() {
+      const selects = [
+        { id: 'kamus-bab-select', hasAll: true },
+        { id: 'dialog-bab-select', hasAll: true },
+        { id: 'budaya-bab-select', hasAll: true },
+        { id: 'adm-kosa-bab', hasAll: false },
+        { id: 'adm-perc-bab', hasAll: false },
+        { id: 'adm-bk-bab', hasAll: false }
+      ];
+
+      selects.forEach(({ id, hasAll }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const currentVal = el.value;
+        el.innerHTML = hasAll ? '<option value="all">Semua Bab Materi</option>' : '';
+        state.babList.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.id;
+          opt.textContent = `Bab ${String(b.id).padStart(2, '0')} — ${b.judul_id}`;
+          el.appendChild(opt);
+        });
+        if (currentVal && [...el.options].some(o => o.value === currentVal)) {
+          el.value = currentVal;
+        }
+      });
+
+      const fcSel = document.getElementById('flashcard-bab-select');
+      if (fcSel) {
+        const prev = fcSel.value;
+        fcSel.innerHTML = `
+          <option value="all">Semua Bab Materi</option>
+          <option value="belum">Hanya Yang Belum Hafal</option>
+        `;
+        state.babList.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.id;
+          opt.textContent = `Bab ${String(b.id).padStart(2, '0')} — ${b.judul_id}`;
+          fcSel.appendChild(opt);
+        });
+        if (prev && [...fcSel.options].some(o => o.value === prev)) fcSel.value = prev;
+      }
+    }
+
+    // =========================================================================
+    // 8. NAVIGASI UTAMA & INTERAKSI BERANDA / SMART SEARCH
+    // =========================================================================
+    function switchView(viewName) {
+      if (viewName === 'admin' && state.currentUser?.role !== 'admin') {
+        showToast("Akses ditolak: Khusus Administrator.", "error");
+        return;
+      }
+      state.activeNav = viewName;
+
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+      const activeSec = document.getElementById(`view-${viewName}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      document.querySelectorAll('#desktop-nav .nav-btn').forEach(btn => {
+        const isActive = btn.dataset.nav === viewName;
+        btn.className = isActive
+          ? 'nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold bg-brand-600 text-white shadow-md shadow-brand-600/20 transition'
+          : 'nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-100/80 transition';
+      });
+
+      document.querySelectorAll('#mobile-bottom-nav .mob-nav-btn').forEach(btn => {
+        const isActive = btn.dataset.nav === viewName;
+        btn.className = isActive
+          ? 'mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold bg-brand-600 text-white shadow-sm transition'
+          : 'mob-nav-btn flex flex-col items-center justify-center py-2 rounded-xl text-[10px] font-bold text-slate-500 hover:text-slate-800 transition';
+      });
+
+      document.getElementById('app-root').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('[data-nav]').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.nav));
+    });
+
+    document.getElementById('beranda-btn-kelola').addEventListener('click', () => {
+      switchView('admin');
+      switchAdminSubTab('materi');
+    });
+
+    function updateStats() {
+      document.getElementById('stat-total-bab').textContent = `${state.babList.length} Bab`;
+      document.getElementById('stat-total-kata').textContent = `${state.kosakataList.length} Kata`;
+      document.getElementById('stat-total-dialog').textContent = `${state.percakapanList.length} Baris`;
+      const hafalCount = Object.values(state.progresMap).filter(v => v === 'hafal').length;
+      document.getElementById('stat-total-hafal').textContent = `${hafalCount} Kata`;
+    }
+
+    function renderBabGrid() {
+      const container = document.getElementById('bab-grid-container');
+      const query = (document.getElementById('filter-bab-input')?.value || '').toLowerCase();
+      const filtered = state.babList.filter(b =>
+        b.judul_id.toLowerCase().includes(query) ||
+        (b.subjudul || '').toLowerCase().includes(query) ||
+        String(b.id).includes(query)
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="col-span-full glass-card rounded-2xl p-6 text-center text-xs text-slate-400">Tidak ada bab materi yang cocok dengan pencarian.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(b => {
+        const countKata = state.kosakataList.filter(k => Number(k.bab_id) === Number(b.id)).length;
+        const countDialog = state.percakapanList.filter(p => Number(p.bab_id) === Number(b.id)).length;
+        const adminEditBtn = state.currentUser?.role === 'admin'
+          ? `<button type="button" onclick="event.stopPropagation(); window.openModalEditMateri(${b.id}, 'info');" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-bold transition">Edit Materi</button>`
+          : '';
+
+        return `
+          <div onclick="window.openBabDetail(${b.id})" class="glass-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-lg bg-brand-100 text-brand-700 text-[11px] font-extrabold">BAB ${String(b.id).padStart(2, '0')}</span>
+                <span class="arabic-text text-base font-bold text-brand-700">${escapeHtml(b.judul_ar)}</span>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-sm">${escapeHtml(b.judul_id)}</h4>
+              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapeHtml(b.subjudul || '')}</p>
+            </div>
+            <div class="pt-2.5 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+              <span>${countKata} Kosakata &bull; ${countDialog} Dialog</span>
+              ${adminEditBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.openBabDetail = (babId) => {
+      document.getElementById('kamus-bab-select').value = String(babId);
+      switchView('kamus');
+      renderKamusList();
+    };
+
+    document.getElementById('filter-bab-input').addEventListener('input', renderBabGrid);
+
+    // Global Smart Search
+    const globalSearchInput = document.getElementById('global-search-input');
+    const clearGlobalBtn = document.getElementById('clear-global-search');
+    globalSearchInput.addEventListener('input', () => {
+      const q = globalSearchInput.value.trim().toLowerCase();
+      const box = document.getElementById('global-search-results-box');
+      const list = document.getElementById('global-search-list');
+
+      if (!q) {
+        box.classList.add('hidden');
+        clearGlobalBtn.classList.add('hidden');
+        return;
+      }
+
+      clearGlobalBtn.classList.remove('hidden');
+      box.classList.remove('hidden');
+
+      const kosaMatches = state.kosakataList.filter(k =>
+        k.arti.toLowerCase().includes(q) || k.transliterasi.toLowerCase().includes(q) || k.arab.includes(q)
+      ).map(k => ({
+        type: 'Kosakata',
+        bab_id: k.bab_id,
+        arab: k.arab,
+        translit: k.transliterasi,
+        arti: k.arti,
+        badge: k.kategori
+      }));
+
+      const percMatches = state.percakapanList.filter(p =>
+        p.arti.toLowerCase().includes(q) || p.transliterasi.toLowerCase().includes(q) || p.arab.includes(q)
+      ).map(p => ({
+        type: 'Percakapan',
+        bab_id: p.bab_id,
+        arab: p.arab,
+        translit: p.transliterasi,
+        arti: p.arti,
+        badge: p.judul_dialog
+      }));
+
+      const combined = [...kosaMatches, ...percMatches];
+      document.getElementById('global-search-count').textContent = combined.length;
+
+      if (combined.length === 0) {
+        list.innerHTML = '<div class="col-span-full glass-card rounded-2xl p-6 text-center text-xs text-slate-400">Tidak ditemukan hasil yang cocok.</div>';
+        return;
+      }
+
+      list.innerHTML = combined.slice(0, 30).map(item => `
+        <div class="glass-card rounded-2xl p-4 flex flex-col justify-between gap-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-[10px] font-bold">Bab ${item.bab_id} &bull; ${escapeHtml(item.badge)}</span>
+            <span class="text-[10px] font-bold text-slate-400">${item.type}</span>
+          </div>
+          <p class="arabic-text text-xl font-bold text-slate-900 mt-1">${escapeHtml(item.arab)}</p>
+          <div>
+            <p class="text-xs font-semibold text-brand-700 italic">${escapeHtml(item.translit)}</p>
+            <p class="text-sm font-bold text-slate-800">${escapeHtml(item.arti)}</p>
+          </div>
+        </div>
+      `).join('');
+    });
+
+    clearGlobalBtn.addEventListener('click', () => {
+      globalSearchInput.value = '';
+      globalSearchInput.dispatchEvent(new Event('input'));
+    });
+
+    // =========================================================================
+    // 9. MENU 2: KAMUS KOSAKATA LENGKAP & PROGRES HAFALAN
+    // =========================================================================
+    function renderKamusList() {
+      const babVal = document.getElementById('kamus-bab-select').value;
+      const statusVal = document.getElementById('kamus-status-select').value;
+      const q = (document.getElementById('kamus-search-input').value || '').toLowerCase();
+      const container = document.getElementById('kamus-list-container');
+      const infoBox = document.getElementById('kamus-bab-info');
+
+      if (babVal !== 'all') {
+        const babObj = state.babList.find(b => String(b.id) === String(babVal));
+        if (babObj) {
+          infoBox.classList.remove('hidden');
+          document.getElementById('kamus-bab-info-title').textContent = `Bab ${String(babObj.id).padStart(2, '0')} — ${babObj.judul_id}`;
+          document.getElementById('kamus-bab-info-ar').textContent = babObj.judul_ar;
+          document.getElementById('kamus-bab-info-desc').textContent = babObj.deskripsi || babObj.subjudul || '';
+        }
+      } else {
+        infoBox.classList.add('hidden');
+      }
+
+      const filtered = state.kosakataList.filter(k => {
+        if (babVal !== 'all' && String(k.bab_id) !== String(babVal)) return false;
+        if (state.activeKategori !== 'all' && k.kategori !== state.activeKategori) return false;
+        const st = state.progresMap[k.id] || 'belum';
+        if (statusVal === 'hafal' && st !== 'hafal') return false;
+        if (statusVal === 'favorit' && st !== 'favorit') return false;
+        if (statusVal === 'belum' && st === 'hafal') return false;
+        if (q && !(k.arti.toLowerCase().includes(q) || k.transliterasi.toLowerCase().includes(q) || k.arab.includes(q))) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="col-span-full glass-card rounded-2xl p-8 text-center text-xs text-slate-400">Belum ada kosakata pada filter yang dipilih.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(k => {
+        const st = state.progresMap[k.id];
+        const isHafal = st === 'hafal';
+        const isFav = st === 'favorit';
+        return `
+          <div class="glass-card rounded-2xl p-4 flex flex-col justify-between gap-3">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold">Bab ${k.bab_id}</span>
+                <span class="px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-[10px] font-bold">${escapeHtml(k.kategori)}</span>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="window.toggleProgres('${k.id}', 'favorit')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${isFav ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}">
+                  ${isFav ? '★ Favorit' : '☆ Favorit'}
+                </button>
+                <button type="button" onclick="window.toggleProgres('${k.id}', 'hafal')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${isHafal ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-emerald-50'}">
+                  ${isHafal ? '✓ Hafal' : 'Tandai Hafal'}
+                </button>
+              </div>
+            </div>
+            <p class="arabic-text text-2xl font-bold text-slate-900">${escapeHtml(k.arab)}</p>
+            <div>
+              <p class="text-xs font-semibold text-brand-700 italic">${escapeHtml(k.transliterasi)}</p>
+              <p class="text-sm font-extrabold text-slate-800 mt-0.5">${escapeHtml(k.arti)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.toggleProgres = async (kosakataId, targetStatus) => {
+      if (state.currentUser?.role !== 'user') {
+        showToast("Login sebagai Peserta untuk menyimpan progres hafalan.", "warning");
+        return;
+      }
+
+      const current = state.progresMap[kosakataId];
+      const nextStatus = current === targetStatus ? null : targetStatus;
+
+      try {
+        if (IS_PREVIEW) {
+          PREVIEW_STORE.progres_user = PREVIEW_STORE.progres_user.filter(p => !(p.user_id === state.currentUser.id && p.kosakata_id === kosakataId));
+          if (nextStatus) {
+            PREVIEW_STORE.progres_user.push({ id: 'pr-' + Date.now(), user_id: state.currentUser.id, kosakata_id: kosakataId, status: nextStatus });
+          }
+        } else {
+          if (!nextStatus) {
+            const { error } = await supabase.from('progres_user').delete().eq('user_id', state.currentUser.id).eq('kosakata_id', kosakataId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('progres_user').upsert(
+              { user_id: state.currentUser.id, kosakata_id: kosakataId, status: nextStatus },
+              { onConflict: 'user_id,kosakata_id' }
+            );
+            if (error) throw error;
+          }
+        }
+
+        if (nextStatus) state.progresMap[kosakataId] = nextStatus;
+        else delete state.progresMap[kosakataId];
+
+        updateStats();
+        renderKamusList();
+      } catch (err) {
+        showToast("Gagal memperbarui status: " + err.message, "error");
+      }
+    };
+
+    document.getElementById('kamus-bab-select').addEventListener('change', renderKamusList);
+    document.getElementById('kamus-status-select').addEventListener('change', renderKamusList);
+    document.getElementById('kamus-search-input').addEventListener('input', renderKamusList);
+    document.querySelectorAll('#kamus-kategori-tabs .kat-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.activeKategori = btn.dataset.kat;
+        document.querySelectorAll('#kamus-kategori-tabs .kat-pill').forEach(b => {
+          b.className = b.dataset.kat === state.activeKategori
+            ? 'kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shrink-0 transition'
+            : 'kat-pill px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition';
+        });
+        renderKamusList();
+      });
+    });
+
+    // =========================================================================
+    // 10. MENU 3: PERCAKAPAN & CONTOH PENGGUNAAN
+    // =========================================================================
+    function renderPercakapanList() {
+      const babVal = document.getElementById('dialog-bab-select').value;
+      const jenisVal = document.getElementById('dialog-jenis-select').value;
+      const container = document.getElementById('percakapan-list-container');
+
+      const filtered = state.percakapanList.filter(p => {
+        if (babVal !== 'all' && String(p.bab_id) !== String(babVal)) return false;
+        if (jenisVal !== 'all' && p.jenis !== jenisVal) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="glass-card rounded-2xl p-8 text-center text-xs text-slate-400">Belum ada percakapan pada filter ini.</div>';
+        return;
+      }
+
+      const groups = {};
+      filtered.forEach(item => {
+        const key = `${item.bab_id}__${item.judul_dialog}`;
+        if (!groups[key]) {
+          groups[key] = { bab_id: item.bab_id, jenis: item.jenis, judul: item.judul_dialog, rows: [] };
+        }
+        groups[key].rows.push(item);
+      });
+
+      container.innerHTML = Object.values(groups).map(g => {
+        const babObj = state.babList.find(b => Number(b.id) === Number(g.bab_id));
+        const babTitle = babObj ? `Bab ${String(babObj.id).padStart(2, '0')} — ${babObj.judul_id}` : `Bab ${g.bab_id}`;
+        return `
+          <div class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/70 pb-3">
+              <div>
+                <span class="text-[11px] font-bold text-brand-700">${escapeHtml(babTitle)}</span>
+                <h3 class="text-base font-extrabold text-slate-900">${escapeHtml(g.judul)}</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full text-[11px] font-bold ${g.jenis === 'Mini Dialog' ? 'bg-amber-100 text-amber-800' : 'bg-brand-100 text-brand-700'}">${escapeHtml(g.jenis)}</span>
+            </div>
+            <div class="space-y-3">
+              ${g.rows.map((r, idx) => {
+                const isAlt = idx % 2 === 1 && g.jenis === 'Mini Dialog';
+                return `
+                  <div class="p-4 rounded-2xl ${isAlt ? 'bg-brand-50/75 border border-brand-100 ml-0 sm:ml-6' : 'bg-white/95 border border-slate-200/80 mr-0 sm:mr-6'}">
+                    <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-white mb-2">${escapeHtml(r.peran)}</span>
+                    <p class="arabic-text text-xl sm:text-2xl font-bold text-slate-900">${escapeHtml(r.arab)}</p>
+                    <p class="text-xs font-semibold text-brand-700 italic mt-1">${escapeHtml(r.transliterasi)}</p>
+                    <p class="text-sm font-bold text-slate-700 mt-0.5">${escapeHtml(r.arti)}</p>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('dialog-bab-select').addEventListener('change', renderPercakapanList);
+    document.getElementById('dialog-jenis-select').addEventListener('change', renderPercakapanList);
+
+    // =========================================================================
+    // 11. MENU 4: BUDAYA & KAIDAH 'AMMIYAH
+    // =========================================================================
+    function renderBudayaList() {
+      const babVal = document.getElementById('budaya-bab-select').value;
+      const container = document.getElementById('budaya-list-container');
+
+      const filtered = state.budayaKaidahList.filter(bk => {
+        if (bk.tipe !== state.activeBKTab) return false;
+        if (babVal !== 'all' && String(bk.bab_id) !== String(babVal)) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="glass-card rounded-2xl p-8 text-center text-xs text-slate-400">Belum ada catatan ${state.activeBKTab} untuk filter ini.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(bk => {
+        const babObj = state.babList.find(b => Number(b.id) === Number(bk.bab_id));
+        const babLabel = babObj ? `Bab ${String(babObj.id).padStart(2, '0')} — ${babObj.judul_id}` : `Bab ${bk.bab_id}`;
+        return `
+          <div class="glass-card rounded-3xl p-5 sm:p-6 space-y-2.5 border-l-4 ${bk.tipe === 'Budaya' ? 'border-l-amber-500' : 'border-l-brand-600'}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-500">${escapeHtml(babLabel)}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${bk.tipe === 'Budaya' ? 'bg-amber-100 text-amber-800' : 'bg-brand-100 text-brand-700'}">${escapeHtml(bk.tipe)}</span>
+            </div>
+            <h3 class="text-base font-extrabold text-slate-900">${escapeHtml(bk.judul)}</h3>
+            <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(bk.konten)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('budaya-bab-select').addEventListener('change', renderBudayaList);
+    document.querySelectorAll('#view-budaya .bk-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.activeBKTab = btn.dataset.bk;
+        document.querySelectorAll('#view-budaya .bk-tab').forEach(b => {
+          b.className = b.dataset.bk === state.activeBKTab
+            ? 'bk-tab py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-white text-brand-700 shadow-sm transition'
+            : 'bk-tab py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition';
+        });
+        renderBudayaList();
+      });
+    });
+
+    // =========================================================================
+    // 12. MENU 5: FLASHCARD INTERAKTIF
+    // =========================================================================
+    function initFlashcards() {
+      const sel = document.getElementById('flashcard-bab-select').value;
+      let pool = [...state.kosakataList];
+      if (sel === 'belum') {
+        pool = pool.filter(k => state.progresMap[k.id] !== 'hafal');
+      } else if (sel !== 'all') {
+        pool = pool.filter(k => String(k.bab_id) === String(sel));
+      }
+      state.flashcards = pool;
+      state.fcIndex = 0;
+      state.fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const total = state.flashcards.length;
+      const inner = document.getElementById('fc-card-inner');
+      inner.classList.toggle('rotate-y-180', state.fcFlipped);
+
+      if (total === 0) {
+        document.getElementById('fc-counter').textContent = 'Kartu 0 dari 0';
+        document.getElementById('fc-bab-label').textContent = '-';
+        document.getElementById('fc-kategori-badge').textContent = 'Kosong';
+        document.getElementById('fc-arab-text').textContent = 'Tidak ada kartu';
+        document.getElementById('fc-translit-text').textContent = '-';
+        document.getElementById('fc-arti-text').textContent = 'Pilih bab lain';
+        return;
+      }
+
+      const card = state.flashcards[state.fcIndex];
+      const babObj = state.babList.find(b => Number(b.id) === Number(card.bab_id));
+      document.getElementById('fc-counter').textContent = `Kartu ${state.fcIndex + 1} dari ${total}`;
+      document.getElementById('fc-bab-label').textContent = babObj ? `Bab ${babObj.id}: ${babObj.judul_id}` : `Bab ${card.bab_id}`;
+      document.getElementById('fc-kategori-badge').textContent = card.kategori;
+      document.getElementById('fc-arab-text').textContent = card.arab;
+      document.getElementById('fc-translit-text').textContent = card.transliterasi;
+      document.getElementById('fc-arti-text').textContent = card.arti;
+    }
+
+    document.getElementById('fc-card-wrapper').addEventListener('click', () => {
+      if (state.flashcards.length === 0) return;
+      state.fcFlipped = !state.fcFlipped;
+      renderFlashcard();
+    });
+
+    document.getElementById('fc-prev-btn').addEventListener('click', () => {
+      if (state.flashcards.length === 0) return;
+      state.fcIndex = (state.fcIndex - 1 + state.flashcards.length) % state.flashcards.length;
+      state.fcFlipped = false;
+      renderFlashcard();
+    });
+
+    document.getElementById('fc-next-btn').addEventListener('click', () => {
+      if (state.flashcards.length === 0) return;
+      state.fcIndex = (state.fcIndex + 1) % state.flashcards.length;
+      state.fcFlipped = false;
+      renderFlashcard();
+    });
+
+    document.getElementById('fc-mark-hafal-btn').addEventListener('click', async () => {
+      if (state.flashcards.length === 0) return;
+      const card = state.flashcards[state.fcIndex];
+      await window.toggleProgres(card.id, 'hafal');
+      showToast(`"${card.arti}" ditandai sudah hafal!`);
+    });
+
+    document.getElementById('flashcard-bab-select').addEventListener('change', initFlashcards);
+    document.getElementById('flashcard-shuffle-btn').addEventListener('click', () => {
+      state.flashcards.sort(() => Math.random() - 0.5);
+      state.fcIndex = 0;
+      state.fcFlipped = false;
+      renderFlashcard();
+      showToast("Urutan kartu diacak.");
+    });
+
+    // =========================================================================
+    // 13. MENU KELOLA MATERI (TAMBAH, EDIT, HAPUS MATERI & SUB-MATERI)
+    // =========================================================================
+    function switchAdminSubTab(tabName) {
+      state.activeAdminTab = tabName;
+      document.querySelectorAll('#admin-tabs .admin-tab').forEach(b => {
+        b.className = b.dataset.admintab === state.activeAdminTab
+          ? 'admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white shrink-0 transition'
+          : 'admin-tab px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shrink-0 transition';
+      });
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
+      const targetSec = document.getElementById(`admin-sec-${state.activeAdminTab}`);
+      if (targetSec) targetSec.classList.remove('hidden');
+    }
+
+    document.querySelectorAll('#admin-tabs .admin-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchAdminSubTab(btn.dataset.admintab));
+    });
+
+    // Render Daftar Materi Bab pada Menu "Kelola Materi"
+    function renderAdminKelolaMateriList() {
+      const container = document.getElementById('adm-materi-list-container');
+      const countEl = document.getElementById('adm-count-materi');
+      const q = (document.getElementById('adm-search-materi')?.value || '').toLowerCase();
+
+      const filtered = state.babList.filter(b =>
+        b.judul_id.toLowerCase().includes(q) ||
+        (b.subjudul || '').toLowerCase().includes(q) ||
+        String(b.id).includes(q)
+      );
+
+      countEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-8 rounded-2xl bg-slate-50 border border-slate-200/80 text-center text-xs text-slate-400">Belum ada materi bab yang ditemukan. Klik <b>+ Tambah Materi Baru</b> untuk membuat materi.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(b => {
+        const kosaCnt = state.kosakataList.filter(k => Number(k.bab_id) === Number(b.id)).length;
+        const percCnt = state.percakapanList.filter(p => Number(p.bab_id) === Number(b.id)).length;
+        const bkCnt = state.budayaKaidahList.filter(bk => Number(bk.bab_id) === Number(b.id)).length;
+
+        return `
+          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-brand-300 transition flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+            <div class="min-w-0 space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-lg bg-brand-100 text-brand-700 text-xs font-extrabold">BAB ${String(b.id).padStart(2, '0')}</span>
+                <span class="arabic-text text-lg font-bold text-brand-700">${escapeHtml(b.judul_ar)}</span>
+                <span class="text-[11px] font-semibold text-slate-400">&bull; ${kosaCnt} Kosakata, ${percCnt} Dialog, ${bkCnt} Budaya/Kaidah</span>
+              </div>
+              <h4 class="text-base font-extrabold text-slate-900">${escapeHtml(b.judul_id)}</h4>
+              <p class="text-xs text-slate-500 line-clamp-2">${escapeHtml(b.subjudul || b.deskripsi || '')}</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button type="button" onclick="window.openModalEditMateri(${b.id}, 'kosa')" class="px-3 py-2 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 text-xs font-bold transition">
+                Isi Bab (${kosaCnt + percCnt + bkCnt})
+              </button>
+              <button type="button" onclick="window.openModalEditMateri(${b.id}, 'info')" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold transition">
+                Edit Materi
+              </button>
+              <button type="button" onclick="window.hapusMateriBab(${b.id})" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition">
+                Hapus
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('adm-search-materi').addEventListener('input', renderAdminKelolaMateriList);
+
+    // Buka Modal Tambah Materi Baru
+    document.getElementById('btn-open-tambah-materi').addEventListener('click', () => {
+      state.editingBabId = null;
+      document.getElementById('form-modal-materi-bab').reset();
+      document.getElementById('mm-original-id').value = '';
+
+      const nextNum = state.babList.length > 0 ? Math.max(...state.babList.map(b => Number(b.id))) + 1 : 1;
+      const idField = document.getElementById('mm-id');
+      idField.value = nextNum;
+      idField.readOnly = false;
+
+      document.getElementById('modal-materi-mode-badge').textContent = 'Tambah Materi Baru';
+      document.getElementById('modal-materi-mode-badge').className = 'px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-700 text-[10px] font-extrabold uppercase tracking-wider';
+      document.getElementById('modal-materi-title').textContent = 'Tambah Materi Bab Baru';
+
+      document.getElementById('modal-materi-tabs').classList.add('hidden');
+      document.getElementById('btn-modal-hapus-bab').classList.add('hidden');
+      switchModalMateriTab('info');
+
+      document.getElementById('modal-kelola-materi').classList.remove('hidden');
+    });
+
+    // Buka Modal Edit Materi Bab (beserta Tab Kelola Kosakata, Dialog, Budaya/Kaidah)
+    window.openModalEditMateri = (babId, initialTab = 'info') => {
+      const bab = state.babList.find(b => Number(b.id) === Number(babId));
+      if (!bab) return;
+
+      state.editingBabId = Number(bab.id);
+      document.getElementById('mm-original-id').value = bab.id;
+      const idField = document.getElementById('mm-id');
+      idField.value = bab.id;
+      idField.readOnly = true;
+
+      document.getElementById('mm-jid').value = bab.judul_id;
+      document.getElementById('mm-jar').value = bab.judul_ar;
+      document.getElementById('mm-sub').value = bab.subjudul || '';
+      document.getElementById('mm-desc').value = bab.deskripsi || '';
+
+      document.getElementById('modal-materi-mode-badge').textContent = `Edit Materi Bab ${String(bab.id).padStart(2, '0')}`;
+      document.getElementById('modal-materi-mode-badge').className = 'px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider';
+      document.getElementById('modal-materi-title').textContent = `Edit Materi: ${bab.judul_id}`;
+
+      document.getElementById('modal-materi-tabs').classList.remove('hidden');
+      document.getElementById('btn-modal-hapus-bab').classList.remove('hidden');
+
+      refreshModalSubMateriLists();
+      switchModalMateriTab(initialTab);
+      document.getElementById('modal-kelola-materi').classList.remove('hidden');
+    };
+
+    window.closeModalKelolaMateri = () => {
+      document.getElementById('modal-kelola-materi').classList.add('hidden');
+      state.editingBabId = null;
+    };
+
+    document.getElementById('btn-close-modal-materi').addEventListener('click', window.closeModalKelolaMateri);
+
+    function switchModalMateriTab(tab) {
+      state.activeModalTab = tab;
+      document.querySelectorAll('#modal-materi-tabs .mm-tab').forEach(btn => {
+        btn.className = btn.dataset.mmtab === tab
+          ? 'mm-tab py-2 px-2 rounded-xl text-xs font-bold bg-white text-slate-900 shadow-sm transition'
+          : 'mm-tab py-2 px-2 rounded-xl text-xs font-semibold text-slate-600 transition';
+      });
+
+      document.getElementById('form-modal-materi-bab').classList.toggle('hidden', tab !== 'info');
+      document.getElementById('mm-sec-kosa').classList.toggle('hidden', tab !== 'kosa');
+      document.getElementById('mm-sec-perc').classList.toggle('hidden', tab !== 'perc');
+      document.getElementById('mm-sec-bk').classList.toggle('hidden', tab !== 'bk');
+    }
+
+    document.querySelectorAll('#modal-materi-tabs .mm-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchModalMateriTab(btn.dataset.mmtab));
+    });
+
+    // Simpan Form Tambah / Edit Materi Bab
+    document.getElementById('form-modal-materi-bab').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const origId = document.getElementById('mm-original-id').value;
+      const payload = {
+        id: Number(document.getElementById('mm-id').value),
+        judul_id: document.getElementById('mm-jid').value.trim(),
+        judul_ar: document.getElementById('mm-jar').value.trim(),
+        subjudul: document.getElementById('mm-sub').value.trim(),
+        deskripsi: document.getElementById('mm-desc').value.trim()
+      };
+
+      try {
+        if (!origId && state.babList.some(b => Number(b.id) === payload.id)) {
+          throw new Error(`Nomor Bab ${payload.id} sudah digunakan. Gunakan nomor lain atau edit bab tersebut.`);
+        }
+
+        if (IS_PREVIEW) {
+          const idx = PREVIEW_STORE.materi_bab.findIndex(x => Number(x.id) === payload.id);
+          if (idx > -1) PREVIEW_STORE.materi_bab[idx] = payload;
+          else PREVIEW_STORE.materi_bab.push(payload);
+        } else {
+          const { error } = await supabase.from('materi_bab').upsert([payload], { onConflict: 'id' });
+          if (error) throw error;
+        }
+
+        await loadAllData();
+        populateBabDropdowns();
+        refreshAllViews();
+
+        if (!origId) {
+          showToast(`Materi Bab ${payload.id} berhasil ditambahkan!`);
+          window.openModalEditMateri(payload.id, 'info');
+        } else {
+          showToast(`Perubahan Materi Bab ${payload.id} berhasil disimpan!`);
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // Hapus Materi Bab (beserta relasi Kosakata, Percakapan, Budaya & Kaidah)
+    window.hapusMateriBab = async (babId) => {
+      const bab = state.babList.find(b => Number(b.id) === Number(babId));
+      const titleStr = bab ? `Bab ${bab.id} (${bab.judul_id})` : `Bab ${babId}`;
+      const ok = await askConfirm(
+        `Hapus ${titleStr}?`,
+        "Seluruh kosakata, percakapan, dan catatan budaya/kaidah di dalam bab ini juga akan dihapus permanen."
+      );
+      if (!ok) return;
+
+      try {
+        if (IS_PREVIEW) {
+          PREVIEW_STORE.materi_bab = PREVIEW_STORE.materi_bab.filter(b => Number(b.id) !== Number(babId));
+          PREVIEW_STORE.kosakata = PREVIEW_STORE.kosakata.filter(k => Number(k.bab_id) !== Number(babId));
+          PREVIEW_STORE.percakapan = PREVIEW_STORE.percakapan.filter(p => Number(p.bab_id) !== Number(babId));
+          PREVIEW_STORE.budaya_kaidah = PREVIEW_STORE.budaya_kaidah.filter(bk => Number(bk.bab_id) !== Number(babId));
+        } else {
+          const { error } = await supabase.from('materi_bab').delete().eq('id', Number(babId));
+          if (error) throw error;
+        }
+
+        if (state.editingBabId === Number(babId)) {
+          window.closeModalKelolaMateri();
+        }
+
+        await loadAllData();
+        populateBabDropdowns();
+        refreshAllViews();
+        showToast(`${titleStr} berhasil dihapus.`);
+      } catch (err) {
+        showToast("Gagal menghapus materi: " + err.message, "error");
+      }
+    };
+
+    document.getElementById('btn-modal-hapus-bab').addEventListener('click', () => {
+      if (state.editingBabId !== null) {
+        window.hapusMateriBab(state.editingBabId);
+      }
+    });
+
+    // Render Sub-Materi di dalam Modal Edit Materi
+    function refreshModalSubMateriLists() {
+      if (state.editingBabId === null) return;
+      const babId = Number(state.editingBabId);
+
+      // 1. Kosakata Bab
+      const kosaItems = state.kosakataList.filter(k => Number(k.bab_id) === babId);
+      document.getElementById('mm-cnt-kosa').textContent = kosaItems.length;
+      document.getElementById('mm-list-kosa').innerHTML = kosaItems.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada kosakata di bab ini.</p>'
+        : kosaItems.map(k => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-brand-50 text-brand-700 text-[10px] font-bold">${escapeHtml(k.kategori)}</span>
+                <span class="arabic-text text-base font-bold text-slate-900">${escapeHtml(k.arab)}</span>
+              </div>
+              <p class="text-xs text-slate-600 truncate"><i>${escapeHtml(k.transliterasi)}</i> &mdash; <b>${escapeHtml(k.arti)}</b></p>
+            </div>
+            <div class="flex gap-1 shrink-0">
+              <button type="button" onclick="window.mmEditKosa('${k.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('kosakata', '${k.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+
+      // 2. Percakapan Bab
+      const percItems = state.percakapanList.filter(p => Number(p.bab_id) === babId);
+      document.getElementById('mm-cnt-perc').textContent = percItems.length;
+      document.getElementById('mm-list-perc').innerHTML = percItems.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada dialog/percakapan di bab ini.</p>'
+        : percItems.map(p => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold text-brand-700">#${p.urutan} &bull; ${escapeHtml(p.judul_dialog)} (${escapeHtml(p.peran)})</span>
+              <p class="arabic-text text-base font-bold text-slate-900">${escapeHtml(p.arab)}</p>
+              <p class="text-xs text-slate-600 truncate">${escapeHtml(p.arti)}</p>
+            </div>
+            <div class="flex gap-1 shrink-0">
+              <button type="button" onclick="window.mmEditPerc('${p.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('percakapan', '${p.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+
+      // 3. Budaya & Kaidah Bab
+      const bkItems = state.budayaKaidahList.filter(bk => Number(bk.bab_id) === babId);
+      document.getElementById('mm-cnt-bk').textContent = bkItems.length;
+      document.getElementById('mm-list-bk').innerHTML = bkItems.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada catatan budaya/kaidah di bab ini.</p>'
+        : bkItems.map(bk => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-gold-100 text-gold-600">${escapeHtml(bk.tipe)}</span>
+              <p class="text-xs font-bold text-slate-900 mt-1 truncate">${escapeHtml(bk.judul)}</p>
+            </div>
+            <div class="flex gap-1 shrink-0">
+              <button type="button" onclick="window.mmEditBk('${bk.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('budaya_kaidah', '${bk.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    // CRUD Sub-Materi langsung di dalam Modal Edit Materi
+    document.getElementById('mm-form-kosa').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (state.editingBabId === null) return;
+      const editId = document.getElementById('mm-kosa-id').value;
+      const payload = {
+        bab_id: Number(state.editingBabId),
+        kategori: document.getElementById('mm-kosa-kat').value,
+        arab: document.getElementById('mm-kosa-arab').value.trim(),
+        transliterasi: document.getElementById('mm-kosa-trans').value.trim(),
+        arti: document.getElementById('mm-kosa-arti').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.kosakata.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.kosakata[idx] = { ...PREVIEW_STORE.kosakata[idx], ...payload };
+          } else {
+            PREVIEW_STORE.kosakata.unshift({ id: 'k-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('kosakata').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('kosakata').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetMmKosaForm();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Kosakata berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan kosakata: " + err.message, "error");
+      }
+    });
+
+    window.mmEditKosa = (id) => {
+      const k = state.kosakataList.find(x => x.id === id);
+      if (!k) return;
+      document.getElementById('mm-kosa-id').value = k.id;
+      document.getElementById('mm-kosa-kat').value = k.kategori;
+      document.getElementById('mm-kosa-arab').value = k.arab;
+      document.getElementById('mm-kosa-trans').value = k.transliterasi;
+      document.getElementById('mm-kosa-arti').value = k.arti;
+      document.getElementById('mm-form-kosa-title').textContent = 'Edit Kosakata';
+      document.getElementById('mm-cancel-kosa').classList.remove('hidden');
+    };
+
+    function resetMmKosaForm() {
+      document.getElementById('mm-form-kosa').reset();
+      document.getElementById('mm-kosa-id').value = '';
+      document.getElementById('mm-form-kosa-title').textContent = '+ Tambah Kosakata ke Bab Ini';
+      document.getElementById('mm-cancel-kosa').classList.add('hidden');
+    }
+    document.getElementById('mm-cancel-kosa').addEventListener('click', resetMmKosaForm);
+
+    document.getElementById('mm-form-perc').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (state.editingBabId === null) return;
+      const editId = document.getElementById('mm-perc-id').value;
+      const payload = {
+        bab_id: Number(state.editingBabId),
+        jenis: document.getElementById('mm-perc-jenis').value,
+        judul_dialog: document.getElementById('mm-perc-judul').value.trim(),
+        peran: document.getElementById('mm-perc-peran').value.trim(),
+        urutan: Number(document.getElementById('mm-perc-urutan').value),
+        arab: document.getElementById('mm-perc-arab').value.trim(),
+        transliterasi: document.getElementById('mm-perc-trans').value.trim(),
+        arti: document.getElementById('mm-perc-arti').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.percakapan.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.percakapan[idx] = { ...PREVIEW_STORE.percakapan[idx], ...payload };
+          } else {
+            PREVIEW_STORE.percakapan.push({ id: 'p-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('percakapan').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('percakapan').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetMmPercForm();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Percakapan berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan percakapan: " + err.message, "error");
+      }
+    });
+
+    window.mmEditPerc = (id) => {
+      const p = state.percakapanList.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('mm-perc-id').value = p.id;
+      document.getElementById('mm-perc-jenis').value = p.jenis;
+      document.getElementById('mm-perc-judul').value = p.judul_dialog;
+      document.getElementById('mm-perc-peran').value = p.peran;
+      document.getElementById('mm-perc-urutan').value = p.urutan;
+      document.getElementById('mm-perc-arab').value = p.arab;
+      document.getElementById('mm-perc-trans').value = p.transliterasi;
+      document.getElementById('mm-perc-arti').value = p.arti;
+      document.getElementById('mm-form-perc-title').textContent = 'Edit Percakapan';
+      document.getElementById('mm-cancel-perc').classList.remove('hidden');
+    };
+
+    function resetMmPercForm() {
+      document.getElementById('mm-form-perc').reset();
+      document.getElementById('mm-perc-id').value = '';
+      document.getElementById('mm-form-perc-title').textContent = '+ Tambah Percakapan / Kalimat ke Bab Ini';
+      document.getElementById('mm-cancel-perc').classList.add('hidden');
+    }
+    document.getElementById('mm-cancel-perc').addEventListener('click', resetMmPercForm);
+
+    document.getElementById('mm-form-bk').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (state.editingBabId === null) return;
+      const editId = document.getElementById('mm-bk-id').value;
+      const payload = {
+        bab_id: Number(state.editingBabId),
+        tipe: document.getElementById('mm-bk-tipe').value,
+        judul: document.getElementById('mm-bk-judul').value.trim(),
+        konten: document.getElementById('mm-bk-konten').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.budaya_kaidah.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.budaya_kaidah[idx] = { ...PREVIEW_STORE.budaya_kaidah[idx], ...payload };
+          } else {
+            PREVIEW_STORE.budaya_kaidah.push({ id: 'bk-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('budaya_kaidah').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('budaya_kaidah').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetMmBkForm();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Budaya / Kaidah berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan budaya/kaidah: " + err.message, "error");
+      }
+    });
+
+    window.mmEditBk = (id) => {
+      const bk = state.budayaKaidahList.find(x => x.id === id);
+      if (!bk) return;
+      document.getElementById('mm-bk-id').value = bk.id;
+      document.getElementById('mm-bk-tipe').value = bk.tipe;
+      document.getElementById('mm-bk-judul').value = bk.judul;
+      document.getElementById('mm-bk-konten').value = bk.konten;
+      document.getElementById('mm-form-bk-title').textContent = 'Edit Budaya / Kaidah';
+      document.getElementById('mm-cancel-bk').classList.remove('hidden');
+    };
+
+    function resetMmBkForm() {
+      document.getElementById('mm-form-bk').reset();
+      document.getElementById('mm-bk-id').value = '';
+      document.getElementById('mm-form-bk-title').textContent = '+ Tambah Budaya / Kaidah ke Bab Ini';
+      document.getElementById('mm-cancel-bk').classList.add('hidden');
+    }
+    document.getElementById('mm-cancel-bk').addEventListener('click', resetMmBkForm);
+
+    // =========================================================================
+    // 14. TAB LANJUTAN ADMIN (KOSAKATA, PERCAKAPAN, BUDAYA, AKUN PESERTA)
+    // =========================================================================
+    function renderAdminSecondaryTables() {
+      // 1. Table Kosakata
+      const qKosa = (document.getElementById('adm-search-kosa')?.value || '').toLowerCase();
+      const kosaRows = state.kosakataList.filter(k =>
+        k.arti.toLowerCase().includes(qKosa) || k.transliterasi.toLowerCase().includes(qKosa) || k.arab.includes(qKosa)
+      );
+      document.getElementById('adm-table-kosakata').innerHTML = kosaRows.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada data kosakata.</p>'
+        : kosaRows.map(k => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">Bab ${k.bab_id}</span>
+                <span class="arabic-text text-base font-bold text-slate-900">${escapeHtml(k.arab)}</span>
+              </div>
+              <p class="text-xs text-slate-600 truncate"><i>${escapeHtml(k.transliterasi)}</i> &mdash; <b>${escapeHtml(k.arti)}</b></p>
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <button type="button" onclick="window.editKosakata('${k.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('kosakata', '${k.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+
+      // 2. Table Percakapan
+      document.getElementById('adm-table-percakapan').innerHTML = state.percakapanList.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada data percakapan.</p>'
+        : state.percakapanList.map(p => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-50 text-brand-700">Bab ${p.bab_id} &bull; ${escapeHtml(p.judul_dialog)} (${escapeHtml(p.peran)})</span>
+              <p class="arabic-text text-base font-bold text-slate-900 mt-1">${escapeHtml(p.arab)}</p>
+              <p class="text-xs text-slate-600 truncate">${escapeHtml(p.arti)}</p>
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <button type="button" onclick="window.editPercakapan('${p.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('percakapan', '${p.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+
+      // 3. Table Budaya & Kaidah
+      document.getElementById('adm-table-budaya').innerHTML = state.budayaKaidahList.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada data budaya/kaidah.</p>'
+        : state.budayaKaidahList.map(bk => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gold-100 text-gold-600">Bab ${bk.bab_id} &bull; ${escapeHtml(bk.tipe)}</span>
+              <p class="text-xs font-bold text-slate-900 mt-1 truncate">${escapeHtml(bk.judul)}</p>
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <button type="button" onclick="window.editBudaya('${bk.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('budaya_kaidah', '${bk.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+
+      // 4. Table Users
+      document.getElementById('adm-table-users').innerHTML = state.usersList.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">Belum ada akun peserta terdaftar.</p>'
+        : state.usersList.map(u => `
+          <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-extrabold text-slate-900">${escapeHtml(u.nama_lengkap || '-')}</p>
+              <p class="text-[11px] text-slate-500">Username: <b>${escapeHtml(u.username)}</b> &bull; Pass: <code class="bg-slate-100 px-1 rounded">${escapeHtml(u.password)}</code></p>
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <button type="button" onclick="window.editUser('${u.id}')" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">Edit</button>
+              <button type="button" onclick="window.deleteRecord('users', '${u.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    document.getElementById('adm-search-kosa').addEventListener('input', renderAdminSecondaryTables);
+
+    // CRUD Kosakata Tab
+    document.getElementById('form-admin-kosakata').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('edit-kosakata-id').value;
+      const payload = {
+        bab_id: Number(document.getElementById('adm-kosa-bab').value),
+        kategori: document.getElementById('adm-kosa-kat').value,
+        arab: document.getElementById('adm-kosa-arab').value.trim(),
+        transliterasi: document.getElementById('adm-kosa-trans').value.trim(),
+        arti: document.getElementById('adm-kosa-arti').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.kosakata.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.kosakata[idx] = { ...PREVIEW_STORE.kosakata[idx], ...payload };
+          } else {
+            PREVIEW_STORE.kosakata.unshift({ id: 'k-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('kosakata').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('kosakata').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetFormKosakata();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Kosakata berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan kosakata: " + err.message, "error");
+      }
+    });
+
+    window.editKosakata = (id) => {
+      const k = state.kosakataList.find(x => x.id === id);
+      if (!k) return;
+      document.getElementById('edit-kosakata-id').value = k.id;
+      document.getElementById('adm-kosa-bab').value = k.bab_id;
+      document.getElementById('adm-kosa-kat').value = k.kategori;
+      document.getElementById('adm-kosa-arab').value = k.arab;
+      document.getElementById('adm-kosa-trans').value = k.transliterasi;
+      document.getElementById('adm-kosa-arti').value = k.arti;
+      document.getElementById('title-form-kosakata').textContent = 'Edit Kosakata';
+      document.getElementById('cancel-edit-kosakata').classList.remove('hidden');
+    };
+
+    function resetFormKosakata() {
+      document.getElementById('form-admin-kosakata').reset();
+      document.getElementById('edit-kosakata-id').value = '';
+      document.getElementById('title-form-kosakata').textContent = 'Tambah Kosakata Baru';
+      document.getElementById('cancel-edit-kosakata').classList.add('hidden');
+    }
+    document.getElementById('cancel-edit-kosakata').addEventListener('click', resetFormKosakata);
+
+    // CRUD Percakapan Tab
+    document.getElementById('form-admin-percakapan').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('edit-percakapan-id').value;
+      const payload = {
+        bab_id: Number(document.getElementById('adm-perc-bab').value),
+        jenis: document.getElementById('adm-perc-jenis').value,
+        urutan: Number(document.getElementById('adm-perc-urutan').value),
+        judul_dialog: document.getElementById('adm-perc-judul').value.trim(),
+        peran: document.getElementById('adm-perc-peran').value.trim(),
+        arab: document.getElementById('adm-perc-arab').value.trim(),
+        transliterasi: document.getElementById('adm-perc-trans').value.trim(),
+        arti: document.getElementById('adm-perc-arti').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.percakapan.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.percakapan[idx] = { ...PREVIEW_STORE.percakapan[idx], ...payload };
+          } else {
+            PREVIEW_STORE.percakapan.push({ id: 'p-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('percakapan').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('percakapan').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetFormPercakapan();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Percakapan berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan percakapan: " + err.message, "error");
+      }
+    });
+
+    window.editPercakapan = (id) => {
+      const p = state.percakapanList.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('edit-percakapan-id').value = p.id;
+      document.getElementById('adm-perc-bab').value = p.bab_id;
+      document.getElementById('adm-perc-jenis').value = p.jenis;
+      document.getElementById('adm-perc-urutan').value = p.urutan;
+      document.getElementById('adm-perc-judul').value = p.judul_dialog;
+      document.getElementById('adm-perc-peran').value = p.peran;
+      document.getElementById('adm-perc-arab').value = p.arab;
+      document.getElementById('adm-perc-trans').value = p.transliterasi;
+      document.getElementById('adm-perc-arti').value = p.arti;
+      document.getElementById('title-form-percakapan').textContent = 'Edit Percakapan';
+      document.getElementById('cancel-edit-percakapan').classList.remove('hidden');
+    };
+
+    function resetFormPercakapan() {
+      document.getElementById('form-admin-percakapan').reset();
+      document.getElementById('edit-percakapan-id').value = '';
+      document.getElementById('title-form-percakapan').textContent = 'Tambah Baris Percakapan / Contoh';
+      document.getElementById('cancel-edit-percakapan').classList.add('hidden');
+    }
+    document.getElementById('cancel-edit-percakapan').addEventListener('click', resetFormPercakapan);
+
+    // CRUD Budaya & Kaidah Tab
+    document.getElementById('form-admin-budaya').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('edit-budaya-id').value;
+      const payload = {
+        bab_id: Number(document.getElementById('adm-bk-bab').value),
+        tipe: document.getElementById('adm-bk-tipe').value,
+        judul: document.getElementById('adm-bk-judul').value.trim(),
+        konten: document.getElementById('adm-bk-konten').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.budaya_kaidah.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.budaya_kaidah[idx] = { ...PREVIEW_STORE.budaya_kaidah[idx], ...payload };
+          } else {
+            PREVIEW_STORE.budaya_kaidah.push({ id: 'bk-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('budaya_kaidah').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('budaya_kaidah').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetFormBudaya();
+        await loadAllData();
+        refreshAllViews();
+        showToast("Data Budaya/Kaidah berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan data: " + err.message, "error");
+      }
+    });
+
+    window.editBudaya = (id) => {
+      const bk = state.budayaKaidahList.find(x => x.id === id);
+      if (!bk) return;
+      document.getElementById('edit-budaya-id').value = bk.id;
+      document.getElementById('adm-bk-bab').value = bk.bab_id;
+      document.getElementById('adm-bk-tipe').value = bk.tipe;
+      document.getElementById('adm-bk-judul').value = bk.judul;
+      document.getElementById('adm-bk-konten').value = bk.konten;
+      document.getElementById('title-form-budaya').textContent = 'Edit Budaya / Kaidah';
+      document.getElementById('cancel-edit-budaya').classList.remove('hidden');
+    };
+
+    function resetFormBudaya() {
+      document.getElementById('form-admin-budaya').reset();
+      document.getElementById('edit-budaya-id').value = '';
+      document.getElementById('title-form-budaya').textContent = "Tambah Budaya / Kaidah 'Ammiyah";
+      document.getElementById('cancel-edit-budaya').classList.add('hidden');
+    }
+    document.getElementById('cancel-edit-budaya').addEventListener('click', resetFormBudaya);
+
+    // CRUD Users / Peserta Tab
+    document.getElementById('form-admin-users').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('edit-user-id').value;
+      const payload = {
+        nama_lengkap: document.getElementById('adm-usr-nama').value.trim(),
+        username: document.getElementById('adm-usr-username').value.trim(),
+        password: document.getElementById('adm-usr-password').value.trim()
+      };
+      try {
+        if (IS_PREVIEW) {
+          if (editId) {
+            const idx = PREVIEW_STORE.users.findIndex(x => x.id === editId);
+            if (idx > -1) PREVIEW_STORE.users[idx] = { ...PREVIEW_STORE.users[idx], ...payload };
+          } else {
+            PREVIEW_STORE.users.unshift({ id: 'u-' + Date.now(), ...payload });
+          }
+        } else {
+          if (editId) {
+            const { error } = await supabase.from('users').update(payload).eq('id', editId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('users').insert([payload]);
+            if (error) throw error;
+          }
+        }
+        resetFormUsers();
+        await loadAllData();
+        renderAdminSecondaryTables();
+        showToast("Akun peserta berhasil disimpan!");
+      } catch (err) {
+        showToast("Gagal menyimpan akun: " + err.message, "error");
+      }
+    });
+
+    window.editUser = (id) => {
+      const u = state.usersList.find(x => x.id === id);
+      if (!u) return;
+      document.getElementById('edit-user-id').value = u.id;
+      document.getElementById('adm-usr-nama').value = u.nama_lengkap || '';
+      document.getElementById('adm-usr-username').value = u.username;
+      document.getElementById('adm-usr-password').value = u.password;
+      document.getElementById('title-form-users').textContent = 'Edit Akun Peserta';
+      document.getElementById('cancel-edit-users').classList.remove('hidden');
+    };
+
+    function resetFormUsers() {
+      document.getElementById('form-admin-users').reset();
+      document.getElementById('edit-user-id').value = '';
+      document.getElementById('title-form-users').textContent = 'Tambah Akun Peserta / Jamaah';
+      document.getElementById('cancel-edit-users').classList.add('hidden');
+    }
+    document.getElementById('cancel-edit-users').addEventListener('click', resetFormUsers);
+
+    // Generic Delete Record
+    window.deleteRecord = async (table, id) => {
+      const ok = await askConfirm("Konfirmasi Hapus", "Data yang dihapus tidak dapat dikembalikan. Lanjutkan?");
+      if (!ok) return;
+
+      try {
+        if (IS_PREVIEW) {
+          PREVIEW_STORE[table] = PREVIEW_STORE[table].filter(item => String(item.id) !== String(id));
+        } else {
+          const { error } = await supabase.from(table).delete().eq('id', id);
+          if (error) throw error;
+        }
+        await loadAllData();
+        populateBabDropdowns();
+        refreshAllViews();
+        showToast("Data berhasil dihapus.");
+      } catch (err) {
+        showToast("Gagal menghapus: " + err.message, "error");
+      }
+    };
+
+    // Start Application
+    initAuth();
+  </script>
+</body>
+</html>
