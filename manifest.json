@@ -1,0 +1,25 @@
+{
+  "name": "Kamus Arab 'Ammiyah Saudi",
+  "short_name": "Kamus Amiyah",
+  "description": "Kamus kosakata dan panduan percakapan praktis Bahasa Arab 'Ammiyah Saudi.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#b8860b",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
