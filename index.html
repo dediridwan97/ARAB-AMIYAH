@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>Kamus &amp; Percakapan Arab 'Ammiyah Saudi — AI Gemini &amp; Umrah Mandiri</title>
-  <meta name="theme-color" content="#0f766e" />
+  <title>Labbaik Academy by Abu Syauqi — Kamus Arab 'Ammiyah</title>
+  <meta name="theme-color" content="#c5a253" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Kamus Amiyah" />
+  <meta name="apple-mobile-web-app-title" content="Labbaik Academy" />
 
-  <!-- PWA Manifest Data URI (1-File Ready; otomatis diganti ke /manifest.json jika tersedia di Vercel) -->
-  <link id="pwa-manifest-link" rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Kamus%20Arab%20Ammiyah%20Saudi%22%2C%22short_name%22%3A%22Kamus%20Amiyah%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%230f766e%22%7D' />
+  <!-- Ikon Browser & Ikon Layar Utama HP (Logo Labbaik Academy) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='26' fill='%23ffffff'/%3E%3Cg fill='%23c5a253'%3E%3Cpath d='M14 31 L60 12 L106 31 L106 44 L60 25 L14 44 Z'/%3E%3Cpath d='M14 50 L60 31 L106 50 L106 59 L60 40 L14 59 Z'/%3E%3Cpath d='M58 46 L106 65 L106 108 L92 108 L92 84 C92 76 74 76 74 84 L74 108 L58 108 Z'/%3E%3C/g%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png?v=2" />
+
+  <!-- PWA Manifest Data URI (otomatis beralih ke /manifest.json?v=2 saat di-deploy ke Vercel) -->
+  <link id="pwa-manifest-link" rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Labbaik%20Academy%20by%20Abu%20Syauqi%22%2C%22short_name%22%3A%22Labbaik%20Academy%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23c5a253%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520120%2520120'%253E%253Crect%2520width%3D'120'%2520height%3D'120'%2520rx%3D'26'%2520fill%3D'%2523ffffff'%2F%253E%253Cg%2520fill%3D'%2523c5a253'%253E%253Cpath%2520d%3D'M14%252031%2520L60%252012%2520L106%252031%2520L106%252044%2520L60%252025%2520L14%252044%2520Z'%2F%253E%253Cpath%2520d%3D'M14%252050%2520L60%252031%2520L106%252050%2520L106%252059%2520L60%252040%2520L14%252059%2520Z'%2F%253E%253Cpath%2520d%3D'M58%252046%2520L106%252065%2520L106%2520108%2520L92%2520108%2520L92%252084%2520C92%252076%252074%252076%252074%252084%2520L74%2520108%2520L58%2520108%2520Z'%2F%253E%253C%2Fg%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D" />
 
   <!-- Google Fonts: Inter & Amiri (untuk teks Arab berharakat yang jernih) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -226,12 +230,16 @@
     <section id="login-screen" class="flex-1 w-full overflow-y-auto custom-scroll flex items-center justify-center px-4 py-6">
       <div class="w-full max-w-[400px] my-auto py-2">
         <div class="text-center mb-5">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-br from-emeraldbrand-700 to-emeraldbrand-900 text-white shadow-xl shadow-emeraldbrand-700/25 mb-3 border border-goldaccent-200/40">
-            <span class="arabic-text text-3xl font-bold leading-none">ع</span>
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white shadow-xl shadow-amber-900/10 mb-3 border border-amber-200/80 p-3">
+            <svg viewBox="0 0 120 120" class="w-full h-full" aria-label="Logo Labbaik Academy">
+              <g fill="#c5a253">
+                <path d="M12 31 L60 10 L108 31 L108 45 L60 24 L12 45 Z" />
+                <path d="M12 51 L60 30 L108 51 L108 60 L60 39 L12 60 Z" />
+                <path d="M58 46 L108 66 L108 110 L93 110 L93 85 C93 76 73 76 73 85 L73 110 L58 110 Z" />
+              </g>
+            </svg>
           </div>
-          <div>
-            <span class="inline-block px-3 py-1 rounded-full bg-goldaccent-100 text-goldaccent-700 text-[11px] font-bold tracking-wide uppercase mb-2">Umrah Mandiri &bull; AI Gemini</span>
-          </div>
+          <p class="text-sm font-extrabold tracking-wide text-[#9a7b32] mb-1">Labbaik Academy by Abu Syauqi</p>
           <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kamus Arab 'Ammiyah</h1>
           <p class="text-xs text-slate-600 mt-1">Dialek Saudi Sehari-hari &bull; 30 Bab Materi Lengkap</p>
         </div>
@@ -294,10 +302,6 @@
             </div>
           </div>
         </div>
-
-        <p class="text-center text-[11px] text-slate-500 mt-5">
-          Referensi: Kamus Percakapan Praktis Untuk Umrah Mandiri &bull; Abul 'Abbās Ahmad Rayah As-Silmi
-        </p>
       </div>
     </section>
 
@@ -309,12 +313,18 @@
       <!-- Mobile Top Header (Permanen) -->
       <header class="mobile-header shrink-0 z-20 glass-nav border-b px-4 pb-3 items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emeraldbrand-700 to-emeraldbrand-900 text-white flex items-center justify-center shadow-sm shrink-0">
-            <span class="arabic-text text-lg font-bold leading-none">ع</span>
+          <div class="w-10 h-10 rounded-xl bg-white border border-amber-200/90 flex items-center justify-center shadow-sm p-1.5 shrink-0">
+            <svg viewBox="0 0 120 120" class="w-full h-full" aria-label="Logo Labbaik Academy">
+              <g fill="#c5a253">
+                <path d="M12 31 L60 10 L108 31 L108 45 L60 24 L12 45 Z" />
+                <path d="M12 51 L60 30 L108 51 L108 60 L60 39 L12 60 Z" />
+                <path d="M58 46 L108 66 L108 110 L93 110 L93 85 C93 76 73 76 73 85 L73 110 L58 110 Z" />
+              </g>
+            </svg>
           </div>
           <div class="min-w-0">
-            <h2 class="text-sm font-extrabold text-slate-900 truncate leading-tight">Kamus 'Ammiyah</h2>
-            <p id="mob-user-label" class="text-[11px] font-semibold text-emeraldbrand-700 truncate">Peserta</p>
+            <h2 class="text-sm font-extrabold text-slate-900 truncate leading-tight">Labbaik Academy</h2>
+            <p id="mob-user-label" class="text-[11px] font-semibold text-[#9a7b32] truncate">by Abu Syauqi</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
@@ -1097,7 +1107,7 @@
             const checkSw = await fetch('/sw.js', { method: 'HEAD' }).catch(() => null);
             if (checkSw && checkSw.ok) {
               const link = document.getElementById('pwa-manifest-link');
-              if (link) link.href = '/manifest.json';
+              if (link) link.href = '/manifest.json?v=2';
               await navigator.serviceWorker.register('/sw.js');
             } else {
               const swCode = `
